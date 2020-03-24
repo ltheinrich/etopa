@@ -1,18 +1,9 @@
-[package]
-name = "etopa"
-version = "0.1.0"
-authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
-edition = "2018"
-license = "ISC"
-repository = "https://github.com/ltheinrich/etopa"
-description = "Time-based one-time password authenticator"
-readme = "README.md"
-
-[dependencies]
-kern = "1.0.3"
-rustls = "0.17.0"
-aes-gcm = "0.5.0"
-rand = "0.7.3"
+[workspace]
+members = [
+    "etopa",
+    "etopan"
+]
+default-members = ["etopa"]
 
 [profile.release]
 lto = true

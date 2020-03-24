@@ -1,0 +1,17 @@
+[package]
+name = "etopan"
+version = "0.1.0"
+authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
+edition = "2018"
+license = "ISC"
+repository = "https://github.com/ltheinrich/etopa"
+description = "Etopa for Android"
+readme = "README.md"
+
+[dependencies]
+etopa = { path = "../etopa" }
+jni = { version = "0.16.0", default-features = false }
+
+[lib]
+name = "etopan"
+crate-type = ["cdylib"]
