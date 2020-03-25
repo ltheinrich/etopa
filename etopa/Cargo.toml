@@ -13,3 +13,5 @@ kern = "1.0.3"
 lhi = { path = "/home/lennart/lhi" }
 aes-gcm = "0.5.0"
 rand = "0.7.3"
+ring = "0.16.11"
+data-encoding = "2.2.0"

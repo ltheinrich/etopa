@@ -1,8 +1,6 @@
 #![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
-extern crate etopa;
-
 use jni::objects::{JObject, JString};
 use jni::sys::jstring;
 use jni::JNIEnv;

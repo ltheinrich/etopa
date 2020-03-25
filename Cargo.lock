@@ -120,6 +120,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "data-encoding"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
+
+[[package]]
 name = "either"
 version = "1.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -139,9 +145,11 @@ name = "etopa"
 version = "0.1.0"
 dependencies = [
  "aes-gcm",
+ "data-encoding",
  "kern",
  "lhi",
  "rand",
+ "ring",
 ]
 
 [[package]]
