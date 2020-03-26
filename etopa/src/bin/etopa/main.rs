@@ -1,17 +1,9 @@
 //! Etopa main
 
-mod config;
-
-use config::{conf_cli, conf_file};
 use etopa::common::*;
-use kern::cli::Command;
-use lhi::{
-    server::{listen, load_certificate},
-    HttpError,
-};
+use kern::{init_version, Command, Config, Fail};
+use lhi::server::{listen, load_certificate};
 use std::env::args;
-use std::fs::File;
-use std::io::prelude::Read;
 
 // Main function
 fn main() {
@@ -30,51 +22,34 @@ fn main() {
     println!("{}", String::from_utf8(plaintext).unwrap());
 
     // init
-    init_version();
+    println!(
+        "Etopa {} (c) 2020 Lennart Heinrich\n",
+        init_version(CARGO_TOML)
+    );
 
     // parse arguments
     let args: Vec<String> = args().collect();
     let cmd = Command::from(&args, &["help"]);
-    if cmd.is_option("help") {
+    if cmd.option("help") {
         return println!("{}", HELP);
     }
 
-    // config options
-    let mut port = "4490";
-    let mut addr = "[::]";
-    let mut threads = 1; // additional threads
-    let mut cert = "cert.pem";
-    let mut key = "key.pem";
+    // load file config
+    let mut conf_buf = String::new();
+    let config =
+        Config::read("/etc/etopa.conf", &mut conf_buf).unwrap_or_else(|_| Config::from(""));
 
-    // parse config file
-    let mut buf = String::new();
-    if let Ok(mut file) = File::open("/etc/etopa.conf") {
-        if file.read_to_string(&mut buf).is_ok() {
-            conf_file(
-                &mut buf,
-                &mut port,
-                &mut addr,
-                &mut threads,
-                &mut cert,
-                &mut key,
-            );
-        }
-    }
-
-    // parse cli config
-    conf_cli(
-        &cmd,
-        &mut port,
-        &mut addr,
-        &mut threads,
-        &mut cert,
-        &mut key,
-    );
+    // configuration
+    let port = cmd.param("port", config.value("port", "4490"));
+    let addr = cmd.param("addr", config.value("addr", "[::]"));
+    let threads = cmd.parameter("threads", config.get("threads", 1));
+    let cert = cmd.param("cert", config.value("cert", "cert.pem"));
+    let key = cmd.param("key", config.value("key", "key.pem"));
 
     // start server
     let tls_config = load_certificate(cert, key).unwrap();
     let listeners = listen(&format!("{}:{}", addr, port), threads, tls_config, |_| {
-        HttpError::from("unimplemented")
+        Fail::from("unimplemented")
     })
     .unwrap();
 
