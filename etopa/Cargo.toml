@@ -10,7 +10,7 @@ readme = "README.md"
 
 [dependencies]
 kern = "1.1.0"
-lhi = "=0.0.0-dev.1" # 0.0.0 is outdated
+lhi = "=0.0.0" # 0.0.0 is outdated
 aes-gcm = "0.5.0"
 rand = "0.7.3"
 ring = "0.16.11"
