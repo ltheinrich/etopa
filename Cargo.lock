@@ -220,9 +220,9 @@ dependencies = [
 
 [[package]]
 name = "kern"
-version = "1.1.2"
+version = "1.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "081afde2e0ded40c86d92a5b3e74362accd93e2dcf5a3561bb7ded0ba4c47e8c"
+checksum = "8ea2ea2b14147510d1b37247b99a73e761b934890d7f54d75f3eeda27b0c8a7b"
 
 [[package]]
 name = "lazy_static"
@@ -232,9 +232,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lhi"
-version = "0.0.0-dev.1"
+version = "0.0.0-dev.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6da7d8c94bb7f7b043f1b7ad11bac202d0134f4ce6a9559419a63cb448517553"
+checksum = "955efde1dcd4cd3bac341c14544a2bce0c7933cf83282b1aa0c39a38dc4597c5"
 dependencies = [
  "kern",
  "rustls",

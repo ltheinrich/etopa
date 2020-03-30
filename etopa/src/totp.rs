@@ -1,7 +1,7 @@
 //! Time-based one-time password
 
-use crate::Fail;
 use data_encoding::BASE32;
+use kern::Fail;
 use ring::hmac::{sign, Algorithm, Key, HMAC_SHA1_FOR_LEGACY_USE_ONLY};
 use std::convert::TryInto;
 use std::time::{SystemTime, UNIX_EPOCH};

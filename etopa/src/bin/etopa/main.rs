@@ -2,7 +2,7 @@
 
 use etopa::common::*;
 use kern::{init_version, Command, Config, Fail};
-use lhi::server::{listen, load_certificate};
+use lhi::server::{listen, load_certificate, HttpOptions};
 use std::env::args;
 
 // Main function
@@ -48,9 +48,13 @@ fn main() {
 
     // start server
     let tls_config = load_certificate(cert, key).unwrap();
-    let listeners = listen(&format!("{}:{}", addr, port), threads, tls_config, |_| {
-        Fail::from("unimplemented")
-    })
+    let listeners = listen(
+        &format!("{}:{}", addr, port),
+        threads,
+        HttpOptions::new(),
+        tls_config,
+        |_| Fail::from("unimplemented"),
+    )
     .unwrap();
 
     // print info message and join threads
