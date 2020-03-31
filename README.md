@@ -1,4 +1,5 @@
 ![Build Status](https://github.com/ltheinrich/etopa/workflows/Rust/badge.svg)
+![Discord](https://img.shields.io/discord/694617177717735457)
 
 # Etopa
 ### Time-based one-time password authenticator (2FA)
