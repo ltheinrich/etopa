@@ -1,0 +1,15 @@
+[package]
+name = "etopaw"
+version = "0.1.0"
+authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
+edition = "2018"
+license = "ISC"
+repository = "https://github.com/ltheinrich/etopa"
+description = "Etopa for Web"
+readme = "README.md"
+
+[dependencies]
+wasm-bindgen = "0.2.60"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

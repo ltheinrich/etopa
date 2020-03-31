@@ -1,2 +1,5 @@
 /target
 /.vscode
+/etopaw/pkg
+/etopaw/app/node_modules
+/etopaw/app/dist

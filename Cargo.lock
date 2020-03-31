@@ -161,6 +161,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "etopaw"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "generic-array"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
