@@ -251,9 +251,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lhi"
-version = "0.0.0-dev.2"
+version = "0.0.0-dev.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "955efde1dcd4cd3bac341c14544a2bce0c7933cf83282b1aa0c39a38dc4597c5"
+checksum = "625eeae22df8530b2d216a1f143663f7567b9f0ec6f7b4bb43afef9362c9fe81"
 dependencies = [
  "kern",
  "rustls",

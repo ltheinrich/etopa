@@ -1,11 +1,11 @@
 //! Database
 
-use crate::common::*;
 use aes_gcm::{
     aead::{generic_array::GenericArray, Aead, NewAead},
     Aes256Gcm,
 };
 use kern::Fail;
+use rand::{thread_rng, Rng};
 use std::collections::BTreeMap;
 use std::convert::TryInto;
 use std::fs::{File, OpenOptions};
@@ -13,13 +13,58 @@ use std::io::prelude::*;
 use std::str::FromStr;
 use std::string::ToString;
 
-/// Encrypted storage
-pub struct SecureStorage {
-    file_name: String,
+/// Raw data storage file
+pub struct StorageFile {
     file: File,
+}
+
+/// Encrypted storage (AES-GCM-256)
+pub struct SecureStorage {
     aead: Aes256Gcm,
-    nonce: Nonce,
     data: BTreeMap<String, String>,
+}
+
+impl StorageFile {
+    /// Open file or create new
+    pub fn new(file_name: &str) -> Result<Self, Fail> {
+        // open file
+        let file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .open(file_name)
+            .or_else(Fail::from)?;
+
+        // return
+        Ok(Self { file })
+    }
+
+    /// Read data from file
+    pub fn read(&mut self) -> Result<Vec<u8>, Fail> {
+        // start from beginning
+        self.file
+            .seek(std::io::SeekFrom::Start(0))
+            .or_else(Fail::from)?;
+
+        // create buffer
+        let mut buf = Vec::with_capacity(match self.file.metadata() {
+            Ok(metadata) => (metadata.len() as usize).try_into().unwrap_or(8192),
+            Err(_) => 8192,
+        });
+
+        // read and return
+        self.file.read_to_end(&mut buf).or_else(Fail::from)?;
+        Ok(buf)
+    }
+
+    /// Write data to file
+    pub fn write(&mut self, data: &[u8]) -> Result<(), Fail> {
+        // truncate file
+        self.file.set_len(0).or_else(Fail::from)?;
+
+        // write data
+        self.file.write_all(data).or_else(Fail::from)
+    }
 }
 
 impl SecureStorage {
@@ -69,108 +114,59 @@ impl SecureStorage {
         &self.data
     }
 
-    /// Create new secure storage (parse with )
-    pub fn new(file_name: String, raw_key: &str) -> Result<Self, Fail> {
-        // read file
-        let mut file = open_file(&file_name)?;
-        let buf = read_file(&mut file)?;
-
-        // initialize crypto
+    /// Create new secure storage
+    pub fn new(raw_data: &[u8], raw_key: &str) -> Result<Self, Fail> {
+        // initialize aes
         let key = GenericArray::clone_from_slice(raw_key.as_bytes());
         let aead = Aes256Gcm::new(key);
-        let file_nonce = [
-            &b"etopa+crypto"[..],
-            &file_name
-                .split('/')
-                .last()
-                .unwrap_or("etopa+crypto")
-                .as_bytes()[..],
-        ]
-        .concat();
-        let nonce =
-            GenericArray::clone_from_slice(&file_nonce[(file_nonce.len() - 12)..file_nonce.len()]);
 
-        // get decrypted data
-        let raw_data = if buf.len() <= 1 {
-            // encrypt initialization
-            let initial_data = b"etopa_secure_storage#1\n".to_vec();
-            let encrypted = aead
-                .encrypt(&nonce, initial_data.as_ref())
-                .or_else(|_| Fail::from("could not initialize secure storage"))?;
-
-            // write
-            file.write_all(&encrypted).or_else(Fail::from)?;
-
-            // set initial data
-            String::from_utf8(initial_data).or_else(Fail::from)?
+        // check if contains at least nonce (first 12 bytes)
+        if raw_data.len() < 13 {
+            // no data
+            Ok(Self {
+                aead,
+                data: BTreeMap::new(),
+            })
         } else {
-            // decrypt data
+            // get nonce and decrypt data
+            let nonce = GenericArray::clone_from_slice(&raw_data[..12]);
             let decrypted = aead
-                .decrypt(&nonce, buf.as_ref())
-                .or_else(|_| Fail::from("could not decrypt secure storage"))?;
-            String::from_utf8(decrypted).or_else(Fail::from)?
-        };
+                .decrypt(&nonce, &raw_data[12..])
+                .or_else(|_| Fail::from("could not decrypt secure storage data"))?;
 
-        // parse raw data to map
-        let data = parse(&raw_data)?;
-
-        // return unparsed secure storage
-        Ok(Self {
-            file_name,
-            file,
-            aead,
-            nonce,
-            data,
-        })
-    }
-
-    /// Write secure storage to file
-    fn write_file(&mut self) -> Result<(), Fail> {
-        // truncate file and reopen
-        self.file.set_len(0).or_else(Fail::from)?;
-        self.file = open_file(&self.file_name)?;
-
-        // encrypt data
-        let encrypted = self
-            .aead
-            .encrypt(&self.nonce, serialize(&self.data)?.as_bytes())
-            .or_else(|_| Fail::from("could not encrypt data for secure storage"))?;
-
-        // write file and return
-        self.file.write_all(&encrypted).or_else(Fail::from)?;
-        Ok(())
-    }
-}
-
-impl Drop for SecureStorage {
-    // save at drop
-    fn drop(&mut self) {
-        if let Err(err) = self.write_file() {
-            eprintln!(
-                "Failed to write secure storage to file ({}) at drop: '{}'",
-                self.file_name, err
-            );
+            // decrypted to string
+            let dec_data = String::from_utf8(decrypted).or_else(Fail::from)?;
+            Ok(Self {
+                aead,
+                data: parse(&dec_data),
+            })
         }
     }
+
+    /// Serialize and encrypt secure storage
+    pub fn encrypt(&self) -> Result<Vec<u8>, Fail> {
+        // generate random nonce
+        let mut rng = thread_rng();
+        let mut raw_data: Vec<u8> = (0..12).map(|_| rng.gen()).collect();
+        let nonce = GenericArray::clone_from_slice(&raw_data);
+
+        // encrypt data
+        let mut encrypted = self
+            .aead
+            .encrypt(&nonce, serialize(&self.data).as_bytes())
+            .or_else(|_| Fail::from("could not encrypt secure storage data"))?;
+
+        // add encrypted and return
+        raw_data.append(&mut encrypted);
+        Ok(raw_data)
+    }
 }
 
-// parse string to map
-fn parse(raw_data: &str) -> Result<BTreeMap<String, String>, Fail> {
-    // split first line and check format
-    let mut head_conf = raw_data.splitn(2, '\n');
-    if head_conf
-        .next()
-        .ok_or_else(|| Fail::new("invalid secure storage format"))?
-        != "etopa_secure_storage#1"
-    {
-        return Fail::from("invalid secure storage format");
-    }
-
-    // Config parser
+/// Parse string to map
+fn parse(dec_data: &str) -> BTreeMap<String, String> {
+    // initialize map and split lines
     let mut conf = BTreeMap::new();
-    head_conf
-        .next()
-        .ok_or_else(|| Fail::new("invalid secure storage format"))?
+    dec_data
         .split('\n')
         // seperate and trim
         .map(|l| l.splitn(2, '=').map(|c| c.trim()).collect())
@@ -183,14 +179,13 @@ fn parse(raw_data: &str) -> Result<BTreeMap<String, String>, Fail> {
         });
 
     // return
-    Ok(conf)
+    conf
 }
 
-// serialize map to string
-fn serialize(data: &BTreeMap<String, String>) -> Result<String, Fail> {
-    // create buffer and add header
-    let mut buf = String::with_capacity(22 + data.len() * 10);
-    buf.push_str("etopa_secure_storage#1\n");
+/// Serialize map to string
+fn serialize(data: &BTreeMap<String, String>) -> String {
+    // create buffer
+    let mut buf = String::with_capacity(data.len() * 10);
 
     // add entries
     for (k, v) in data {
@@ -201,29 +196,5 @@ fn serialize(data: &BTreeMap<String, String>) -> Result<String, Fail> {
     }
 
     // return
-    Ok(buf)
-}
-
-// opens a file
-fn open_file(file_name: &str) -> Result<File, Fail> {
-    // open file
-    OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open(file_name)
-        .or_else(Fail::from)
-}
-
-// reads a file
-fn read_file(file: &mut File) -> Result<Vec<u8>, Fail> {
-    // create buffer
-    let mut buf = Vec::with_capacity(match file.metadata() {
-        Ok(metadata) => (metadata.len() as usize).try_into().unwrap_or(8192),
-        Err(_) => 8192,
-    });
-
-    // read and return
-    file.read_to_end(&mut buf).or_else(Fail::from)?;
-    Ok(buf)
+    buf
 }

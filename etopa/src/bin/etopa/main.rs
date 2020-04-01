@@ -2,10 +2,10 @@
 
 use etopa::common::*;
 use kern::{init_version, Command, Config, Fail};
-use lhi::server::{listen, load_certificate, HttpOptions};
+use lhi::server::{listen, load_certificate, HttpSettings};
 use std::env::args;
 
-// Main function
+/// Main function
 fn main() {
     use aes_gcm::aead::{generic_array::GenericArray, Aead, NewAead};
     use aes_gcm::Aes256Gcm;
@@ -51,7 +51,7 @@ fn main() {
     let listeners = listen(
         &format!("{}:{}", addr, port),
         threads,
-        HttpOptions::new(),
+        HttpSettings::new(),
         tls_config,
         |_| Fail::from("unimplemented"),
     )

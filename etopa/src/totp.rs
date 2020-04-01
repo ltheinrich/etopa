@@ -58,7 +58,7 @@ impl Generator {
         Ok(token)
     }
 
-    // Generate new token at time
+    /// Generate new token at time
     fn token_at(&self, time: &[u8]) -> u32 {
         let signed = sign(&self.key, &time);
         let sr = signed.as_ref();
