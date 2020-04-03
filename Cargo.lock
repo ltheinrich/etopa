@@ -156,6 +156,7 @@ version = "0.1.0"
 dependencies = [
  "aes-gcm",
  "data-encoding",
+ "json",
  "kern",
  "lhi",
  "rand",
@@ -238,10 +239,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "kern"
-version = "1.1.3"
+name = "json"
+version = "0.12.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ea2ea2b14147510d1b37247b99a73e761b934890d7f54d75f3eeda27b0c8a7b"
+checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
+
+[[package]]
+name = "kern"
+version = "1.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fd18ac119c33371c24abef4cfbc07ac156fb7e944d7a3f3c36817c675561bff5"
 
 [[package]]
 name = "lazy_static"
@@ -251,9 +258,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lhi"
-version = "0.0.0-dev.3"
+version = "0.0.0-dev.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "625eeae22df8530b2d216a1f143663f7567b9f0ec6f7b4bb43afef9362c9fe81"
+checksum = "df79cde58751043a7edcff7234d4406bda99e603854d668e1acb9ad0fe5721e3"
 dependencies = [
  "kern",
  "rustls",
@@ -310,9 +317,9 @@ checksum = "74490b50b9fbe561ac330df47c08f3f33073d2d00c150f719147d7c54522fa1b"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c09721c6781493a2a492a96b5a5bf19b65917fe6728884e7c44dd0c60ca3435"
+checksum = "df246d292ff63439fea9bc8c0a270bed0e390d5ebd4db4ba15aba81111b5abe3"
 dependencies = [
  "unicode-xid",
 ]
@@ -607,9 +614,9 @@ checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
 
 [[package]]
 name = "winapi-util"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ccfbf554c6ad11084fb7517daca16cfdcaccbdadba4fc336f032a8b12c2ad80"
+checksum = "fa515c5163a99cc82bab70fd3bfdd36d827be85de63737b40fcef2ce084a436e"
 dependencies = [
  "winapi",
 ]

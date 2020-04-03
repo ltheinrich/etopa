@@ -7,6 +7,7 @@ license = "ISC"
 repository = "https://github.com/ltheinrich/etopa"
 description = "Etopa for Web"
 readme = "README.md"
+homepage = "https://etopa.de"
 
 [dependencies]
 wasm-bindgen = "0.2.60"

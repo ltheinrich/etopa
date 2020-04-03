@@ -1,26 +1,19 @@
 //! Etopa main
 
+#[macro_use]
+extern crate json;
+
+mod api;
+
 use etopa::common::*;
+use json::JsonValue;
 use kern::{init_version, Command, Config, Fail};
-use lhi::server::{listen, load_certificate, HttpSettings};
+use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings};
 use std::env::args;
+use std::fmt::Display;
 
 /// Main function
 fn main() {
-    use aes_gcm::aead::{generic_array::GenericArray, Aead, NewAead};
-    use aes_gcm::Aes256Gcm;
-    let key = GenericArray::clone_from_slice(b"12345678901234567890123456789012");
-    let aead = Aes256Gcm::new(key);
-    let nonce_buf: Vec<u8> = (0..12).map(|_| rand::random()).collect();
-    let nonce = GenericArray::from_slice(&nonce_buf);
-    let ciphertext = aead
-        .encrypt(nonce, b"plaintext message".as_ref())
-        .expect("encryption failure!");
-    let plaintext = aead
-        .decrypt(nonce, ciphertext.as_ref())
-        .expect("decryption failure!");
-    println!("{}", String::from_utf8(plaintext).unwrap());
-
     // init
     println!(
         "Etopa {} (c) 2020 Lennart Heinrich\n",
@@ -53,7 +46,7 @@ fn main() {
         threads,
         HttpSettings::new(),
         tls_config,
-        |_| Fail::from("unimplemented"),
+        handle,
     )
     .unwrap();
 
@@ -62,4 +55,28 @@ fn main() {
     for listener in listeners {
         listener.join().expect("listener thread crashed");
     }
+}
+
+/// Assigning requests to handlers
+fn handle(req: Result<HttpRequest, Fail>) -> Result<Vec<u8>, Fail> {
+    // unwrap and match url
+    let req: HttpRequest = req?;
+    let handler = match req.url() {
+        "/test" => api::test,
+        // handler not found
+        _ => return Ok(json_error("Handler not found")),
+    };
+
+    // handle request
+    Ok(handler(req))
+}
+
+/// Convert JsonValue to response
+pub fn jsonify(value: JsonValue) -> Vec<u8> {
+    respond(value.to_string().as_bytes(), "application/json", None)
+}
+
+/// Convert error message into json format error
+pub fn json_error<E: Display>(err: E) -> Vec<u8> {
+    jsonify(object!(error: format!("{}", err)))
 }

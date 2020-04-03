@@ -7,6 +7,7 @@ license = "ISC"
 repository = "https://github.com/ltheinrich/etopa"
 description = "Etopa for Android"
 readme = "README.md"
+homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
