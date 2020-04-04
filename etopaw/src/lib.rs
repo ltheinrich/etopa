@@ -1,7 +1,9 @@
-use wasm_bindgen::prelude::*;
+//! Etopa for Web
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {

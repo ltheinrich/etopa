@@ -1,15 +1,15 @@
 [package]
 name = "etopaw"
-version = "0.1.0"
+version = "0.0.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2018"
 license = "ISC"
 repository = "https://github.com/ltheinrich/etopa"
 description = "Etopa for Web"
-readme = "README.md"
 homepage = "https://etopa.de"
 
 [dependencies]
+etopa = { path = "../etopa" }
 wasm-bindgen = "0.2.60"
 console_error_panic_hook = "0.1.6"
 wee_alloc = "0.4.5"

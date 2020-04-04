@@ -152,20 +152,27 @@ dependencies = [
 
 [[package]]
 name = "etopa"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "aes-gcm",
  "data-encoding",
- "json",
  "kern",
- "lhi",
  "rand",
  "ring",
 ]
 
 [[package]]
+name = "etopai"
+version = "0.0.0"
+dependencies = [
+ "etopa",
+ "json",
+ "lhi",
+]
+
+[[package]]
 name = "etopan"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "etopa",
  "jni",
@@ -173,9 +180,10 @@ dependencies = [
 
 [[package]]
 name = "etopaw"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "console_error_panic_hook",
+ "etopa",
  "wasm-bindgen",
  "wee_alloc",
 ]

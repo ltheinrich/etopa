@@ -1,0 +1,29 @@
+{
+  "name": "etopaw-app",
+  "version": "0.1.0",
+  "description": "Etopa for Web application",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ltheinrich/etopa"
+  },
+  "author": "Lennart Heinrich <lennart@ltheinrich.de>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ltheinrich/etopa/issues"
+  },
+  "homepage": "https://etopa.de",
+  "dependencies": {
+    "etopaw": "file:../etopaw/pkg"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

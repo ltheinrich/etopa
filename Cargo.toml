@@ -1,10 +1,10 @@
 [workspace]
 members = [
     "etopa",
+    "etopai",
     "etopan",
     "etopaw",
 ]
-default-members = ["etopa"]
 
 [profile.release]
 lto = true
