@@ -5,12 +5,22 @@ extern crate json;
 
 mod api;
 
-use etopa::common::*;
-use etopa::{init_version, Command, Config, Fail};
+use etopa::{
+    common::*,
+    data::{SecureStorage, StorageFile},
+    init_version, Command, Config, Fail,
+};
 use json::JsonValue;
 use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fmt::Display;
+use std::sync::{Arc, RwLock};
+
+/// Data shared between handlers
+pub struct SharedData {
+    pub user_data: StorageFile,
+    pub used_files: Vec<String>,
+}
 
 /// Main function
 fn main() {
@@ -38,6 +48,10 @@ fn main() {
     let threads = cmd.parameter("threads", config.get("threads", 1));
     let cert = cmd.param("cert", config.value("cert", "data/cert.pem"));
     let key = cmd.param("key", config.value("key", "data/key.pem"));
+    let data = cmd.param("data", config.value("data", "data"));
+
+    // open username/password storage
+    let user_data = StorageFile::new(&format!("{}/user_data.esdb", data)).unwrap();
 
     // start server
     let tls_config = load_certificate(cert, key).unwrap();
@@ -47,6 +61,10 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
+        Arc::new(RwLock::new(SharedData {
+            user_data,
+            used_files: Vec::new(),
+        })),
     )
     .unwrap();
 
@@ -58,17 +76,23 @@ fn main() {
 }
 
 /// Assigning requests to handlers
-fn handle(req: Result<HttpRequest, Fail>) -> Result<Vec<u8>, Fail> {
+fn handle(
+    req: Result<HttpRequest, Fail>,
+    shared: Arc<RwLock<SharedData>>,
+) -> Result<Vec<u8>, Fail> {
     // unwrap and match url
     let req: HttpRequest = req?;
     let handler = match req.url() {
-        "/test" => api::test,
+        "/register" => api::register,
         // handler not found
         _ => return Ok(json_error("Handler not found")),
     };
 
     // handle request
-    Ok(handler(req))
+    Ok(match handler(req, shared) {
+        Ok(resp) => resp,
+        Err(err) => json_error(err),
+    })
 }
 
 /// Convert JsonValue to response

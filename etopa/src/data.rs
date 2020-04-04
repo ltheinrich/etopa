@@ -25,6 +25,45 @@ pub struct SecureStorage {
 }
 
 impl StorageFile {
+    /// Read storage file and parse to map
+    pub fn parse(&mut self) -> Result<BTreeMap<String, String>, Fail> {
+        // read file initialize
+        let buf = String::from_utf8(self.read()?).or_else(Fail::from)?;
+
+        // initialize map and split lines
+        let mut conf = BTreeMap::new();
+        buf.split('\n')
+            // seperate and trim
+            .map(|l| l.splitn(2, '=').map(|c| c.trim()).collect())
+            // iterate through seperated lines
+            .for_each(|kv: Vec<&str>| {
+                // check if contains key and value
+                if kv.len() == 2 {
+                    conf.insert(kv[0].to_lowercase(), kv[1].to_string());
+                }
+            });
+
+        // return
+        Ok(conf)
+    }
+
+    /// Serialize map to string
+    pub fn serialize(&mut self, data: &BTreeMap<String, String>) -> Result<(), Fail> {
+        // create buffer
+        let mut buf = String::with_capacity(data.len() * 10);
+
+        // add entries
+        for (k, v) in data {
+            buf.push_str(k);
+            buf.push('=');
+            buf.push_str(v);
+            buf.push('\n');
+        }
+
+        // write
+        self.write(buf.as_bytes()).or_else(Fail::from)
+    }
+
     /// Open file or create new
     pub fn new(file_name: &str) -> Result<Self, Fail> {
         // open file
@@ -61,6 +100,11 @@ impl StorageFile {
     pub fn write(&mut self, data: &[u8]) -> Result<(), Fail> {
         // truncate file
         self.file.set_len(0).or_else(Fail::from)?;
+
+        // start from first byte
+        self.file
+            .seek(std::io::SeekFrom::Start(0))
+            .or_else(Fail::from)?;
 
         // write data
         self.file.write_all(data).or_else(Fail::from)
