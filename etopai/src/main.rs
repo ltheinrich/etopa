@@ -5,11 +5,7 @@ extern crate json;
 
 mod api;
 
-use etopa::{
-    common::*,
-    data::{SecureStorage, StorageFile},
-    init_version, Command, Config, Fail,
-};
+use etopa::{common::*, data::StorageFile, init_version, Command, Config, Fail};
 use json::JsonValue;
 use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings};
 use std::env::args;
@@ -84,8 +80,10 @@ fn handle(
     let req: HttpRequest = req?;
     let handler = match req.url() {
         "/register" => api::register,
+        "/login" => api::login,
+        "/delete" => api::delete,
         // handler not found
-        _ => return Ok(json_error("Handler not found")),
+        _ => return Ok(json_error("handler not found")),
     };
 
     // handle request
@@ -97,7 +95,7 @@ fn handle(
 
 /// Convert JsonValue to response
 pub fn jsonify(value: JsonValue) -> Vec<u8> {
-    respond(value.to_string().as_bytes(), "application/json", None)
+    respond(value.to_string(), "application/json", None)
 }
 
 /// Convert error message into json format error

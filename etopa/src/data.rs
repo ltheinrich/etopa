@@ -47,7 +47,7 @@ impl StorageFile {
         Ok(conf)
     }
 
-    /// Serialize map to string
+    /// Serialize map to string and write to file
     pub fn serialize(&mut self, data: &BTreeMap<String, String>) -> Result<(), Fail> {
         // create buffer
         let mut buf = String::with_capacity(data.len() * 10);
