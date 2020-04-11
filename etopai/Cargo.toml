@@ -10,5 +10,5 @@ homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
-lhi = "=0.0.0-dev.9" # 0.0.0 is outdated
+lhi = "=0.0.0-dev.11" # 0.0.0 is outdated
 json = "0.12.4"
