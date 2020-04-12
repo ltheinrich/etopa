@@ -11,7 +11,7 @@ mod api;
 use common::SharedData;
 use etopa::{common::*, data::StorageFile, init_version, Command, Config, Fail};
 use json::JsonValue;
-use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings};
+use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings, ResponseData};
 use std::env::args;
 use std::fmt::Display;
 use std::sync::{Arc, RwLock};
@@ -90,7 +90,12 @@ fn handle(
 
 /// Convert JsonValue to response
 pub fn jsonify(value: JsonValue) -> Vec<u8> {
-    respond(value.to_string(), "application/json", None)
+    let mut resp_data = ResponseData::new();
+    resp_data.headers.insert("access-control-allow-origin", "*");
+    resp_data
+        .headers
+        .insert("access-control-allow-headers", "content-type");
+    respond(value.to_string(), "application/json", Some(resp_data))
 }
 
 /// Convert error message into json format error

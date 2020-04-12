@@ -40,11 +40,11 @@ pub fn is_json(req: &HttpRequest) -> Result<JsonValue, Fail> {
     // check content-type
     if req.headers().get("content-type").unwrap_or(&"") != &"application/json" {
         // wrong content-type
-        return Fail::from("Content-Type is not application/json");
+        return Fail::from("content-type is not application/json");
     }
 
     // parse json
-    parse(req.body()).or_else(|_| Fail::from("Request body is not JSON"))
+    parse(req.body()).or_else(|_| Fail::from("request body is not JSON"))
 }
 
 /// Check if request method is POST
@@ -63,7 +63,7 @@ pub fn has_body(req: &HttpRequest) -> Result<(), Fail> {
     // check if is empty (trim whitespace first)
     if req.body().trim().is_empty() {
         // empty body
-        Fail::from("Empty body")
+        Fail::from("empty body")
     } else {
         // has body
         Ok(())
