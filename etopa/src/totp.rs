@@ -7,6 +7,7 @@ use std::convert::TryInto;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// TOTP generator
+#[derive(Clone, Debug)]
 pub struct Generator {
     secret: Vec<u8>,
     key: Key,

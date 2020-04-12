@@ -3,20 +3,18 @@
 #[macro_use]
 extern crate json;
 
+pub mod common;
+pub mod utils;
+
 mod api;
 
+use common::SharedData;
 use etopa::{common::*, data::StorageFile, init_version, Command, Config, Fail};
 use json::JsonValue;
 use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fmt::Display;
 use std::sync::{Arc, RwLock};
-
-/// Data shared between handlers
-pub struct SharedData {
-    pub user_data: StorageFile,
-    pub used_files: Vec<String>,
-}
 
 /// Main function
 fn main() {
@@ -57,10 +55,7 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData {
-            user_data,
-            used_files: Vec::new(),
-        })),
+        Arc::new(RwLock::new(SharedData::new(user_data))),
     )
     .unwrap();
 
@@ -79,9 +74,9 @@ fn handle(
     // unwrap and match url
     let req: HttpRequest = req?;
     let handler = match req.url() {
-        "/register" => api::register,
-        "/login" => api::login,
-        "/delete" => api::delete,
+        "/user/create" => api::user::create,
+        "/user/login" => api::user::login,
+        "/user/delete" => api::user::delete,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };

@@ -1,4 +1,4 @@
-//! Type definitions
+//! Commons
 
 use aes_gcm::aead::generic_array::{
     typenum::{
@@ -7,6 +7,12 @@ use aes_gcm::aead::generic_array::{
     },
     GenericArray,
 };
+
+/// Help output
+pub const HELP: &str = "Help: TODO";
+
+/// Cargo.toml
+pub const CARGO_TOML: &str = include_str!("../../Cargo.toml");
 
 /// AES 256-bit key representation
 pub type Aes256Key =

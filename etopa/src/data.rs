@@ -14,11 +14,13 @@ use std::str::FromStr;
 use std::string::ToString;
 
 /// Raw data storage file
+#[derive(Debug)]
 pub struct StorageFile {
     file: File,
 }
 
 /// Encrypted storage (AES-GCM-256)
+#[derive(Clone)]
 pub struct SecureStorage {
     aead: Aes256Gcm,
     data: BTreeMap<String, String>,
