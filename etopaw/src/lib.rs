@@ -17,6 +17,6 @@ pub fn set_panic_hook() {
 }
 
 #[wasm_bindgen]
-pub fn hash_password(password: &str) -> String {
-    crypto::hash_password(password.as_bytes())
+pub fn hash_password(password: &str, username: &str) -> String {
+    crypto::hash_password(password.as_bytes(), username.as_bytes())
 }

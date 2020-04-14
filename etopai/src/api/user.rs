@@ -9,6 +9,8 @@ use std::collections::BTreeMap;
 use std::sync::{Arc, RwLock};
 use std::time::{Duration, SystemTime};
 
+const VALID_LOGIN_SECS: u64 = 3600;
+
 /// User login/token management
 #[derive(Clone, Debug, Default)]
 pub struct UserLogins {
@@ -84,7 +86,7 @@ impl UserLogins {
             .elapsed()
             .unwrap_or(Duration::from_secs(u64::max_value()))
             .as_secs()
-            < 86400
+            < VALID_LOGIN_SECS
     }
 }
 
