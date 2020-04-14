@@ -19,4 +19,3 @@ export async function fetch_api(url = "", data = {}) {
     });
     return resp.json();
 }
-

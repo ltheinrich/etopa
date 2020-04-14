@@ -5,15 +5,19 @@
     <meta charset="utf-8">
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
+    <script src="./js/vue.min.js"></script>
 </head>
 
 <body>
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
-    <p id="login"><a href="./login.html">Login</a></p>
-    <p id="register"><a href="./register.html">Registration</a></p>
     <script type="module" src="./js/index.js"></script>
-    <button id="logout">Logout</button> <!-- TODO logout handler -->
+    <div id="vue">
+        <p id="login" hidden><a href="./login.html">{{ lang.login }}</a></p>
+        <p id="register" hidden><a href="./register.html">{{ lang.register }}</a></p>
+        <button id="logout" hidden>{{ lang.logout }}</button>
+        <p id="result"></p>
+    </div>
 </body>
 
 </html>

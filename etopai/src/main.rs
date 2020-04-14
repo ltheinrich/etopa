@@ -74,9 +74,10 @@ fn handle(
     // unwrap and match url
     let req: HttpRequest = req?;
     let handler = match req.url() {
-        "/user/create" => api::user::create,
+        "/user/register" => api::user::register,
         "/user/login" => api::user::login,
         "/user/delete" => api::user::delete,
+        "/user/logout" => api::user::logout,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };

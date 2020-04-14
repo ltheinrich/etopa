@@ -22,12 +22,12 @@ elif [ $1 == "android" ]; then
   cp target/aarch64-linux-android/release/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
   cp target/armv7-linux-androideabi/release/libetopan.so $JNI_LIBS/armeabi-v7a/libetopan.so
 elif [ $1 == "wasm" ]; then
-  wasm-pack build --release --target web etopaw
+  wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
 elif [ $1 == "full" ]; then
   rm -rf target/build && mkdir -p target/build
   ./build.sh api && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
   ./build.sh android
-  ./build.sh web && (cd etopaw && tar cfJ ../target/build/etopaw.tar.xz --exclude=src --exclude=Cargo.toml --exclude=target --exclude=.gitignore *)
+  ./build.sh wasm && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
 else
   echo "./build api|android|wasm|full"
 fi

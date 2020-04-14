@@ -5,19 +5,22 @@
     <meta charset="utf-8">
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
+    <script src="./js/vue.min.js"></script>
 </head>
 
 <body>
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./js/register.js"></script>
-    <form id="form">
-        <input id="username" type="text" placeholder="Username">
-        <input id="password" type="password" placeholder="Password">
-        <button id="register">Register</button>
-    </form>
-    <p id="result"></p>
-    <p><a href="./login.html">Login</a></p>
+    <div id="vue">
+        <form id="form">
+            <input id="username" type="text" v-bind:placeholder="lang.username" class="vue">
+            <input id="password" type="password" v-bind:placeholder="lang.password">
+            <button id="login">{{ lang.login }}</button>
+        </form>
+        <p id="result"></p>
+        <p><a href="./login.html">{{ lang.login }}</a></p>
+    </div>
 </body>
 
 </html>

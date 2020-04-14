@@ -13,7 +13,7 @@ elif [ $1 == "android" ]; then
   rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/x86
   cp target/i686-linux-android/debug/libetopan.so $JNI_LIBS/x86/libetopan.so
 elif [ $1 == "wasm" ]; then
-  wasm-pack build --dev --target web etopaw
+  wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
 else
   echo "./run api|android|wasm"
 fi

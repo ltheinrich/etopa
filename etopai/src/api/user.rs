@@ -2,13 +2,14 @@
 
 use crate::utils::*;
 use crate::{jsonify, SharedData};
-use etopa::random_an;
-use etopa::{argon2_hash, argon2_verify, random, Fail};
+use etopa::crypto::{argon2_hash, argon2_verify, random, random_an};
+use etopa::Fail;
 use lhi::server::HttpRequest;
 use std::collections::BTreeMap;
 use std::sync::{Arc, RwLock};
 use std::time::{Duration, SystemTime};
 
+/// Seconds a login token is valid
 const VALID_LOGIN_SECS: u64 = 3600;
 
 /// User login/token management
@@ -90,6 +91,32 @@ impl UserLogins {
     }
 }
 
+/// Account logout handler
+pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+    // parse
+    let val = default_check(&req)?;
+    let data = to_map(&val);
+
+    // get values
+    let username = get_str(&data, "username")?;
+    let token = get_str(&data, "token")?;
+
+    // get shared
+    let mut shared = shared.write().unwrap();
+
+    // verify login
+    if shared.user_logins.valid(username, token) {
+        // delete user token
+        shared.user_logins.remove(username, token);
+
+        // successfully deleted
+        Ok(jsonify(object!(success: true)))
+    } else {
+        // wrong login token
+        Fail::from("unauthenticated")
+    }
+}
+
 /// Account deletion handler
 pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // parse
@@ -149,8 +176,8 @@ pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8
     }
 }
 
-/// Account creation handler
-pub fn create(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+/// Account registration handler
+pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // parse
     let val = default_check(&req)?;
     let data = to_map(&val);
@@ -158,6 +185,8 @@ pub fn create(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
     // get values
     let username = get_str(&data, "username")?;
     let password = get_str(&data, "password")?;
+
+    // check username has no equals sign
 
     // get shared
     let mut shared = shared.write().unwrap();

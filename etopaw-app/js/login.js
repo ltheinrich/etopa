@@ -14,11 +14,11 @@ load().then(wasm => {
             .then((resp) => {
                 if ("token" in resp) {
                     sessionStorage.setItem("username", username);
-                    sessionStorage.setItem("token", resp["token"]);
+                    sessionStorage.setItem("token", resp.token);
                     document.getElementById("result").innerText = "Login successful";
                     location.href = "./index.html";
                 } else {
-                    document.getElementById("result").innerText = resp["error"];
+                    document.getElementById("result").innerText = resp.error;
                 }
             });
         return false;
