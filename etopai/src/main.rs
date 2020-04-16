@@ -8,12 +8,10 @@ pub mod utils;
 
 mod api;
 
-use common::SharedData;
-use etopa::{common::*, data::StorageFile, init_version, Command, Config, Fail};
-use json::JsonValue;
-use lhi::server::{listen, load_certificate, respond, HttpRequest, HttpSettings, ResponseData};
+use common::{json_error, jsonify, SharedData};
+use etopa::{common::*, data::StorageFile, meta::init_version, Command, Config, Fail};
+use lhi::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
-use std::fmt::Display;
 use std::sync::{Arc, RwLock};
 
 /// Main function
@@ -55,7 +53,7 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData::new(user_data))),
+        Arc::new(RwLock::new(SharedData::new(user_data, data.to_string()))),
     )
     .unwrap();
 
@@ -78,6 +76,8 @@ fn handle(
         "/user/login" => api::user::login,
         "/user/delete" => api::user::delete,
         "/user/logout" => api::user::logout,
+        "/data/get_secure" => api::data::get_secure,
+        "/data/set_secure" => api::data::set_secure,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };
@@ -87,19 +87,4 @@ fn handle(
         Ok(resp) => resp,
         Err(err) => json_error(err),
     })
-}
-
-/// Convert JsonValue to response
-pub fn jsonify(value: JsonValue) -> Vec<u8> {
-    let mut resp_data = ResponseData::new();
-    resp_data.headers.insert("access-control-allow-origin", "*");
-    resp_data
-        .headers
-        .insert("access-control-allow-headers", "content-type");
-    respond(value.to_string(), "application/json", Some(resp_data))
-}
-
-/// Convert error message into json format error
-pub fn json_error<E: Display>(err: E) -> Vec<u8> {
-    jsonify(object!(error: format!("{}", err)))
 }

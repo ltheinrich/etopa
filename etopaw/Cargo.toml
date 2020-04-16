@@ -10,7 +10,6 @@ homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
-wasm-bindgen = "0.2.60"
 console_error_panic_hook = "0.1.6"
 wee_alloc = "0.4.5"
 

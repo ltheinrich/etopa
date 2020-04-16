@@ -6,6 +6,7 @@ use etopa::crypto::{argon2_hash, argon2_verify, random, random_an};
 use etopa::Fail;
 use lhi::server::HttpRequest;
 use std::collections::BTreeMap;
+use std::fs::remove_file;
 use std::sync::{Arc, RwLock};
 use std::time::{Duration, SystemTime};
 
@@ -93,13 +94,10 @@ impl UserLogins {
 
 /// Account logout handler
 pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
-    // parse
-    let val = default_check(&req)?;
-    let data = to_map(&val);
-
     // get values
-    let username = get_str(&data, "username")?;
-    let token = get_str(&data, "token")?;
+    let headers = req.headers();
+    let username = get_str(headers, "username")?;
+    let token = get_str(headers, "token")?;
 
     // get shared
     let mut shared = shared.write().unwrap();
@@ -119,13 +117,10 @@ pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 
 /// Account deletion handler
 pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
-    // parse
-    let val = default_check(&req)?;
-    let data = to_map(&val);
-
     // get values
-    let username = get_str(&data, "username")?;
-    let token = get_str(&data, "token")?;
+    let headers = req.headers();
+    let username = get_str(headers, "username")?;
+    let token = get_str(headers, "token")?;
 
     // get shared
     let mut shared = shared.write().unwrap();
@@ -137,6 +132,7 @@ pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
         users.remove(username);
         shared.user_data.serialize(&users)?;
         shared.user_logins.remove_user(username);
+        remove_file(format!("{}/{}.edb", shared.data_dir, username)).ok();
 
         // successfully deleted
         Ok(jsonify(object!(success: true)))
@@ -148,13 +144,10 @@ pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 
 /// Login handler
 pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
-    // parse
-    let val = default_check(&req)?;
-    let data = to_map(&val);
-
     // get values
-    let username = get_str(&data, "username")?;
-    let password = get_str(&data, "password")?;
+    let headers = req.headers();
+    let username = get_str(headers, "username")?;
+    let password = get_str(headers, "password")?;
 
     // get shared
     let mut shared = shared.write().unwrap();
@@ -178,15 +171,15 @@ pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8
 
 /// Account registration handler
 pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
-    // parse
-    let val = default_check(&req)?;
-    let data = to_map(&val);
-
     // get values
-    let username = get_str(&data, "username")?;
-    let password = get_str(&data, "password")?;
+    let headers = req.headers();
+    let username = get_str(headers, "username")?;
+    let password = get_str(headers, "password")?;
 
     // check username has no equals sign
+    if username.contains('=') {
+        return Fail::from("username contains = (equals sign)");
+    }
 
     // get shared
     let mut shared = shared.write().unwrap();

@@ -1,4 +1,5 @@
 /target
 /.vscode
 /etopaw-app/pkg
-/data/user_data.esdb
+/data/*.esdb
+/data/*.edb

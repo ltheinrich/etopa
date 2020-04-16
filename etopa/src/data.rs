@@ -13,6 +13,9 @@ use std::io::prelude::*;
 use std::str::FromStr;
 use std::string::ToString;
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct DataMap(BTreeMap<String, String>);
+
 /// Raw data storage file
 #[derive(Debug)]
 pub struct StorageFile {
@@ -23,7 +26,7 @@ pub struct StorageFile {
 #[derive(Clone)]
 pub struct SecureStorage {
     aead: Aes256Gcm,
-    data: BTreeMap<String, String>,
+    data: DataMap,
 }
 
 impl StorageFile {
@@ -67,13 +70,13 @@ impl StorageFile {
     }
 
     /// Open file or create new
-    pub fn new(file_name: &str) -> Result<Self, Fail> {
+    pub fn new(file_name: impl AsRef<str>) -> Result<Self, Fail> {
         // open file
         let file = OpenOptions::new()
             .read(true)
             .write(true)
             .create(true)
-            .open(file_name)
+            .open(file_name.as_ref())
             .or_else(Fail::from)?;
 
         // return
@@ -117,24 +120,24 @@ impl SecureStorage {
     /// Set value in secure storage
     pub fn set<T: ToString>(&mut self, name: &str, value: T) {
         // add to data map
-        self.data.insert(name.to_lowercase(), value.to_string());
+        self.data.0.insert(name.to_lowercase(), value.to_string());
     }
 
     /// Set string value in secure storage
     pub fn insert(&mut self, name: &str, value: String) {
         // add to data map
-        self.data.insert(name.to_lowercase(), value);
+        self.data.0.insert(name.to_lowercase(), value);
     }
 
     /// Remove value from secure storage
     pub fn remove(&mut self, name: &str) {
         // remove from data map
-        self.data.remove(name);
+        self.data.0.remove(name);
     }
 
     /// Get value from secure storage
     pub fn get<T: FromStr>(&self, name: &str) -> Result<T, Fail> {
-        match self.data.get(name) {
+        match self.data.0.get(name) {
             Some(value) => value
                 .parse()
                 .or_else(|_| Fail::from("could not parse value into required type")),
@@ -145,25 +148,29 @@ impl SecureStorage {
     /// Get string value from secure storage
     pub fn value(&self, name: &str) -> Option<&str> {
         // return value
-        Some(self.data.get(&name.to_lowercase())?)
+        Some(self.data.0.get(&name.to_lowercase())?)
     }
 
     /// Check if name is key in data map
     pub fn exists(&self, name: &str) -> bool {
         // return map
-        self.data.contains_key(name)
+        self.data.0.contains_key(name)
     }
 
     /// Get data map
-    pub fn data(&self) -> &BTreeMap<String, String> {
+    pub fn data(&self) -> &DataMap {
         // return map
         &self.data
     }
 
     /// Create new secure storage
-    pub fn new(raw_data: &[u8], raw_key: &str) -> Result<Self, Fail> {
+    pub fn new(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Self, Fail> {
+        // as ref
+        let raw_data = raw_data.as_ref();
+        let raw_key = raw_key.as_ref();
+
         // initialize aes
-        let key = GenericArray::clone_from_slice(raw_key.as_bytes());
+        let key = GenericArray::clone_from_slice(raw_key);
         let aead = Aes256Gcm::new(key);
 
         // check if contains at least nonce (first 12 bytes)
@@ -171,7 +178,7 @@ impl SecureStorage {
             // no data
             Ok(Self {
                 aead,
-                data: BTreeMap::new(),
+                data: DataMap(BTreeMap::new()),
             })
         } else {
             // get nonce and decrypt data
@@ -184,9 +191,19 @@ impl SecureStorage {
             let dec_data = String::from_utf8(decrypted).or_else(Fail::from)?;
             Ok(Self {
                 aead,
-                data: parse(&dec_data),
+                data: DataMap(parse(&dec_data)),
             })
         }
+    }
+
+    /// Create new secure storage
+    pub fn from_map(data: DataMap, raw_key: impl AsRef<[u8]>) -> Self {
+        // initialize aes
+        let key = GenericArray::clone_from_slice(raw_key.as_ref());
+        let aead = Aes256Gcm::new(key);
+
+        // return secure storage
+        Self { aead, data }
     }
 
     /// Serialize and encrypt secure storage
@@ -199,7 +216,7 @@ impl SecureStorage {
         // encrypt data
         let mut encrypted = self
             .aead
-            .encrypt(&nonce, serialize(&self.data).as_bytes())
+            .encrypt(&nonce, serialize(&self.data.0).as_bytes())
             .or_else(|_| Fail::from("could not encrypt secure storage data"))?;
 
         // add encrypted and return

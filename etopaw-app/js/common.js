@@ -8,14 +8,22 @@ export async function load() {
     return wasm;
 }
 
-export async function fetch_api(url = "", data = {}) {
-    const resp = await fetch(`${config.API_URL}/${url}`, {
+export async function fetch_api(url = "", data = {}, body) {
+    const resp = await raw_fetch(url, data, body);
+    return resp.json();
+}
+
+export async function raw_fetch(url = "", data = {}, body = new Uint8Array(0)) {
+    const headers = new Headers({ "content-type": "application/json" });
+    for (var key in data) {
+        headers.append(key, data[key]);
+    }
+    let req = {
         method: "POST",
         cache: "no-cache",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
-    return resp.json();
+        headers,
+        body
+    };
+    const resp = await fetch(`${config.API_URL}/${url}`, req);
+    return resp;
 }
