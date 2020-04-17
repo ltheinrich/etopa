@@ -9,7 +9,7 @@ use std::sync::{Arc, RwLock};
 pub fn get_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
     // get shared
@@ -34,7 +34,7 @@ pub fn get_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<V
 pub fn set_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
     // get shared

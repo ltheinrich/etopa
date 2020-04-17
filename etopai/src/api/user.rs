@@ -96,7 +96,7 @@ impl UserLogins {
 pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
     // get shared
@@ -119,7 +119,7 @@ pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
     // get shared
@@ -146,7 +146,7 @@ pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let password = get_str(headers, "password")?;
 
     // get shared
@@ -173,7 +173,7 @@ pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8
 pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
-    let username = get_str(headers, "username")?;
+    let username = get_username(headers)?;
     let password = get_str(headers, "password")?;
 
     // check username has no equals sign

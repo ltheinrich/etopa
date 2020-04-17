@@ -21,6 +21,20 @@ pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T, Fa
         .or_else(|_| Fail::from(format!("{} is not correct type", key)))
 }
 
+/// Get username string and check if alphanumeric
+pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str, Fail> {
+    // get username
+    let username = get_str(data, "username")?;
+
+    // check if alphanumeric
+    if !username.chars().all(char::is_alphanumeric) {
+        return Fail::from("username is not alphanumeric");
+    }
+
+    // valid username
+    Ok(username)
+}
+
 /// Convert JsonValue to response
 pub fn jsonify(value: JsonValue) -> Vec<u8> {
     respond(value.to_string(), "application/json", cors_headers())
