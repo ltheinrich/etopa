@@ -6,7 +6,8 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 use etopa::{
     crypto,
-    data::{DataMap, SecureStorage},
+    data::{decrypt, encrypt},
+    totp::Generator,
     wasm_bindgen::{self, prelude::*},
 };
 
@@ -21,18 +22,24 @@ pub fn hash_password(password: &str, username: &str) -> String {
 }
 
 #[wasm_bindgen]
-pub fn decrypt_storage(data: &[u8], key: &str) -> JsValue {
-    if data.len() > 10 {
-        if let Ok(storage) = SecureStorage::new(&data[..(data.len() - 2)], key) {
-            return JsValue::from_serde(storage.data()).unwrap();
-        }
-    }
-    JsValue::NULL
+pub fn decrypt_storage(data: &[u8], key: &str) -> String {
+    let data = if data.len() > 1 {
+        &data[..(data.len() - 2)]
+    } else {
+        data
+    };
+    decrypt(data, key).unwrap()
 }
 
 #[wasm_bindgen]
-pub fn encrypt_storage(data: &JsValue, key: &str) -> Vec<u8> {
-    let map: DataMap = data.into_serde().unwrap();
-    let storage = SecureStorage::from_map(map, key);
-    storage.encrypt().unwrap()
+pub fn encrypt_storage(data: &str, key: &str) -> Vec<u8> {
+    encrypt(data, key).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn gen_token(secret: &str, time_millis: u64) -> String {
+    Generator::new(secret)
+        .unwrap()
+        .token_at(time_millis / 1000)
+        .unwrap()
 }

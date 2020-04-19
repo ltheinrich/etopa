@@ -1,9 +1,5 @@
 import { load, api_fetch } from "./common.js";
 
-if (sessionStorage.getItem("username") != null && sessionStorage.getItem("token") != null) {
-    location.href = "./index.html";
-}
-
 load(async function (wasm) {
     document.getElementById("form").onsubmit = function () {
         const username = document.getElementById("username").value;
@@ -20,4 +16,4 @@ load(async function (wasm) {
         }, "user/register", { username, password });
         return false;
     };
-});
+}, false);

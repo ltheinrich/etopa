@@ -9,7 +9,7 @@ description = "Time-based one-time password authenticator"
 homepage = "https://etopa.de"
 
 [dependencies]
-kern = "1.1.4"
+kern = "1.1.6"
 aes-gcm = "0.5.0"
 rand = "0.7.3"
 ring = "0.16.12"
@@ -17,9 +17,7 @@ data-encoding = "2.2.0"
 sha3 = "0.8.2"
 hex = "0.4.2"
 rust-argon2 = "0.8.2"
-serde = "1.0.106"
-serde_derive = "1.0.106"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = {version = "0.2.60", features = ["serde-serialize"]}
+wasm-bindgen = { version = "0.2.60" }
 rand = { version = "0.7.3", features = ["wasm-bindgen"] }

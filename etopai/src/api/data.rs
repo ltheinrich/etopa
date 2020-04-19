@@ -1,7 +1,10 @@
 //! Data API handlers
 
 use crate::{common::*, SharedData};
-use etopa::{data::StorageFile, Fail};
+use etopa::{
+    data::{open_file, read_file, write_file},
+    Fail,
+};
 use lhi::server::{respond, HttpRequest};
 use std::sync::{Arc, RwLock};
 
@@ -18,9 +21,9 @@ pub fn get_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<V
     // verify login
     if shared.user_logins.valid(username, token) {
         // read storage file
-        let mut file = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
+        let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
         Ok(respond(
-            file.read()?,
+            read_file(&mut file)?,
             "application/octet-stream",
             cors_headers(),
         ))
@@ -43,8 +46,8 @@ pub fn set_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<V
     // verify login
     if shared.user_logins.valid(username, token) {
         // write storage file
-        let mut file = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
-        file.write(req.body())?;
+        let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
+        write_file(&mut file, req.body())?;
 
         // return success
         Ok(jsonify(object!(success: true)))

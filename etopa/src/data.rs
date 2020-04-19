@@ -10,11 +10,7 @@ use std::collections::BTreeMap;
 use std::convert::TryInto;
 use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
-use std::str::FromStr;
 use std::string::ToString;
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct DataMap(BTreeMap<String, String>);
 
 /// Raw data storage file
 #[derive(Debug)]
@@ -22,18 +18,19 @@ pub struct StorageFile {
     file: File,
 }
 
-/// Encrypted storage (AES-GCM-256)
-#[derive(Clone)]
-pub struct SecureStorage {
-    aead: Aes256Gcm,
-    data: DataMap,
-}
-
 impl StorageFile {
+    /// Open file or create new
+    pub fn new(file_name: impl AsRef<str>) -> Result<Self, Fail> {
+        // open file and return
+        Ok(Self {
+            file: open_file(file_name)?,
+        })
+    }
+
     /// Read storage file and parse to map
     pub fn parse(&mut self) -> Result<BTreeMap<String, String>, Fail> {
         // read file initialize
-        let buf = String::from_utf8(self.read()?).or_else(Fail::from)?;
+        let buf = String::from_utf8(read_file(&mut self.file)?).or_else(Fail::from)?;
 
         // initialize map and split lines
         let mut conf = BTreeMap::new();
@@ -66,198 +63,95 @@ impl StorageFile {
         }
 
         // write
-        self.write(buf.as_bytes()).or_else(Fail::from)
-    }
-
-    /// Open file or create new
-    pub fn new(file_name: impl AsRef<str>) -> Result<Self, Fail> {
-        // open file
-        let file = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .create(true)
-            .open(file_name.as_ref())
-            .or_else(Fail::from)?;
-
-        // return
-        Ok(Self { file })
-    }
-
-    /// Read data from file
-    pub fn read(&mut self) -> Result<Vec<u8>, Fail> {
-        // start from beginning
-        self.file
-            .seek(std::io::SeekFrom::Start(0))
-            .or_else(Fail::from)?;
-
-        // create buffer
-        let mut buf = Vec::with_capacity(match self.file.metadata() {
-            Ok(metadata) => (metadata.len() as usize).try_into().unwrap_or(8192),
-            Err(_) => 8192,
-        });
-
-        // read and return
-        self.file.read_to_end(&mut buf).or_else(Fail::from)?;
-        Ok(buf)
-    }
-
-    /// Write data to file
-    pub fn write(&mut self, data: &[u8]) -> Result<(), Fail> {
-        // truncate file
-        self.file.set_len(0).or_else(Fail::from)?;
-
-        // start from first byte
-        self.file
-            .seek(std::io::SeekFrom::Start(0))
-            .or_else(Fail::from)?;
-
-        // write data
-        self.file.write_all(data).or_else(Fail::from)
+        write_file(&mut self.file, buf.as_bytes()).or_else(Fail::from)
     }
 }
 
-impl SecureStorage {
-    /// Set value in secure storage
-    pub fn set<T: ToString>(&mut self, name: &str, value: T) {
-        // add to data map
-        self.data.0.insert(name.to_lowercase(), value.to_string());
-    }
-
-    /// Set string value in secure storage
-    pub fn insert(&mut self, name: &str, value: String) {
-        // add to data map
-        self.data.0.insert(name.to_lowercase(), value);
-    }
-
-    /// Remove value from secure storage
-    pub fn remove(&mut self, name: &str) {
-        // remove from data map
-        self.data.0.remove(name);
-    }
-
-    /// Get value from secure storage
-    pub fn get<T: FromStr>(&self, name: &str) -> Result<T, Fail> {
-        match self.data.0.get(name) {
-            Some(value) => value
-                .parse()
-                .or_else(|_| Fail::from("could not parse value into required type")),
-            None => Fail::from("no value for key"),
-        }
-    }
-
-    /// Get string value from secure storage
-    pub fn value(&self, name: &str) -> Option<&str> {
-        // return value
-        Some(self.data.0.get(&name.to_lowercase())?)
-    }
-
-    /// Check if name is key in data map
-    pub fn exists(&self, name: &str) -> bool {
-        // return map
-        self.data.0.contains_key(name)
-    }
-
-    /// Get data map
-    pub fn data(&self) -> &DataMap {
-        // return map
-        &self.data
-    }
-
-    /// Create new secure storage
-    pub fn new(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Self, Fail> {
-        // as ref
-        let raw_data = raw_data.as_ref();
-        let raw_key = raw_key.as_ref();
-
-        // initialize aes
-        let key = GenericArray::clone_from_slice(raw_key);
-        let aead = Aes256Gcm::new(key);
-
-        // check if contains at least nonce (first 12 bytes)
-        if raw_data.len() < 13 {
-            // no data
-            Ok(Self {
-                aead,
-                data: DataMap(BTreeMap::new()),
-            })
-        } else {
-            // get nonce and decrypt data
-            let nonce = GenericArray::clone_from_slice(&raw_data[..12]);
-            let decrypted = aead
-                .decrypt(&nonce, &raw_data[12..])
-                .or_else(|_| Fail::from("could not decrypt secure storage data"))?;
-
-            // decrypted to string
-            let dec_data = String::from_utf8(decrypted).or_else(Fail::from)?;
-            Ok(Self {
-                aead,
-                data: DataMap(parse(&dec_data)),
-            })
-        }
-    }
-
-    /// Create new secure storage
-    pub fn from_map(data: DataMap, raw_key: impl AsRef<[u8]>) -> Self {
-        // initialize aes
-        let key = GenericArray::clone_from_slice(raw_key.as_ref());
-        let aead = Aes256Gcm::new(key);
-
-        // return secure storage
-        Self { aead, data }
-    }
-
-    /// Serialize and encrypt secure storage
-    pub fn encrypt(&self) -> Result<Vec<u8>, Fail> {
-        // generate random nonce
-        let mut rng = thread_rng();
-        let mut raw_data: Vec<u8> = (0..12).map(|_| rng.gen()).collect();
-        let nonce = GenericArray::clone_from_slice(&raw_data);
-
-        // encrypt data
-        let mut encrypted = self
-            .aead
-            .encrypt(&nonce, serialize(&self.data.0).as_bytes())
-            .or_else(|_| Fail::from("could not encrypt secure storage data"))?;
-
-        // add encrypted and return
-        raw_data.append(&mut encrypted);
-        Ok(raw_data)
-    }
+/// Open file or create new
+pub fn open_file(file_name: impl AsRef<str>) -> Result<File, Fail> {
+    // open and return file
+    OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(file_name.as_ref())
+        .or_else(Fail::from)
 }
 
-/// Parse string to map
-fn parse(dec_data: &str) -> BTreeMap<String, String> {
-    // initialize map and split lines
-    let mut conf = BTreeMap::new();
-    dec_data
-        .split('\n')
-        // seperate and trim
-        .map(|l| l.splitn(2, '=').map(|c| c.trim()).collect())
-        // iterate through seperated lines
-        .for_each(|kv: Vec<&str>| {
-            // check if contains key and value
-            if kv.len() == 2 {
-                conf.insert(kv[0].to_lowercase(), kv[1].to_string());
-            }
-        });
+/// Read data from file
+pub fn read_file(file: &mut File) -> Result<Vec<u8>, Fail> {
+    // start from beginning
+    file.seek(std::io::SeekFrom::Start(0)).or_else(Fail::from)?;
 
-    // return
-    conf
-}
-
-/// Serialize map to string
-fn serialize(data: &BTreeMap<String, String>) -> String {
     // create buffer
-    let mut buf = String::with_capacity(data.len() * 10);
+    let mut buf = Vec::with_capacity(match file.metadata() {
+        Ok(metadata) => (metadata.len() as usize).try_into().unwrap_or(8192),
+        Err(_) => 8192,
+    });
 
-    // add entries
-    for (k, v) in data {
-        buf.push_str(k);
-        buf.push('=');
-        buf.push_str(v);
-        buf.push('\n');
+    // read and return
+    file.read_to_end(&mut buf).or_else(Fail::from)?;
+    Ok(buf)
+}
+
+/// Write data to file
+pub fn write_file(file: &mut File, data: &[u8]) -> Result<(), Fail> {
+    // truncate file
+    file.set_len(0).or_else(Fail::from)?;
+
+    // start from first byte
+    file.seek(std::io::SeekFrom::Start(0)).or_else(Fail::from)?;
+
+    // write data
+    file.write_all(data).or_else(Fail::from)
+}
+
+/// Intialize Aes256Gcm with custom key
+fn init_aes(raw_key: impl AsRef<[u8]>) -> Aes256Gcm {
+    // initialize aes with key
+    let key = GenericArray::clone_from_slice(raw_key.as_ref());
+    Aes256Gcm::new(key)
+}
+
+/// Decrypt secure storage
+pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<String, Fail> {
+    // init
+    let raw_data = raw_data.as_ref();
+    let aead = init_aes(raw_key);
+
+    // check if contains at least nonce (first 12 bytes)
+    if raw_data.len() < 13 {
+        // no data
+        Ok("{}".to_string())
+    } else {
+        // get nonce and decrypt data
+        let nonce = GenericArray::clone_from_slice(&raw_data[..12]);
+        let decrypted = aead
+            .decrypt(&nonce, &raw_data[12..])
+            .or_else(|_| Fail::from("could not decrypt secure storage data"))?;
+
+        // decrypted to string
+        let data = String::from_utf8(decrypted).or_else(Fail::from)?;
+        Ok(data)
     }
+}
 
-    // return
-    buf
+/// Encrypt secure storage
+pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<u8>, Fail> {
+    // init
+    let aead = init_aes(raw_key);
+    let mut rng = thread_rng();
+
+    // generate random nonce
+    let mut raw_data: Vec<u8> = (0..12).map(|_| rng.gen()).collect();
+    let nonce = GenericArray::clone_from_slice(&raw_data);
+
+    // encrypt data
+    let mut encrypted = aead
+        .encrypt(&nonce, data.as_ref())
+        .or_else(|_| Fail::from("could not encrypt secure storage data"))?;
+
+    // add encrypted and return
+    raw_data.append(&mut encrypted);
+    Ok(raw_data)
 }

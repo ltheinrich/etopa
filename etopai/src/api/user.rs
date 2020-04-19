@@ -92,6 +92,20 @@ impl UserLogins {
     }
 }
 
+/// Token validation handler
+pub fn valid(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+    // get values
+    let headers = req.headers();
+    let username = get_username(headers)?;
+    let token = get_str(headers, "token")?;
+
+    // get shared and validate
+    let shared = shared.read().unwrap();
+    Ok(jsonify(
+        object!(valid: shared.user_logins.valid(username, token)),
+    ))
+}
+
 /// Account logout handler
 pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values

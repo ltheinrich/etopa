@@ -16,10 +16,3 @@ export const lang = {
         // TODO german language
     }
 };
-
-new Vue({
-    el: "#vue",
-    data: {
-        lang: lang[localStorage.getItem("lang") == null ? LANG : localStorage.getItem("lang")]
-    }
-});
