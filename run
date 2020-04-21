@@ -3,7 +3,7 @@
 if [ "$#" -ne 1 ]; then
   echo "./run api|android|wasm"
 elif [ $1 == "api" ]; then
-  cargo run -p etopai
+  cross run -p etopai
 elif [ $1 == "android" ]; then
   JNI_LIBS=etopan-app/app/src/main/jniLibs
   if ! [[ "$PATH" == ?(*:)"$HOME/.NDK/18-x86/bin"?(:*) ]]; then

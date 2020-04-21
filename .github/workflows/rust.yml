@@ -2,7 +2,40 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  rust:
+  rust-lint:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Format
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -p ${{ matrix.project }} --all -- --check
+
+      - name: Lint
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p ${{ matrix.project }} -- -D warnings
+
+  rust-build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -82,19 +115,7 @@ jobs:
           command: test
           args: -p ${{ matrix.project }} --target aarch64-linux-android
 
-      - name: Format
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -p ${{ matrix.project }} --all -- --check
-
-      - name: Lint
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -p ${{ matrix.project }} -- -D warnings
-
-  kotlin:
+  android-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

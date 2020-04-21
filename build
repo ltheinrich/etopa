@@ -3,7 +3,7 @@
 if [ "$#" -ne 1 ]; then
   echo "./build api|android|wasm|full"
 elif [ $1 == "api" ]; then
-  cargo build -p etopai --release
+  cross build -p etopai --release
 elif [ $1 == "android" ]; then
   rm -rf etopan-app/app/build
   (cd etopan-app && ./gradlew :app:bundleRelease)
