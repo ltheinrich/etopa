@@ -3,14 +3,14 @@ on: [push, pull_request]
 
 jobs:
   rust:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         config:
-          - {os: ubuntu-latest, project: 'etopa' }
-          - {os: ubuntu-latest, project: 'etopai' }
-          - {os: ubuntu-latest, project: 'etopaw' }
-          - {os: ubuntu-latest, project: 'etopan' }
+          - 'etopa'
+          - 'etopai'
+          - 'etopaw'
+          - 'etopan'
 
     steps:
       - name: Checkout
@@ -25,15 +25,15 @@ jobs:
           components: rustfmt, clippy
 
       - name: Linux target
-        if: ${{ matrix.config.project == 'etopa' || matrix.config.project == 'etopai' }}
+        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable x86_64-unknown-linux-musl
 
       - name: WebAssembly target
-        if: ${{ matrix.config.project == 'etopaw' }}
-        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain wasm32-unknown-unknown
+        if: ${{ matrix.project == 'etopaw' }}
+        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable wasm32-unknown-unknown
 
       - name: Android target
-        if: ${{ matrix.config.project == 'etopan' }}
+        if: ${{ matrix.project == 'etopan' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
 
       - name: Build Linux
@@ -41,50 +41,50 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: -p ${{ matrix.config.project }} --target x86_64-unknown-linux-musl
+          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
       - name: Test Linux
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: test
-          args: -p ${{ matrix.config.project }} --target x86_64-unknown-linux-musl
+          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
       - name: Install wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
-        if: ${{ matrix.config.project == 'etopaw' }}
+        if: ${{ matrix.project == 'etopaw' }}
         with:
           version: 'latest'
 
       - name: Build WebAssembly
-        if: ${{ matrix.config.project == 'etopaw' }}
-        run: wasm-pack build -t web ${{ matrix.config.project }}
+        if: ${{ matrix.project == 'etopaw' }}
+        run: wasm-pack build -t web ${{ matrix.project }}
 
       - name: Build Android
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: -p ${{ matrix.config.project }} --target aarch64-linux-android
+          args: -p ${{ matrix.project }} --target aarch64-linux-android
 
       - name: Test Android
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: test
-          args: -p ${{ matrix.config.project }} --target aarch64-linux-android
+          args: -p ${{ matrix.project }} --target aarch64-linux-android
 
       - name: Format
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -p ${{ matrix.config.project }} --all -- --check
+          args: -p ${{ matrix.project }} --all -- --check
 
       - name: Lint
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -p ${{ matrix.config.project }} -- -D warnings
+          args: -p ${{ matrix.project }} -- -D warnings
 
   kotlin:
     runs-on: ubuntu-latest
