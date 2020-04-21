@@ -6,11 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config:
-          - 'etopa'
-          - 'etopai'
-          - 'etopaw'
-          - 'etopan'
+        project: [etopa, etopai, etopaw, etopan]
 
     steps:
       - name: Checkout
@@ -37,6 +33,7 @@ jobs:
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
 
       - name: Build Linux
+        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
@@ -44,6 +41,7 @@ jobs:
           args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
       - name: Test Linux
+        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
@@ -51,8 +49,8 @@ jobs:
           args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
       - name: Install wasm-pack
-        uses: jetli/wasm-pack-action@v0.3.0
         if: ${{ matrix.project == 'etopaw' }}
+        uses: jetli/wasm-pack-action@v0.3.0
         with:
           version: 'latest'
 
@@ -61,6 +59,7 @@ jobs:
         run: wasm-pack build -t web ${{ matrix.project }}
 
       - name: Build Android
+        if: ${{ matrix.project == 'etopan' }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
@@ -68,6 +67,7 @@ jobs:
           args: -p ${{ matrix.project }} --target aarch64-linux-android
 
       - name: Test Android
+        if: ${{ matrix.project == 'etopan' }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
