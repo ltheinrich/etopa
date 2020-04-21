@@ -1,4 +1,4 @@
-![Build Status](https://github.com/ltheinrich/etopa/workflows/Rust/badge.svg)
+[![Build Status](https://github.com/ltheinrich/etopa/workflows/Rust/badge.svg)](https://github.com/ltheinrich/etopa/actions?query=workflow%3ACI)
 [![Discord](https://img.shields.io/discord/694617177717735457)](https://discord.gg/ZWFNBgR)
 
 # Etopa

@@ -2,139 +2,95 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  etopa:
+  rust:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+    strategy:
+      matrix:
+        project:
+          - etopa
+          - etopai
+          - etopan
+          - etopaw
 
-      - uses: actions-rs/toolchain@v1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: rustfmt, clippy
-          target: x86_64-unknown-linux-musl
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: -p ${{ github.job }}
+      - name: Linux target
+        if: ${{ matrix.project == "etopa" || matrix.project == "etopai" }}
+        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable x86_64-unknown-linux-musl
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -p ${{ github.job }}
+      - name: WebAssembly target
+        if: ${{ matrix.project == "etopaw" }}
+        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain wasm32-unknown-unknown
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -p ${{ github.job }} --all -- --check
+      - name: Android target
+        if: ${{ matrix.project == "etopan" }}
+        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -p ${{ github.job }} -- -D warnings
-
-  etopai:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-          target: x86_64-unknown-linux-musl
-
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: -p ${{ github.job }}
-
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -p ${{ github.job }}
-
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -p ${{ github.job }} --all -- --check
-
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -p ${{ github.job }} -- -D warnings
-
-  etopan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-          target: aarch64-linux-android
-
-      - uses: actions-rs/cargo@v1
+      - name: Build Linux
+        uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: -p ${{ github.job }}
+          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
-      - uses: actions-rs/cargo@v1
+      - name: Test Linux
+        uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: test
-          args: -p ${{ github.job }}
+          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -p ${{ github.job }} --all -- --check
-
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -p ${{ github.job }} -- -D warnings
-
-  etopaw:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-          target: wasm32-unknown-unknown
-
-      - uses: jetli/wasm-pack-action@v0.3.0
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.3.0
+        if: ${{ matrix.project == "etopaw" }}
         with:
           version: 'latest'
 
-      - run: wasm-pack build -t web etopaw
+      - name: Build WebAssembly
+        if: ${{ matrix.project == "etopaw" }}
+        run: wasm-pack build -t web etopaw
 
-      - uses: actions-rs/cargo@v1
+      - name: Build Android
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: -p ${{ matrix.project }} --target aarch64-linux-android
+
+      - name: Test Android
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: test
+          args: -p ${{ matrix.project }} --target aarch64-linux-android
+
+      - name: Format
+        uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -p ${{ github.job }} --all -- --check
+          args: -p ${{ matrix.project }} --all -- --check
 
-      - uses: actions-rs/cargo@v1
+      - name: Lint
+        uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -p ${{ github.job }} -- -D warnings
+          args: -p ${{ matrix.project }} -- -D warnings
 
-  etopan-app:
+  kotlin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - run: cd etopan-app && ./gradlew :app:bundleRelease
+      - name: Build
+        run: cd etopan-app && ./gradlew :app:bundleRelease
