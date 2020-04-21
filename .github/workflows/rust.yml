@@ -28,13 +28,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -p ${{ matrix.project }} --all -- --check
+          args: --all -- --check
 
       - name: Lint
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -p ${{ matrix.project }} -- -D warnings
+          args: -- -D warnings
 
   rust-build:
     runs-on: ubuntu-latest
