@@ -44,6 +44,7 @@ jobs:
         if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: build
           args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
@@ -51,6 +52,7 @@ jobs:
         if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: test
           args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
 
