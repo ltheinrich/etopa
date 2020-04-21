@@ -7,10 +7,10 @@ jobs:
     strategy:
       matrix:
         config:
-          - {os: ubuntu-latest, project: "etopa" }
-          - {os: ubuntu-latest, project: "etopai" }
-          - {os: ubuntu-latest, project: "etopaw" }
-          - {os: ubuntu-latest, project: "etopan" }
+          - {os: ubuntu-latest, project: 'etopa' }
+          - {os: ubuntu-latest, project: 'etopai' }
+          - {os: ubuntu-latest, project: 'etopaw' }
+          - {os: ubuntu-latest, project: 'etopan' }
 
     steps:
       - name: Checkout
@@ -25,15 +25,15 @@ jobs:
           components: rustfmt, clippy
 
       - name: Linux target
-        if: ${{ matrix.config.project == "etopa" || matrix.config.project == "etopai" }}
+        if: ${{ matrix.config.project == 'etopa' || matrix.config.project == 'etopai' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable x86_64-unknown-linux-musl
 
       - name: WebAssembly target
-        if: ${{ matrix.config.project == "etopaw" }}
+        if: ${{ matrix.config.project == 'etopaw' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain wasm32-unknown-unknown
 
       - name: Android target
-        if: ${{ matrix.config.project == "etopan" }}
+        if: ${{ matrix.config.project == 'etopan' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
 
       - name: Build Linux
@@ -52,12 +52,12 @@ jobs:
 
       - name: Install wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
-        if: ${{ matrix.config.project == "etopaw" }}
+        if: ${{ matrix.config.project == 'etopaw' }}
         with:
           version: 'latest'
 
       - name: Build WebAssembly
-        if: ${{ matrix.config.project == "etopaw" }}
+        if: ${{ matrix.config.project == 'etopaw' }}
         run: wasm-pack build -t web ${{ matrix.config.project }}
 
       - name: Build Android
