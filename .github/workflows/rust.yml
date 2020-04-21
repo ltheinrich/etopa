@@ -7,10 +7,10 @@ jobs:
     strategy:
       matrix:
         project:
-          - etopa
-          - etopai
-          - etopan
-          - etopaw
+          - "etopa"
+          - "etopai"
+          - "etopan"
+          - "etopaw"
 
     steps:
       - name: Checkout
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build WebAssembly
         if: ${{ matrix.project == "etopaw" }}
-        run: wasm-pack build -t web etopaw
+        run: wasm-pack build -t web ${{ matrix.project }}
 
       - name: Build Android
         uses: actions-rs/cargo@v1
