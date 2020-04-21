@@ -1,15 +1,140 @@
-name: Rust
-
-on: [push]
+name: CI
+on: [push, pull_request]
 
 jobs:
-  build:
-
+  etopa:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@master
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+          target: x86_64-unknown-linux-musl
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -p ${{ github.job }} --all -- --check
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p ${{ github.job }} -- -D warnings
+
+  etopai:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+          target: x86_64-unknown-linux-musl
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -p ${{ github.job }} --all -- --check
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p ${{ github.job }} -- -D warnings
+
+  etopan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+          target: aarch64-linux-android
+
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: test
+          args: -p ${{ github.job }}
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -p ${{ github.job }} --all -- --check
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p ${{ github.job }} -- -D warnings
+
+  etopaw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+          target: wasm32-unknown-unknown
+
+      - uses: jetli/wasm-pack-action@v0.3.0
+        with:
+          version: 'latest'
+
+      - run: wasm-pack build -t web etopaw
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -p ${{ github.job }} --all -- --check
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -p ${{ github.job }} -- -D warnings
+
+  etopan-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: cd etopan-app && ./gradlew :app:bundleRelease
