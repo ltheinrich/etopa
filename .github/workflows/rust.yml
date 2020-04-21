@@ -62,10 +62,6 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: Linux target
-        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
-        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable x86_64-unknown-linux-musl
-
       - name: WebAssembly target
         if: ${{ matrix.project == 'etopaw' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable wasm32-unknown-unknown
@@ -74,21 +70,19 @@ jobs:
         if: ${{ matrix.project == 'etopan' }}
         run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
 
-      - name: Build Linux
+      - name: Build
         if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
-          use-cross: true
           command: build
-          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
+          args: -p ${{ matrix.project }}
 
-      - name: Test Linux
+      - name: Test
         if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
         uses: actions-rs/cargo@v1
         with:
-          use-cross: true
           command: test
-          args: -p ${{ matrix.project }} --target x86_64-unknown-linux-musl
+          args: -p ${{ matrix.project }}
 
       - name: Install wasm-pack
         if: ${{ matrix.project == 'etopaw' }}
