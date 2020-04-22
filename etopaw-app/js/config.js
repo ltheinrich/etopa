@@ -10,7 +10,11 @@ export const lang = {
         delete: "Delete",
         username: "Username",
         password: "Password",
-        registration: "Registration"
+        registration: "Registration",
+        name: "Name",
+        secret: "Secret",
+        add: "Add",
+        delete: "Delete"
     },
     de: {
         // TODO german language

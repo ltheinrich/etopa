@@ -14,7 +14,12 @@
     <script type="module" src="./js/index.js"></script>
     <div id="vue">
         <button id="logout">{{ lang.logout }}</button>
-        <p id="result"></p>
+        <br><br>
+        <progress id="timeleft" max="30"></progress>
+        <ul id="tokens"></ul>
+        <input id="name" type="text" v-bind:placeholder="lang.name">
+        <input id="secret" type="text" v-bind:placeholder="lang.secret">
+        <button id="add">{{ lang.add }}</button>
     </div>
 </body>
 
