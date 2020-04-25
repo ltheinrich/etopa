@@ -2,8 +2,11 @@
 
 use crate::utils::*;
 use crate::{jsonify, SharedData};
-use etopa::crypto::{argon2_hash, argon2_verify, random, random_an};
 use etopa::Fail;
+use etopa::{
+    crypto::{argon2_hash, argon2_verify, random, random_an},
+    data::{move_file, open_file, write_file},
+};
 use lhi::server::HttpRequest;
 use std::collections::BTreeMap;
 use std::fs::remove_file;
@@ -75,6 +78,13 @@ impl UserLogins {
     pub fn remove_user(&mut self, user: &str) {
         // remove user
         self.user_logins.remove(user);
+    }
+
+    /// Rename user entry
+    pub fn rename(&mut self, user: &str, new_user: String) {
+        if let Some(logins) = self.user_logins.remove(user) {
+            self.user_logins.insert(new_user, logins);
+        }
     }
 
     /// Remove expired logins
@@ -190,11 +200,6 @@ pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec
     let username = get_username(headers)?;
     let password = get_str(headers, "password")?;
 
-    // check username has no equals sign
-    if username.contains('=') {
-        return Fail::from("username contains = (equals sign)");
-    }
-
     // get shared
     let mut shared = shared.write().unwrap();
     let mut users = shared.user_data.parse()?;
@@ -214,4 +219,72 @@ pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec
 
     // return login token
     Ok(jsonify(object!(token: shared.user_logins.add(username))))
+}
+
+/// Change user handler
+pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+    // get values
+    let headers = req.headers();
+    let username = get_username(headers)?;
+    let token = get_str(headers, "token")?;
+    let password = get_str(headers, "password")?;
+    let new_username = get_an(headers, "new_username");
+
+    // get shared
+    let mut shared = shared.write().unwrap();
+    let mut users = shared.user_data.parse()?;
+
+    // verify login
+    if shared.user_logins.valid(username, token) {
+        // update secure storage
+        let edb_path = format!("{}/{}.edb", shared.data_dir, username);
+        let mut file = open_file(&edb_path)?;
+        write_file(&mut file, req.body())?;
+
+        // change password
+        if let Some(user_password) = users.get_mut(username) {
+            // argon2 hash password
+            let salt = random(10);
+            let password_argon2 = argon2_hash(password.as_bytes(), &salt)?;
+
+            // change password
+            *user_password = password_argon2;
+            shared.user_data.serialize(&users)?;
+        } else {
+            return Fail::from("internal error: user entry does not exist in cache");
+        }
+
+        // change username
+        if let Ok(new_username) = new_username {
+            // check if user already exists
+            if users.contains_key(new_username) {
+                return Fail::from("new username already exists");
+            }
+
+            // rename user
+            let new_edb_path = format!("{}/{}.edb", shared.data_dir, new_username);
+            move_file(&edb_path, &new_edb_path)?;
+            match users.remove(username) {
+                Some(password_hash) => users.insert(new_username.to_string(), password_hash),
+                None => {
+                    // revert filename change
+                    move_file(&new_edb_path, &edb_path)?;
+                    return Fail::from("internal error: user entry does not exist in cache");
+                }
+            };
+            if let Err(err) = shared.user_data.serialize(&users) {
+                // revert filename change
+                move_file(&new_edb_path, &edb_path)?;
+                return Err(err);
+            }
+            shared
+                .user_logins
+                .rename(username, new_username.to_string());
+        }
+
+        // return login token
+        Ok(jsonify(object!(success: true)))
+    } else {
+        Fail::from("unauthenticated")
+    }
 }

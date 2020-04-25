@@ -77,6 +77,7 @@ fn handle(
         "/user/delete" => api::user::delete,
         "/user/logout" => api::user::logout,
         "/user/valid" => api::user::valid,
+        "/user/change" => api::user::change,
         "/data/get_secure" => api::data::get_secure,
         "/data/set_secure" => api::data::set_secure,
         // handler not found

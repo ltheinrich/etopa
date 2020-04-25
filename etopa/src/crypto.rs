@@ -28,6 +28,41 @@ pub fn hash_password(password: &[u8], username: &[u8]) -> String {
     hex_encode(result)
 }
 
+/// Generate key (password hash) for secure storage encryption
+///
+/// sha3-256(username + sha3-256(secure_storage + sha3-256(password))
+/// Even username length -> first 32 bytes
+/// Uneven username length -> last 32 bytes
+pub fn hash_key(password: &[u8], username: &[u8]) -> String {
+    // init hasher and hash password
+    let mut hasher = Sha3_256::new();
+    hasher.input(password);
+    let mut enc = hex_encode(hasher.result());
+
+    // hash the hash with username
+    hasher = Sha3_256::new();
+    hasher.input(b"secure_storage");
+    hasher.input(enc);
+    enc = hex_encode(hasher.result());
+
+    // hash the hash with etopa
+    hasher = Sha3_256::new();
+    hasher.input(username);
+    hasher.input(enc);
+    let result = hasher.result();
+
+    // hex encode and check uneven username length
+    let mut full_key = hex_encode(result);
+    if username.len() % 2 != 0 {
+        // return last 32 bytes of key
+        return full_key.split_at(32).1.to_string();
+    }
+
+    // return first 32 bytes of key
+    full_key.truncate(32);
+    full_key
+}
+
 use argon2::{
     hash_encoded, verify_encoded, Config as Argon2Config, ThreadMode as Argon2ThreadMode,
 };

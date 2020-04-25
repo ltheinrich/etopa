@@ -22,13 +22,18 @@ pub fn hash_password(password: &str, username: &str) -> String {
 }
 
 #[wasm_bindgen]
+pub fn hash_key(password: &str, username: &str) -> String {
+    crypto::hash_key(password.as_bytes(), username.as_bytes())
+}
+
+#[wasm_bindgen]
 pub fn decrypt_storage(data: &[u8], key: &str) -> String {
     let data = if data.len() > 1 {
         &data[..(data.len() - 2)]
     } else {
         data
     };
-    decrypt(data, key).unwrap()
+    decrypt(data, key).unwrap_or("FAILED TO DECRYPT".to_string())
 }
 
 #[wasm_bindgen]
@@ -38,8 +43,10 @@ pub fn encrypt_storage(data: &str, key: &str) -> Vec<u8> {
 
 #[wasm_bindgen]
 pub fn gen_token(secret: &str, time_millis: u64) -> String {
-    Generator::new(secret)
-        .unwrap()
-        .token_at(time_millis / 1000)
-        .unwrap()
+    match Generator::new(secret) {
+        Ok(gen) => gen
+            .token_at(time_millis / 1000)
+            .unwrap_or("INVALID SECRET".to_string()),
+        Err(err) => err.to_string(),
+    }
 }

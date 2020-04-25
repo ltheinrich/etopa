@@ -9,7 +9,6 @@ use etopa::data::StorageFile;
 #[derive(Debug)]
 pub struct SharedData {
     pub user_data: StorageFile,
-    pub used_files: Vec<String>,
     pub user_logins: UserLogins,
     pub data_dir: String,
 }
@@ -20,7 +19,6 @@ impl SharedData {
         // return default with provided user data
         Self {
             user_data,
-            used_files: Vec::new(),
             user_logins: UserLogins::new(),
             data_dir,
         }

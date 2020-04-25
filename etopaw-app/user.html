@@ -11,16 +11,22 @@
 <body>
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
-    <script type="module" src="./js/register.js"></script>
+    <script type="module" src="./js/user.js"></script>
     <div id="vue">
+        <a href=".."><button>{{ lang.back }}</button></a>
+        <br><br>
         <form id="form">
-            <input id="username" type="text" v-bind:placeholder="lang.username" class="vue">
+            <input id="new_username" type="text" v-bind:placeholder="lang.new_username">
             <input id="password" type="password" v-bind:placeholder="lang.password">
-            <input id="repeat_password" type="password" v-bind:placeholder="lang.repeat_password">
-            <button id="login">{{ lang.register }}</button>
+            <input id="new_password" type="password" v-bind:placeholder="lang.new_password">
+            <input id="repeat_new_password" type="password" v-bind:placeholder="lang.repeat_new_password">
+            <button>{{ lang.change_user }}</button>
+        </form>
+        <form id="delete">
+            <input id="delete_password" type="password" v-bind:placeholder="lang.password">
+            <button>{{ lang.delete_user }}</button>
         </form>
         <p id="result"></p>
-        <p><a href="./login.html">{{ lang.login }}</a></p>
     </div>
 </body>
 

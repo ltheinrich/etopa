@@ -1,4 +1,4 @@
-import { load, api_fetch, raw_fetch, login_data } from "./common.js";
+import { load, api_fetch, login_data, lang, encrypt, load_storage } from "./common.js";
 
 let wasm;
 let storage;
@@ -11,14 +11,7 @@ load(async function (temp_wasm) {
 });
 
 async function reload_storage() {
-    storage = await raw_fetch(async function (resp) {
-        const buffer = await resp.arrayBuffer();
-        const storage = JSON.parse(wasm.decrypt_storage(new Uint8Array(buffer), "12345678901234567890123456789012"));
-        if (storage.secrets == undefined) {
-            storage.secrets = {};
-        }
-        return storage;
-    }, "data/get_secure", login_data());
+    storage = await load_storage(wasm);
     reload_tokens(true);
 }
 
@@ -27,7 +20,7 @@ async function update_storage() {
         if (json.success != true) {
             alert("Could not update secure storage: " + json.error);
         }
-    }, "data/set_secure", login_data(), wasm.encrypt_storage(JSON.stringify(storage), "12345678901234567890123456789012"));
+    }, "data/set_secure", login_data(), encrypt(wasm, storage));
     reload_storage();
 }
 
@@ -35,9 +28,12 @@ function add_token() {
     const name = document.getElementById("name");
     const secret = document.getElementById("secret");
     if (name.value != "" && secret.value != "") {
+        reload_storage();
         if (storage.secrets[name.value] == undefined) {
             storage.secrets[name.value] = secret.value;
             update_storage();
+            name.value = "";
+            secret.value = "";
         } else {
             alert("Name for secret already exists")
         }
@@ -47,9 +43,9 @@ function add_token() {
 }
 
 function remove_token(name) {
+    reload_storage();
     delete storage.secrets[name];
     update_storage();
-
 }
 
 function do_reload_tokens() {
@@ -70,14 +66,21 @@ function gen_tokens() {
     tokens.innerHTML = "";
     for (const key in storage.secrets) {
         const li = document.createElement("li");
-        li.appendChild(document.createTextNode(key + ": " + wasm.gen_token(storage.secrets[key], BigInt(Date.now())) + "<button>TODO: DELETE</button>"));
+        li.innerHTML = key + ": " + wasm.gen_token(storage.secrets[key], BigInt(Date.now())) + "&nbsp;";
+        const button = document.createElement("button");
+        button.innerText = lang.delete;
+        button.addEventListener("click", function () {
+            if (confirm("Delete secret")) {
+                remove_token(key);
+            }
+        });
+        li.appendChild(button);
         tokens.appendChild(li);
     }
 }
 
 document.getElementById("logout").onclick = function () {
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("token");
-    location.href = "./login.html";
     api_fetch(async function (json) { }, "user/logout", login_data());
+    sessionStorage.clear();
+    location.href = "./login.html";
 };

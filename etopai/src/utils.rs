@@ -21,18 +21,23 @@ pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T, Fa
         .or_else(|_| Fail::from(format!("{} is not correct type", key)))
 }
 
-/// Get username string and check if alphanumeric
-pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str, Fail> {
-    // get username
-    let username = get_str(data, "username")?;
+/// Get alphanumeric value as string or fail
+pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str, Fail> {
+    // get string
+    let an = get_str(data, key)?;
 
     // check if alphanumeric
-    if !username.chars().all(char::is_alphanumeric) {
-        return Fail::from("username is not alphanumeric");
+    if !an.chars().all(char::is_alphanumeric) {
+        return Fail::from(format!("{} is not alphanumeric", key));
     }
 
-    // valid username
-    Ok(username)
+    // return string
+    Ok(an)
+}
+
+/// Get username string and check if alphanumeric
+pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str, Fail> {
+    get_an(data, "username")
 }
 
 /// Convert JsonValue to response

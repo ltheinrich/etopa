@@ -8,7 +8,7 @@ use kern::Fail;
 use rand::{thread_rng, Rng};
 use std::collections::BTreeMap;
 use std::convert::TryInto;
-use std::fs::{File, OpenOptions};
+use std::fs::{remove_file, rename, File, OpenOptions};
 use std::io::prelude::*;
 use std::string::ToString;
 
@@ -76,6 +76,18 @@ pub fn open_file(file_name: impl AsRef<str>) -> Result<File, Fail> {
         .create(true)
         .open(file_name.as_ref())
         .or_else(Fail::from)
+}
+
+/// Delete file if exists
+pub fn delete_file(file_name: impl AsRef<str>) -> Result<(), Fail> {
+    // delete file
+    remove_file(file_name.as_ref()).or_else(Fail::from)
+}
+
+/// Move file
+pub fn move_file(file_name: impl AsRef<str>, new_file_name: impl AsRef<str>) -> Result<(), Fail> {
+    // delete file
+    rename(file_name.as_ref(), new_file_name.as_ref()).or_else(Fail::from)
 }
 
 /// Read data from file
