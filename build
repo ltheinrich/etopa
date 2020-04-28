@@ -25,9 +25,9 @@ elif [ $1 == "wasm" ]; then
   wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
 elif [ $1 == "full" ]; then
   rm -rf target/build && mkdir -p target/build
-  ./build.sh api && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
-  ./build.sh android
-  ./build.sh wasm && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
+  ./build api && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
+  ./build android
+  ./build wasm && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
 else
   echo "./build api|android|wasm|full"
 fi
