@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="./js/vue.min.js"></script>
 </head>
 
@@ -12,14 +13,33 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./js/login.js"></script>
-    <div id="vue">
-        <form id="form">
-            <input id="username" type="text" v-bind:placeholder="lang.username" class="vue">
-            <input id="password" type="password" v-bind:placeholder="lang.password">
-            <button id="login">{{ lang.login }}</button>
+    <div id="vue" class="container">
+        <form id="loginform" class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active">{{ lang.login }}</li>
+                        </ol>
+                    </nav>
+                </h5>
+                <div class="form-group row justify-content-md-center">
+                    <label for="username" class="col-sm-2 col-form-label">{{ lang.username }}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-md-center">
+                    <label for="password" class="col-sm-2 col-form-label">{{ lang.password }}</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">{{ lang.login }}</button>
+            </div>
         </form>
+        <br>
         <p id="result"></p>
-        <p><a href="./register.html">{{ lang.registration }}</a></p>
     </div>
 </body>
 

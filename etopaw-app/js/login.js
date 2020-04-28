@@ -1,7 +1,7 @@
 import { load, api_fetch } from "./common.js";
 
 load(async function (wasm) {
-    document.getElementById("form").onsubmit = function () {
+    document.getElementById("loginform").onsubmit = function () {
         const username = document.getElementById("username").value;
         const password = wasm.hash_password(document.getElementById("password").value, username);
         const storage_key = wasm.hash_key(document.getElementById("password").value, username);
