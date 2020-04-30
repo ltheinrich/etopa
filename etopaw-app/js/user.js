@@ -41,7 +41,7 @@ function change_user() {
 }
 
 function delete_user() {
-    const password = document.getElementById("delete_password").value;
+    const password = document.getElementById("password").value;
     if (wasm.hash_key(password, username()) != storage_key()) {
         alert("Current password incorrect");
         return false;

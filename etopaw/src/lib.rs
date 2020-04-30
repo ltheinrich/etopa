@@ -9,7 +9,7 @@ extern crate serde_derive;
 
 use etopa::{
     crypto,
-    data::{self, parse, serialize},
+    data::{parse, serialize},
     totp::Generator,
     wasm_bindgen::{self, prelude::*},
 };
@@ -42,14 +42,21 @@ pub fn hash_name(name: &str, username: &str) -> String {
 /// Decrypt from hex
 #[wasm_bindgen]
 pub fn decrypt_hex(data: &str, key: &str) -> String {
-    let data = crypto::hex_decode(data).unwrap();
-    data::decrypt(data, key).unwrap_or("FAILED TO DECRYPT".to_string())
+    // decode hex
+    let dec = crypto::hex_decode(data).unwrap();
+
+    // return decrypted
+    crypto::decrypt(dec, key).unwrap_or("FAILED TO DECRYPT".to_string())
 }
 
 /// Encrypt to hex
 #[wasm_bindgen]
 pub fn encrypt_hex(data: &str, key: &str) -> String {
-    crypto::hex_encode(data::encrypt(data, key).unwrap())
+    // encrypt
+    let enc = crypto::encrypt(data, key).unwrap();
+
+    // return hex-encoded
+    crypto::hex_encode(enc)
 }
 
 #[wasm_bindgen]
@@ -82,7 +89,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
             let dec = crypto::hex_decode(&v).unwrap();
 
             // decrypt secret and modify
-            *v = data::decrypt(dec, key).unwrap_or("FAILED TO DECRYPT".to_string())
+            *v = crypto::decrypt(dec, key).unwrap_or("FAILED TO DECRYPT".to_string())
         }
     });
 
@@ -103,12 +110,12 @@ pub fn serialize_storage(storage: JsValue, key: &str, username: &str) -> String 
         let name = crypto::hash_name(&k, username);
 
         // encrypt secret and name
-        let enc_secret = data::encrypt(&v, key).unwrap();
-        let enc_name = data::encrypt(&k, key).unwrap();
+        let enc_secret = crypto::encrypt(&v, key).unwrap();
+        let enc_name = crypto::encrypt(&k, key).unwrap();
 
         // hex encode secret and name
         let hex_secret = crypto::hex_encode(enc_secret);
-        let hex_name = crypto::hex_encode(enc_namet);
+        let hex_name = crypto::hex_encode(enc_name);
 
         // add secret and secret name
         map.insert(format!("{}_secret", name), hex_secret);

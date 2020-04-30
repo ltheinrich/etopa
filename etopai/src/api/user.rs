@@ -247,6 +247,9 @@ pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
             // change password
             *user_password = password_argon2;
             shared.user_data.write()?;
+
+            // remove user login tokens
+            shared.user_logins.remove_user(username);
         } else {
             return Fail::from("internal error: user entry does not exist in cache");
         }
@@ -258,9 +261,11 @@ pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
                 return Fail::from("new username already exists");
             }
 
-            // rename user
+            // move storage file
             let new_edb_path = format!("{}/{}.edb", shared.data_dir, new_username);
             move_file(&edb_path, &new_edb_path)?;
+
+            // change username
             let users = shared.user_data.cache_mut();
             match users.remove(username) {
                 Some(password_hash) => users.insert(new_username.to_string(), password_hash),
@@ -270,14 +275,16 @@ pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
                     return Fail::from("internal error: user entry does not exist in cache");
                 }
             };
+
+            // change users file
             if let Err(err) = shared.user_data.write() {
                 // revert filename change
                 move_file(&new_edb_path, &edb_path)?;
                 return Err(err);
             }
-            shared
-                .user_logins
-                .rename(username, new_username.to_string());
+
+            // remove user login tokens
+            shared.user_logins.remove_user(username);
         }
 
         // return success

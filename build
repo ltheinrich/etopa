@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-  echo "./build api|android|wasm|full"
+  echo "./build api|android|web|full"
 elif [ $1 == "api" ]; then
   cross build -p etopai --release
 elif [ $1 == "android" ]; then
@@ -21,13 +21,13 @@ elif [ $1 == "android" ]; then
   rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/arm64-v8a && mkdir -p $JNI_LIBS/armeabi-v7a
   cp target/aarch64-linux-android/release/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
   cp target/armv7-linux-androideabi/release/libetopan.so $JNI_LIBS/armeabi-v7a/libetopan.so
-elif [ $1 == "wasm" ]; then
+elif [ $1 == "web" ]; then
   wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
 elif [ $1 == "full" ]; then
   rm -rf target/build && mkdir -p target/build
   ./build api && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
   ./build android
-  ./build wasm && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
+  ./build web && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
 else
-  echo "./build api|android|wasm|full"
+  echo "./build api|android|web|full"
 fi

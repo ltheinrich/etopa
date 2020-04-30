@@ -16,15 +16,16 @@
     <div id="vue">
         <a href="./"><button>{{ lang.back }}</button></a>
         <br><br>
+        <input id="password" type="password" v-bind:placeholder="lang.password">
+        <br><br>
         <form id="form">
-            <input id="password" type="password" v-bind:placeholder="lang.password">
             <input id="new_username" type="text" v-bind:placeholder="lang.new_username">
             <input id="new_password" type="password" v-bind:placeholder="lang.new_password">
             <input id="repeat_new_password" type="password" v-bind:placeholder="lang.repeat_new_password">
             <button>{{ lang.change_user }}</button>
         </form>
+        <br>
         <form id="delete">
-            <input id="delete_password" type="password" v-bind:placeholder="lang.password">
             <button>{{ lang.delete_user }}</button>
         </form>
         <p id="result"></p>
