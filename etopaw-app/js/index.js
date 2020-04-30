@@ -1,39 +1,38 @@
-import { load, api_fetch, login_data, lang, encrypt, load_storage } from "./common.js";
+import { load, api_fetch, login_data, lang, load_secrets, username, storage_key } from "./common.js";
 
 let wasm;
-let storage;
+let secrets;
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
-    await reload_storage();
+    await reload_secrets();
     do_reload_tokens();
     document.getElementById("add").addEventListener("click", add_token);
 });
 
-async function reload_storage() {
-    storage = await load_storage(wasm);
+async function reload_secrets() {
+    secrets = await load_secrets(wasm);
     reload_tokens(true);
 }
 
-async function update_storage() {
-    await api_fetch(async function (json) {
-        if (json.success != true) {
-            alert("Could not update secure storage: " + json.error);
-        }
-    }, "data/set_secure", login_data(), encrypt(wasm, storage));
-    reload_storage();
-}
-
-function add_token() {
+async function add_token() {
     const name = document.getElementById("name");
     const secret = document.getElementById("secret");
     if (name.value != "" && secret.value != "") {
-        reload_storage();
-        if (storage.secrets[name.value] == undefined) {
-            storage.secrets[name.value] = secret.value;
-            update_storage();
-            name.value = "";
-            secret.value = "";
+        if (secrets[name.value] == undefined) {
+            let secret_name = wasm.hash_name(name.value, username());
+            let secret_value = wasm.encrypt_hex(secret.value, storage_key());
+            let secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());
+            api_fetch(async function (json) {
+                if (json.error == false) {
+                    reload_secrets();
+                    gen_tokens();
+                    name.value = "";
+                    secret.value = "";
+                } else {
+                    alert("API error: " + json.error);
+                }
+            }, "data/update", { secret_name, secret_value, secret_name_encrypted, ...login_data() });
         } else {
             alert("Name for secret already exists")
         }
@@ -43,9 +42,23 @@ function add_token() {
 }
 
 function remove_token(name) {
-    reload_storage();
-    delete storage.secrets[name];
-    update_storage();
+    if (name != "") {
+        if (secrets[name] != undefined) {
+            let secret_name = wasm.hash_name(name, username());
+            api_fetch(async function (json) {
+                if (json.error == false) {
+                    delete secrets[name];
+                    gen_tokens();
+                } else {
+                    alert("API error: " + json.error);
+                }
+            }, "data/delete", { secret_name, ...login_data() });
+        } else {
+            alert("Name does not exists")
+        }
+    } else {
+        alert("Name empty");
+    }
 }
 
 function do_reload_tokens() {
@@ -64,9 +77,9 @@ function reload_tokens(force = false) {
 function gen_tokens() {
     const tokens = document.getElementById("tokens");
     tokens.innerHTML = "";
-    for (const key in storage.secrets) {
+    for (const key in secrets) {
         const li = document.createElement("li");
-        li.innerHTML = key + ": " + wasm.gen_token(storage.secrets[key], BigInt(Date.now())) + "&nbsp;";
+        li.innerHTML = key + ": " + wasm.gen_token(secrets[key], BigInt(Date.now())) + "&nbsp;";
         const button = document.createElement("button");
         button.innerText = lang.delete;
         button.addEventListener("click", function () {

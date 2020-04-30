@@ -132,7 +132,7 @@ pub fn logout(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
         shared.user_logins.remove(username, token);
 
         // successfully deleted
-        Ok(jsonify(object!(success: true)))
+        Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
         Fail::from("unauthenticated")
@@ -148,18 +148,17 @@ pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 
     // get shared
     let mut shared = shared.write().unwrap();
-    let mut users = shared.user_data.parse()?;
 
     // verify login
     if shared.user_logins.valid(username, token) {
         // delete user
-        users.remove(username);
-        shared.user_data.serialize(&users)?;
+        shared.user_data.cache_mut().remove(username);
+        shared.user_data.write()?;
         shared.user_logins.remove_user(username);
         remove_file(format!("{}/{}.edb", shared.data_dir, username)).ok();
 
         // successfully deleted
-        Ok(jsonify(object!(success: true)))
+        Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
         Fail::from("unauthenticated")
@@ -175,10 +174,9 @@ pub fn login(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8
 
     // get shared
     let mut shared = shared.write().unwrap();
-    let users = shared.user_data.parse()?;
 
     // get password hash from db
-    match users.get(username) {
+    match shared.user_data.cache().get(username) {
         Some(password_hash) => {
             // verify argon2 password hash
             let password_verified = argon2_verify(password_hash, password.as_bytes());
@@ -202,7 +200,7 @@ pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec
 
     // get shared
     let mut shared = shared.write().unwrap();
-    let mut users = shared.user_data.parse()?;
+    let users = shared.user_data.cache_mut();
 
     // check if user already exists
     if users.contains_key(username) {
@@ -215,14 +213,14 @@ pub fn register(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec
 
     // modify users
     users.insert(username.to_string(), password_argon2);
-    shared.user_data.serialize(&users)?;
+    shared.user_data.write()?;
 
     // return login token
     Ok(jsonify(object!(token: shared.user_logins.add(username))))
 }
 
-/// Change user handler
-pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+/// Update user handler
+pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -232,7 +230,6 @@ pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 
     // get shared
     let mut shared = shared.write().unwrap();
-    let mut users = shared.user_data.parse()?;
 
     // verify login
     if shared.user_logins.valid(username, token) {
@@ -242,14 +239,14 @@ pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
         write_file(&mut file, req.body())?;
 
         // change password
-        if let Some(user_password) = users.get_mut(username) {
+        if let Some(user_password) = shared.user_data.cache_mut().get_mut(username) {
             // argon2 hash password
             let salt = random(10);
             let password_argon2 = argon2_hash(password.as_bytes(), &salt)?;
 
             // change password
             *user_password = password_argon2;
-            shared.user_data.serialize(&users)?;
+            shared.user_data.write()?;
         } else {
             return Fail::from("internal error: user entry does not exist in cache");
         }
@@ -257,13 +254,14 @@ pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
         // change username
         if let Ok(new_username) = new_username {
             // check if user already exists
-            if users.contains_key(new_username) {
+            if shared.user_data.cache().contains_key(new_username) {
                 return Fail::from("new username already exists");
             }
 
             // rename user
             let new_edb_path = format!("{}/{}.edb", shared.data_dir, new_username);
             move_file(&edb_path, &new_edb_path)?;
+            let users = shared.user_data.cache_mut();
             match users.remove(username) {
                 Some(password_hash) => users.insert(new_username.to_string(), password_hash),
                 None => {
@@ -272,7 +270,7 @@ pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
                     return Fail::from("internal error: user entry does not exist in cache");
                 }
             };
-            if let Err(err) = shared.user_data.serialize(&users) {
+            if let Err(err) = shared.user_data.write() {
                 // revert filename change
                 move_file(&new_edb_path, &edb_path)?;
                 return Err(err);
@@ -282,8 +280,8 @@ pub fn change(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
                 .rename(username, new_username.to_string());
         }
 
-        // return login token
-        Ok(jsonify(object!(success: true)))
+        // return success
+        Ok(jsonify(object!(error: false)))
     } else {
         Fail::from("unauthenticated")
     }

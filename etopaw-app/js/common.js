@@ -18,22 +18,17 @@ export function login_data() {
     return { username: username(), token: token() };
 }
 
-export async function load_storage(wasm) {
+export async function load_secrets(wasm) {
     return await raw_fetch(async function (resp) {
-        return await decrypt(wasm, resp);
+        const storage = wasm.parse_storage(new Uint8Array(await resp.arrayBuffer()), storage_key());
+        let secrets = {};
+        for (const key in storage) {
+            if (key.endsWith("_secret")) {
+                secrets[storage[key + "_name"]] = storage[key];
+            }
+        }
+        return secrets;
     }, "data/get_secure", login_data());
-}
-
-export async function decrypt(wasm, resp) {
-    let storage = JSON.parse(wasm.decrypt_storage(new Uint8Array(await resp.arrayBuffer()), storage_key()));
-    if (storage.secrets == undefined) {
-        storage.secrets = {};
-    }
-    return storage;
-}
-
-export function encrypt(wasm, storage, key = storage_key()) {
-    return wasm.encrypt_storage(JSON.stringify(storage), key);
 }
 
 export async function require_logout() {

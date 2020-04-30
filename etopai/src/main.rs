@@ -8,8 +8,8 @@ pub mod utils;
 
 mod api;
 
-use common::{json_error, jsonify, SharedData};
-use etopa::{common::*, data::StorageFile, meta::init_version, Command, Config, Fail};
+use common::{json_error, jsonify, SharedData, CARGO_TOML, HELP};
+use etopa::{data::StorageFile, meta::init_version, Command, Config, Fail};
 use lhi::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::sync::{Arc, RwLock};
@@ -38,15 +38,15 @@ fn main() {
     let port = cmd.param("port", config.value("port", "4490"));
     let addr = cmd.param("addr", config.value("addr", "[::]"));
     let threads = cmd.parameter("threads", config.get("threads", 1));
-    let cert = cmd.param("cert", config.value("cert", "data/cert.pem"));
-    let key = cmd.param("key", config.value("key", "data/key.pem"));
     let data = cmd.param("data", config.value("data", "data"));
+    let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
+    let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
 
     // open username/password storage
     let user_data = StorageFile::new(&format!("{}/user_data.esdb", data)).unwrap();
 
     // start server
-    let tls_config = load_certificate(cert, key).unwrap();
+    let tls_config = load_certificate(&cert, &key).unwrap();
     let listeners = listen(
         &format!("{}:{}", addr, port),
         threads,
@@ -77,9 +77,10 @@ fn handle(
         "/user/delete" => api::user::delete,
         "/user/logout" => api::user::logout,
         "/user/valid" => api::user::valid,
-        "/user/change" => api::user::change,
+        "/user/update" => api::user::update,
         "/data/get_secure" => api::data::get_secure,
-        "/data/set_secure" => api::data::set_secure,
+        "/data/update" => api::data::update,
+        "/data/delete" => api::data::delete,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };

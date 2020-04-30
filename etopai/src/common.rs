@@ -5,6 +5,12 @@ pub use crate::utils::*;
 use crate::api::user::UserLogins;
 use etopa::data::StorageFile;
 
+/// Help output
+pub const HELP: &str = "Help: TODO";
+
+/// Cargo.toml
+pub const CARGO_TOML: &str = include_str!("../Cargo.toml");
+
 /// Data shared between handlers
 #[derive(Debug)]
 pub struct SharedData {

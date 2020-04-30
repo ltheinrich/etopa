@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, encrypt, username, storage_key, load_storage } from "./common.js";
+import { load, api_fetch, login_data, username, storage_key, load_secrets } from "./common.js";
 
 let wasm;
 
@@ -22,9 +22,9 @@ function change_user() {
     }
     const new_password_hash = wasm.hash_password(new_password != "" ? new_password : password, new_username != "" ? new_username : username());
     const key = wasm.hash_key(new_password != "" ? new_password : password, new_username != "" ? new_username : username());
-    load_storage(wasm).then(storage => {
+    load_secrets(wasm).then(secrets => {
         api_fetch(async function (json) {
-            if (json.success == true) {
+            if (json.error == false) {
                 if (new_password != "" || new_username != "") {
                     sessionStorage.setItem("storage_key", key);
                 }
@@ -35,8 +35,8 @@ function change_user() {
             } else {
                 document.getElementById("result").innerText = json.error;
             }
-        }, "user/change", new_username != "" ? { new_username, password: new_password_hash, ...login_data() } : { password: new_password_hash, ...login_data() }, encrypt(wasm, storage, key));
-    });
+        }, "user/update", new_username != "" ? { new_username, password: new_password_hash, ...login_data() } : { password: new_password_hash, ...login_data() }, wasm.serialize_storage(secrets, key, username()));
+    })
     return false;
 }
 
@@ -47,7 +47,7 @@ function delete_user() {
         return false;
     }
     api_fetch(async function (json) {
-        if (json.success == true) {
+        if (json.error == false) {
             sessionStorage.clear();
             location.href = "./login.html";
         } else {
