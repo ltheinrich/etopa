@@ -19,5 +19,5 @@ hex = "0.4.2"
 rust-argon2 = "0.8.2"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = { version = "0.2.60" }
+wasm-bindgen = { version = "0.2.61" }
 rand = { version = "0.7.3", features = ["wasm-bindgen"] }
