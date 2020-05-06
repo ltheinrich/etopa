@@ -4,9 +4,7 @@ use aes_gcm::{
     aead::{generic_array::GenericArray, Aead, NewAead},
     Aes256Gcm,
 };
-use argon2::{
-    hash_encoded, verify_encoded, Config as Argon2Config, ThreadMode as Argon2ThreadMode,
-};
+use argon2::{hash_encoded, verify_encoded, Config, Variant};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::Fail;
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
@@ -154,18 +152,15 @@ pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<
 }
 
 /// Generate Argon2 password hash
-pub fn argon2_hash(pwd: &[u8], salt: &[u8]) -> Result<String, Fail> {
-    let mut config = Argon2Config::default();
-    config.lanes = 3;
-    config.thread_mode = Argon2ThreadMode::Sequential;
-    config.mem_cost = 1024;
-    config.time_cost = 2;
-    hash_encoded(pwd, salt, &config).or_else(Fail::from)
+pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<String, Fail> {
+    let mut config = Config::default();
+    config.variant = Variant::Argon2id;
+    hash_encoded(pwd.as_ref(), salt.as_ref(), &config).or_else(Fail::from)
 }
 
 /// Verify Argon2 password hash
-pub fn argon2_verify(encoded: &str, pwd: &[u8]) -> bool {
-    verify_encoded(encoded, pwd).unwrap_or(false)
+pub fn argon2_verify(encoded: impl AsRef<str>, pwd: impl AsRef<[u8]>) -> bool {
+    verify_encoded(encoded.as_ref(), pwd.as_ref()).unwrap_or(false)
 }
 
 /// Generate random vector

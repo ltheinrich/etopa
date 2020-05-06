@@ -1,4 +1,4 @@
-import * as config_import from "./config.js";
+import * as config_import from "../config.js";
 import { lang as lang_import } from "./lang.js";
 import init, * as wasm from "../pkg/etopaw.js";
 
@@ -31,17 +31,17 @@ export async function load_secrets(wasm) {
     }, "data/get_secure", login_data());
 }
 
-export async function require_logout() {
+export async function require_logout(rel = "./app/") {
     if (await valid_login()) {
-        location.href = "./index.html";
+        location.href = rel;
         return false;
     }
     return true;
 }
 
-export async function require_login() {
+export async function require_login(rel = "../") {
     if (!(await valid_login())) {
-        location.href = "./login.html";
+        location.href = rel;
         return false;
     }
     return true;
@@ -56,15 +56,15 @@ export async function valid_login() {
     }, "user/valid", login_data());
 }
 
-export async function load(exec = async function (wasm) { }, login = true) {
+export async function load(exec = async function (wasm) { }, login = true, rel) {
     document.title = config.TITLE;
     await init();
     wasm.set_panic_hook();
     let ok;
     if (login) {
-        ok = await require_login();
+        ok = await require_login(rel);
     } else {
-        ok = await require_logout();
+        ok = await require_logout(rel);
     }
     if (ok) {
         return await exec(wasm);
@@ -89,8 +89,12 @@ export async function raw_fetch(exec = async function (resp = new Response()) { 
         headers,
         body
     };
-    const resp = await fetch(`${config.API_URL}/${url}`, req);
-    return await exec(resp);
+    try {
+        const resp = await fetch(`${config.API_URL}/${url}`, req);
+        return await exec(resp);
+    } catch (err) {
+        return await exec(new Response(JSON.stringify({ error: err.toString() })));
+    }
 }
 
 export const config = config_import;
@@ -99,6 +103,7 @@ export const lang = lang_import[localStorage.getItem("lang") == null ? config.LA
 new Vue({
     el: "#vue",
     data: {
-        lang
+        lang,
+        config
     }
 });

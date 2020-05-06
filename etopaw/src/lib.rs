@@ -39,6 +39,14 @@ pub fn hash_name(name: &str, username: &str) -> String {
     crypto::hash_name(name.as_bytes(), username.as_bytes())
 }
 
+/// Argon2 password hash
+#[wasm_bindgen]
+pub fn argon2_hash(password: &str, username: &str) -> String {
+    let salt = crypto::random(16);
+    let password_hash = crypto::hash_password(password, username);
+    crypto::argon2_hash(password_hash, salt).unwrap()
+}
+
 /// Decrypt from hex
 #[wasm_bindgen]
 pub fn decrypt_hex(data: &str, key: &str) -> String {

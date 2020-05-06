@@ -12,16 +12,37 @@
 <body>
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
-    <script type="module" src="./js/index.js"></script>
-    <div id="vue">
-        <button id="logout">{{ lang.logout }}</button>
-        <a href="./user.html"><button>{{ lang.user }}</button></a>
-        <br><br>
-        <progress id="timeleft" max="30"></progress>
-        <ul id="tokens"></ul>
-        <input id="name" type="text" v-bind:placeholder="lang.name">
-        <input id="secret" type="text" v-bind:placeholder="lang.secret">
-        <button id="add">{{ lang.add }}</button>
+    <script type="module" src="./index.js"></script>
+    <div id="vue" class="container">
+        <form id="login" class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="./">{{ config.TITLE }}</a></li>
+                            <li class="breadcrumb-item active">{{ lang.login }}</li>
+                        </ol>
+                    </nav>
+                </h5>
+                <div class="form-group row justify-content-md-center">
+                    <label for="username" class="col-sm-2 col-form-label">{{ lang.username }}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-md-center">
+                    <label for="password" class="col-sm-2 col-form-label">{{ lang.password }}</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-md-center">
+                    <button type="submit" class="btn btn-primary"
+                        id="loginbtn">{{ lang.login }}</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-outline-info" id="register">{{ lang.register }}</button>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 

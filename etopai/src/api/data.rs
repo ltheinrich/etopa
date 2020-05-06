@@ -1,25 +1,23 @@
 //! Data API handlers
 
+use crate::data::{open_file, read_file, StorageFile};
 use crate::{common::*, SharedData};
-use etopa::{
-    data::{open_file, read_file, StorageFile},
-    Fail,
-};
+use etopa::Fail;
 use lhi::server::{respond, HttpRequest};
-use std::sync::{Arc, RwLock};
+use std::sync::RwLockReadGuard;
 
 /// Get storage file handler
-pub fn get_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+pub fn get_secure(
+    req: HttpRequest,
+    shared: RwLockReadGuard<'_, SharedData>,
+) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
-    // get shared
-    let shared = shared.read().unwrap();
-
     // verify login
-    if shared.user_logins.valid(username, token) {
+    if shared.logins().valid(username, token) {
         // read storage file
         let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
         Ok(respond(
@@ -34,7 +32,7 @@ pub fn get_secure(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<V
 }
 
 /// Update storage file handler
-pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+pub fn update(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -43,11 +41,8 @@ pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
     let secret_value = get_str(headers, "secret_value")?;
     let secret_name_encrypted = get_str(headers, "secret_name_encrypted")?;
 
-    // get shared
-    let shared = shared.write().unwrap();
-
     // verify login
-    if shared.user_logins.valid(username, token) {
+    if shared.logins().valid(username, token) {
         // read storage file
         let mut storage = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
         let cache = storage.cache_mut();
@@ -69,18 +64,15 @@ pub fn update(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u
 }
 
 /// Delete from storage file handler
-pub fn delete(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>, Fail> {
+pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
     let secret_name = get_str(headers, "secret_name")?;
 
-    // get shared
-    let shared = shared.write().unwrap();
-
     // verify login
-    if shared.user_logins.valid(username, token) {
+    if shared.logins().valid(username, token) {
         // read storage file
         let mut storage = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
         let cache = storage.cache_mut();

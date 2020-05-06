@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, username, storage_key, load_secrets } from "./common.js";
+import { load, api_fetch, login_data, username, storage_key, load_secrets } from "../js/common.js";
 
 let wasm;
 
@@ -20,7 +20,7 @@ function change_user() {
         alert("Current password incorrect");
         return false;
     }
-    const new_password_hash = wasm.hash_password(new_password != "" ? new_password : password, new_username != "" ? new_username : username());
+    const new_password_hash = wasm.argon2_hash(new_password != "" ? new_password : password, new_username != "" ? new_username : username());
     const key = wasm.hash_key(new_password != "" ? new_password : password, new_username != "" ? new_username : username());
     load_secrets(wasm).then(secrets => {
         api_fetch(async function (json) {

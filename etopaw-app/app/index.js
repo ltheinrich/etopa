@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, lang, load_secrets, username, storage_key } from "./common.js";
+import { load, api_fetch, login_data, lang, load_secrets, username, storage_key } from "../js/common.js";
 
 let wasm;
 let secrets;
@@ -95,5 +95,5 @@ function gen_tokens() {
 document.getElementById("logout").onclick = function () {
     api_fetch(async function (json) { }, "user/logout", login_data());
     sessionStorage.clear();
-    location.href = "./login.html";
+    location.href = "../";
 };

@@ -4,12 +4,14 @@
 extern crate json;
 
 pub mod common;
+pub mod data;
 pub mod utils;
 
 mod api;
 
 use common::{json_error, jsonify, SharedData, CARGO_TOML, HELP};
-use etopa::{data::StorageFile, meta::init_version, Command, Config, Fail};
+use data::StorageFile;
+use etopa::{meta::init_version, Command, Config, Fail};
 use lhi::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::sync::{Arc, RwLock};
@@ -37,13 +39,13 @@ fn main() {
     // configuration
     let port = cmd.param("port", config.value("port", "4490"));
     let addr = cmd.param("addr", config.value("addr", "[::]"));
-    let threads = cmd.parameter("threads", config.get("threads", 1));
+    let threads = cmd.parameter("threads", config.get("threads", 2));
     let data = cmd.param("data", config.value("data", "data"));
     let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
     let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
 
     // open username/password storage
-    let user_data = StorageFile::new(&format!("{}/user_data.esdb", data)).unwrap();
+    let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
 
     // start server
     let tls_config = load_certificate(&cert, &key).unwrap();
@@ -53,7 +55,7 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData::new(user_data, data.to_string()))),
+        Arc::new(RwLock::new(SharedData::new(users, data.to_string()))),
     )
     .unwrap();
 
@@ -86,7 +88,7 @@ fn handle(
     };
 
     // handle request
-    Ok(match handler(req, shared) {
+    Ok(match handler(req, shared.read().unwrap()) {
         Ok(resp) => resp,
         Err(err) => json_error(err),
     })
