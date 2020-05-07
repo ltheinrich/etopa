@@ -1,6 +1,6 @@
 //! Data API handlers
 
-use crate::data::{open_file, read_file, StorageFile};
+use crate::data::{open_file, read_file, write_file, StorageFile};
 use crate::{common::*, SharedData};
 use etopa::Fail;
 use lhi::server::{respond, HttpRequest};
@@ -25,6 +25,30 @@ pub fn get_secure(
             "application/octet-stream",
             cors_headers(),
         ))
+    } else {
+        // wrong login token
+        Fail::from("unauthenticated")
+    }
+}
+
+/// Set storage file handler
+pub fn set_secure(
+    req: HttpRequest,
+    shared: RwLockReadGuard<'_, SharedData>,
+) -> Result<Vec<u8>, Fail> {
+    // get values
+    let headers = req.headers();
+    let username = get_username(headers)?;
+    let token = get_str(headers, "token")?;
+
+    // verify login
+    if shared.logins().valid(username, token) {
+        // write to storage file
+        let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
+        write_file(&mut file, req.body())?;
+
+        // return success
+        Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
         Fail::from("unauthenticated")

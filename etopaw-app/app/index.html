@@ -15,13 +15,19 @@
     <script type="module" src="./index.js"></script>
     <div id="vue">
         <button id="logout">{{ lang.logout }}</button>
-        <a href="./user.html"><button>{{ lang.user }}</button></a>
-        <br><br>
-        <progress id="timeleft" max="30"></progress>
-        <ul id="tokens"></ul>
-        <input id="name" type="text" v-bind:placeholder="lang.name">
-        <input id="secret" type="text" v-bind:placeholder="lang.secret">
-        <button id="add">{{ lang.add }}</button>
+        <div id="totp" hidden>
+            <a href="./user.html"><button>{{ lang.user }}</button></a>
+            <br><br>
+            <progress id="timeleft" max="30"></progress>
+            <ul id="tokens"></ul>
+            <input id="name" type="text" v-bind:placeholder="lang.name">
+            <input id="secret" type="text" v-bind:placeholder="lang.secret">
+            <button id="add">{{ lang.add }}</button>
+        </div>
+        <div id="decryption" hidden>
+            <input id="encpassword" type="password" v-bind:placeholder="lang.enc_password">
+            <button id="decrypt">{{ lang.decrypt }}</button>
+        </div>
     </div>
 </body>
 

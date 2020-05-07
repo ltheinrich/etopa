@@ -18,7 +18,9 @@ export const lang = {
         change_user: "Change user",
         user: "User",
         new_username: "New username",
-        delete_user: "Delete user"
+        delete_user: "Delete user",
+        enc_password: "Encryption password",
+        decrypt: "Decrypt"
     },
     de: {
         // TODO german language

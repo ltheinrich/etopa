@@ -11,7 +11,10 @@ mod api;
 
 use common::{json_error, jsonify, SharedData, CARGO_TOML, HELP};
 use data::StorageFile;
-use etopa::{meta::init_version, Command, Config, Fail};
+use etopa::{
+    meta::{init_name, init_version},
+    Command, Config, Fail,
+};
 use lhi::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::sync::{Arc, RwLock};
@@ -23,6 +26,7 @@ fn main() {
         "Etopa {} (c) 2020 Lennart Heinrich\n",
         init_version(CARGO_TOML)
     );
+    init_name(CARGO_TOML);
 
     // parse arguments
     let args: Vec<String> = args().collect();
@@ -74,13 +78,16 @@ fn handle(
     // unwrap and match url
     let req: HttpRequest = req?;
     let handler = match req.url() {
+        // user
         "/user/register" => api::user::register,
         "/user/login" => api::user::login,
         "/user/delete" => api::user::delete,
         "/user/logout" => api::user::logout,
         "/user/valid" => api::user::valid,
         "/user/update" => api::user::update,
+        // data
         "/data/get_secure" => api::data::get_secure,
+        "/data/set_secure" => api::data::set_secure,
         "/data/update" => api::data::update,
         "/data/delete" => api::data::delete,
         // handler not found

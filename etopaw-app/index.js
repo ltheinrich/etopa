@@ -5,57 +5,68 @@ load(async function (wasm) {
     handle_register(wasm);
 }, false);
 
+const username = document.getElementById("username");
+const password = document.getElementById("password");
+const encpassword = document.getElementById("encpassword");
+const loginbtn = document.getElementById("loginbtn");
+const login = document.getElementById("login");
+const register = document.getElementById("register");
 
 function handle_login(wasm) {
-    const loginbtn = document.getElementById("loginbtn");
-    document.getElementById("login").onsubmit = function () {
+    login.onsubmit = function () {
         if (empty_inputs()) {
-            return alert("Empty username or password") == true;
+            return alert("Empty username or (encryption) password") == true;
         }
-        loginbtn.disabled = true;
-        const username = document.getElementById("username").value;
-        const password = wasm.hash_password(document.getElementById("password").value, username);
-        const storage_key = wasm.hash_key(document.getElementById("password").value, username);
+        disabled(true);
+        const password_hash = wasm.hash_password(password.value, username.value);
+        const storage_key = wasm.hash_key(encpassword.value, username.value);
         api_fetch(async function (json) {
             if ("token" in json) {
-                sessionStorage.setItem("username", username);
-                sessionStorage.setItem("token", json.token);
+                localStorage.setItem("username", username.value);
+                localStorage.setItem("token", json.token);
                 sessionStorage.setItem("storage_key", storage_key);
                 location.href = "./app/";
             } else {
                 alert("API error: " + json.error);
-                loginbtn.disabled = false;
+                disabled(false);
             }
-        }, "user/login", { username, password });
+        }, "user/login", { username: username.value, password: password_hash });
         return false;
     };
 }
 
 function handle_register(wasm) {
-    const register = document.getElementById("register");
     register.onclick = function () {
         if (empty_inputs()) {
-            return alert("Empty username or password") == true;
+            return alert("Empty username or (encryption) password") == true;
         }
-        register.disabled = true;
-        const username = document.getElementById("username").value;
-        const password = wasm.argon2_hash(document.getElementById("password").value, username);
-        const storage_key = wasm.hash_key(document.getElementById("password").value, username);
+        disabled(true);
+        const argon2_hash = wasm.argon2_hash(password.value, username.value);
+        const storage_key = wasm.hash_key(encpassword.value, username.value);
         api_fetch(async function (json) {
             if ("token" in json) {
-                sessionStorage.setItem("username", username);
-                sessionStorage.setItem("token", json.token);
+                localStorage.setItem("username", username.value);
+                localStorage.setItem("token", json.token);
                 sessionStorage.setItem("storage_key", storage_key);
                 location.href = "./app/";
             } else {
                 alert("API error: " + json.error);
-                register.disabled = false;
+                disabled(false);
             }
-        }, "user/register", { username, password });
+        }, "user/register", { username: username.value, password: argon2_hash });
         return false;
     };
 }
 
 function empty_inputs() {
-    return document.getElementById("username").value == "" || document.getElementById("password").value == "";
+    return username.value == "" || password.value == "" || encpassword.value == "";
+}
+
+function disabled(val) {
+    login.disabled = val;
+    loginbtn.disabled = val;
+    register.disabled = val;
+    username.disabled = val;
+    password.disabled = val;
+    encpassword.disabled = val;
 }

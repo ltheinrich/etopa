@@ -3,12 +3,43 @@ import { load, api_fetch, login_data, lang, load_secrets, username, storage_key 
 let wasm;
 let secrets;
 
+const encpassword = document.getElementById("encpassword");
+const add = document.getElementById("add");
+const totp = document.getElementById("totp");
+const decryption = document.getElementById("decryption");
+const decrypt = document.getElementById("decrypt");
+
 load(async function (temp_wasm) {
     wasm = temp_wasm;
-    await reload_secrets();
-    do_reload_tokens();
-    document.getElementById("add").addEventListener("click", add_token);
+    if (!await try_init()) {
+        decrypt.addEventListener("click", decrypt_storage);
+        decryption.hidden = false;
+    }
 });
+
+async function try_init() {
+    try {
+        await reload_secrets();
+        do_reload_tokens();
+        add.addEventListener("click", add_token);
+        totp.hidden = false;
+        decryption.hidden = true;
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
+async function decrypt_storage() {
+    if (encpassword.value == "") {
+        return alert("Empty encryption password") == true;
+    }
+    sessionStorage.setItem("storage_key", wasm.hash_key(encpassword.value, username()))
+    if (!await try_init()) {
+        return alert("Could not decrypt secure storage") == true;
+    }
+    return false;
+}
 
 async function reload_secrets() {
     secrets = await load_secrets(wasm);

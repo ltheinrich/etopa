@@ -3,11 +3,11 @@ import { lang as lang_import } from "./lang.js";
 import init, * as wasm from "../pkg/etopaw.js";
 
 export function username() {
-    return sessionStorage.getItem("username");
+    return localStorage.getItem("username");
 }
 
 export function token() {
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
 }
 
 export function storage_key() {
