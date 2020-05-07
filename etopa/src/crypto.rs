@@ -10,18 +10,12 @@ use kern::Fail;
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use sha3::{Digest, Sha3_256};
 
-/// Generate password hash for API usage -> sha3-256(etopa + sha3-256(username + sha3-256(password))
-pub fn hash_password(password: impl AsRef<[u8]>, username: impl AsRef<[u8]>) -> String {
+/// Generate password hash for API usage -> sha3-256(etopa + sha3-256(password))
+pub fn hash_password(password: impl AsRef<[u8]>) -> String {
     // init hasher and hash password
     let mut hasher = Sha3_256::new();
     hasher.input(password);
-    let mut enc = hex_encode(hasher.result());
-
-    // hash the hash with username
-    hasher = Sha3_256::new();
-    hasher.input(username);
-    hasher.input(enc);
-    enc = hex_encode(hasher.result());
+    let enc = hex_encode(hasher.result());
 
     // hash the hash with etopa
     hasher = Sha3_256::new();
@@ -33,20 +27,14 @@ pub fn hash_password(password: impl AsRef<[u8]>, username: impl AsRef<[u8]>) -> 
     hex_encode(result)
 }
 
-/// Generate secret name hash for API usage -> sha3-256(etopa_secret + sha3-256(username + sha3-256(name))
-pub fn hash_name(name: impl AsRef<[u8]>, username: impl AsRef<[u8]>) -> String {
+/// Generate secret name hash for API usage -> sha3-256(etopa_secret + sha3-256(name))
+pub fn hash_name(name: impl AsRef<[u8]>) -> String {
     // init hasher and hash name
     let mut hasher = Sha3_256::new();
     hasher.input(name);
-    let mut enc = hex_encode(hasher.result());
+    let enc = hex_encode(hasher.result());
 
-    // hash the hash with username
-    hasher = Sha3_256::new();
-    hasher.input(username);
-    hasher.input(enc);
-    enc = hex_encode(hasher.result());
-
-    // hash the hash with etopa
+    // hash the hash with etopa_Secret
     hasher = Sha3_256::new();
     hasher.input(b"etopa_secret");
     hasher.input(enc);
@@ -58,33 +46,27 @@ pub fn hash_name(name: impl AsRef<[u8]>, username: impl AsRef<[u8]>) -> String {
 
 /// Generate key (password hash) for secure storage encryption
 ///
-/// sha3-256(username + sha3-256(secure_storage + sha3-256(password))
-/// Even username length -> first 32 bytes
-/// Uneven username length -> last 32 bytes
-pub fn hash_key(password: impl AsRef<[u8]>, username: impl AsRef<[u8]>) -> String {
+/// sha3-256(secure_storage + sha3-256(password))
+/// Even password length -> first 32 bytes
+/// Uneven password length -> last 32 bytes
+pub fn hash_key(password: impl AsRef<[u8]>) -> String {
     // as ref
-    let username = username.as_ref();
+    let password = password.as_ref();
 
     // init hasher and hash password
     let mut hasher = Sha3_256::new();
     hasher.input(password);
-    let mut enc = hex_encode(hasher.result());
+    let enc = hex_encode(hasher.result());
 
-    // hash the hash with username
+    // hash the hash with secure_storage
     hasher = Sha3_256::new();
     hasher.input(b"secure_storage");
     hasher.input(enc);
-    enc = hex_encode(hasher.result());
-
-    // hash the hash with etopa
-    hasher = Sha3_256::new();
-    hasher.input(username);
-    hasher.input(enc);
     let result = hasher.result();
 
-    // hex encode and check uneven username length
+    // hex encode and check uneven password length
     let mut full_key = hex_encode(result);
-    if username.len() % 2 != 0 {
+    if password.len() % 2 != 0 {
         // return last 32 bytes of key
         return full_key.split_at(32).1.to_string();
     }

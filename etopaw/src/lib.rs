@@ -23,27 +23,27 @@ pub fn set_panic_hook() {
 
 /// Hash password for API usage
 #[wasm_bindgen]
-pub fn hash_password(password: &str, username: &str) -> String {
-    crypto::hash_password(password.as_bytes(), username.as_bytes())
+pub fn hash_password(password: &str) -> String {
+    crypto::hash_password(password.as_bytes())
 }
 
 /// Hash password for encryption
 #[wasm_bindgen]
-pub fn hash_key(password: &str, username: &str) -> String {
-    crypto::hash_key(password.as_bytes(), username.as_bytes())
+pub fn hash_key(password: &str) -> String {
+    crypto::hash_key(password.as_bytes())
 }
 
 /// Hash secret name
 #[wasm_bindgen]
-pub fn hash_name(name: &str, username: &str) -> String {
-    crypto::hash_name(name.as_bytes(), username.as_bytes())
+pub fn hash_name(name: &str) -> String {
+    crypto::hash_name(name.as_bytes())
 }
 
 /// Argon2 password hash
 #[wasm_bindgen]
-pub fn argon2_hash(password: &str, username: &str) -> String {
+pub fn argon2_hash(password: &str) -> String {
     let salt = crypto::random(16);
-    let password_hash = crypto::hash_password(password, username);
+    let password_hash = crypto::hash_password(password);
     crypto::argon2_hash(password_hash, salt).unwrap()
 }
 
@@ -65,6 +65,20 @@ pub fn encrypt_hex(data: &str, key: &str) -> String {
 
     // return hex-encoded
     crypto::hex_encode(enc)
+}
+
+/// Decode from hex
+#[wasm_bindgen]
+pub fn hex_decode(data: &str) -> Vec<u8> {
+    // decode from hex
+    crypto::hex_decode(data).unwrap()
+}
+
+/// Encode to hex
+#[wasm_bindgen]
+pub fn hex_encode(data: &[u8]) -> String {
+    // encode to hex
+    crypto::hex_encode(data)
 }
 
 #[wasm_bindgen]
@@ -107,7 +121,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
 
 /// Encrypt secrets and serialize map
 #[wasm_bindgen]
-pub fn serialize_storage(storage: JsValue, key: &str, username: &str) -> String {
+pub fn serialize_storage(storage: JsValue, key: &str) -> String {
     // deserialize from JS
     let storage: StringMap = storage.into_serde().unwrap();
 
@@ -115,7 +129,7 @@ pub fn serialize_storage(storage: JsValue, key: &str, username: &str) -> String 
     let mut map = BTreeMap::new();
     for (k, v) in storage.0 {
         // hash secret name
-        let name = crypto::hash_name(&k, username);
+        let name = crypto::hash_name(&k);
 
         // encrypt secret and name
         let enc_secret = crypto::encrypt(&v, key).unwrap();

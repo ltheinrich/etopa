@@ -61,9 +61,9 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
     let headers = req.headers();
     let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
-    let secret_name = get_str(headers, "secret_name")?;
-    let secret_value = get_str(headers, "secret_value")?;
-    let secret_name_encrypted = get_str(headers, "secret_name_encrypted")?;
+    let secret_name = get_str(headers, "secretname")?;
+    let secret_value = get_str(headers, "secretvalue")?;
+    let secret_name_encrypted = get_str(headers, "secretnameencrypted")?;
 
     // verify login
     if shared.logins().valid(username, token) {
@@ -93,7 +93,7 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
     let headers = req.headers();
     let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
-    let secret_name = get_str(headers, "secret_name")?;
+    let secret_name = get_str(headers, "secretname")?;
 
     // verify login
     if shared.logins().valid(username, token) {

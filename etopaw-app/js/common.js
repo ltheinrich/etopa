@@ -20,7 +20,9 @@ export function login_data() {
 
 export async function load_secrets(wasm) {
     return await raw_fetch(async function (resp) {
-        const storage = wasm.parse_storage(new Uint8Array(await resp.arrayBuffer()), storage_key());
+        const resp_data = new Uint8Array(await resp.arrayBuffer());
+        localStorage.setItem("storage_data", new TextDecoder("utf-8").decode(resp_data));
+        const storage = wasm.parse_storage(resp_data, storage_key());
         let secrets = {};
         for (const key in storage) {
             if (key.endsWith("_secret")) {

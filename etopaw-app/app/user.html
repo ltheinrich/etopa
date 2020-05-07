@@ -16,19 +16,26 @@
     <div id="vue">
         <a href="./"><button>{{ lang.back }}</button></a>
         <br><br>
-        <input id="password" type="password" v-bind:placeholder="lang.password">
+        <input id="enc_password" type="password" v-bind:placeholder="lang.enc_password">
         <br><br>
-        <form id="form">
+        <form id="change_username">
             <input id="new_username" type="text" v-bind:placeholder="lang.new_username">
+            <button type="submit">{{ lang.change_username }}</button>
+        </form>
+        <form id="change_password">
             <input id="new_password" type="password" v-bind:placeholder="lang.new_password">
             <input id="repeat_new_password" type="password" v-bind:placeholder="lang.repeat_new_password">
-            <button>{{ lang.change_user }}</button>
+            <button type="submit">{{ lang.change_password }}</button>
+        </form>
+        <form id="change_enc_password">
+            <input id="new_enc_password" type="password" v-bind:placeholder="lang.new_enc_password">
+            <input id="repeat_new_enc_password" type="password" v-bind:placeholder="lang.repeat_new_enc_password">
+            <button type="submit">{{ lang.change_enc_password }}</button>
         </form>
         <br>
-        <form id="delete">
-            <button>{{ lang.delete_user }}</button>
+        <form id="delete_user">
+            <button type="submit">{{ lang.delete_user }}</button>
         </form>
-        <p id="result"></p>
     </div>
 </body>
 

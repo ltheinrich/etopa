@@ -8,6 +8,9 @@ const add = document.getElementById("add");
 const totp = document.getElementById("totp");
 const decryption = document.getElementById("decryption");
 const decrypt = document.getElementById("decrypt");
+const name = document.getElementById("name");
+const secret = document.getElementById("secret");
+const tokens = document.getElementById("tokens");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -20,12 +23,14 @@ load(async function (temp_wasm) {
 async function try_init() {
     try {
         await reload_secrets();
-        do_reload_tokens();
+        reload_tokens(true);
+        setInterval(reload_tokens, 1000);
         add.addEventListener("click", add_token);
         totp.hidden = false;
         decryption.hidden = true;
         return true;
     } catch (err) {
+        console.log(err);
         return false;
     }
 }
@@ -34,7 +39,7 @@ async function decrypt_storage() {
     if (encpassword.value == "") {
         return alert("Empty encryption password") == true;
     }
-    sessionStorage.setItem("storage_key", wasm.hash_key(encpassword.value, username()))
+    sessionStorage.setItem("storage_key", wasm.hash_key(encpassword.value))
     if (!await try_init()) {
         return alert("Could not decrypt secure storage") == true;
     }
@@ -47,11 +52,9 @@ async function reload_secrets() {
 }
 
 async function add_token() {
-    const name = document.getElementById("name");
-    const secret = document.getElementById("secret");
     if (name.value != "" && secret.value != "") {
         if (secrets[name.value] == undefined) {
-            let secret_name = wasm.hash_name(name.value, username());
+            let secret_name = wasm.hash_name(name.value);
             let secret_value = wasm.encrypt_hex(secret.value, storage_key());
             let secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());
             api_fetch(async function (json) {
@@ -63,7 +66,7 @@ async function add_token() {
                 } else {
                     alert("API error: " + json.error);
                 }
-            }, "data/update", { secret_name, secret_value, secret_name_encrypted, ...login_data() });
+            }, "data/update", { secretname: secret_name, secretvalue: secret_value, secretnameencrypted: secret_name_encrypted, ...login_data() });
         } else {
             alert("Name for secret already exists")
         }
@@ -75,7 +78,7 @@ async function add_token() {
 function remove_token(name) {
     if (name != "") {
         if (secrets[name] != undefined) {
-            let secret_name = wasm.hash_name(name, username());
+            let secret_name = wasm.hash_name(name);
             api_fetch(async function (json) {
                 if (json.error == false) {
                     delete secrets[name];
@@ -83,18 +86,13 @@ function remove_token(name) {
                 } else {
                     alert("API error: " + json.error);
                 }
-            }, "data/delete", { secret_name, ...login_data() });
+            }, "data/delete", { secretname: secret_name, ...login_data() });
         } else {
             alert("Name does not exists")
         }
     } else {
         alert("Name empty");
     }
-}
-
-function do_reload_tokens() {
-    reload_tokens(true);
-    setInterval(reload_tokens, 1000);
 }
 
 function reload_tokens(force = false) {
@@ -106,7 +104,6 @@ function reload_tokens(force = false) {
 }
 
 function gen_tokens() {
-    const tokens = document.getElementById("tokens");
     tokens.innerHTML = "";
     for (const key in secrets) {
         const li = document.createElement("li");
@@ -125,6 +122,8 @@ function gen_tokens() {
 
 document.getElementById("logout").onclick = function () {
     api_fetch(async function (json) { }, "user/logout", login_data());
-    sessionStorage.clear();
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("storage_key");
     location.href = "../";
 };

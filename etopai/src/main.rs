@@ -84,7 +84,8 @@ fn handle(
         "/user/delete" => api::user::delete,
         "/user/logout" => api::user::logout,
         "/user/valid" => api::user::valid,
-        "/user/update" => api::user::update,
+        "/user/change_password" => api::user::change_password,
+        "/user/change_username" => api::user::change_username,
         // data
         "/data/get_secure" => api::data::get_secure,
         "/data/set_secure" => api::data::set_secure,

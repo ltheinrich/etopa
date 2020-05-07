@@ -18,8 +18,8 @@ function handle_login(wasm) {
             return alert("Empty username or (encryption) password") == true;
         }
         disabled(true);
-        const password_hash = wasm.hash_password(password.value, username.value);
-        const storage_key = wasm.hash_key(encpassword.value, username.value);
+        const password_hash = wasm.hash_password(password.value);
+        const storage_key = wasm.hash_key(encpassword.value);
         api_fetch(async function (json) {
             if ("token" in json) {
                 localStorage.setItem("username", username.value);
@@ -41,8 +41,8 @@ function handle_register(wasm) {
             return alert("Empty username or (encryption) password") == true;
         }
         disabled(true);
-        const argon2_hash = wasm.argon2_hash(password.value, username.value);
-        const storage_key = wasm.hash_key(encpassword.value, username.value);
+        const argon2_hash = wasm.argon2_hash(password.value);
+        const storage_key = wasm.hash_key(encpassword.value);
         api_fetch(async function (json) {
             if ("token" in json) {
                 localStorage.setItem("username", username.value);
