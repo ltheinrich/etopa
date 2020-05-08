@@ -26,7 +26,8 @@ export const lang = {
         change_password: "Change password",
         change_enc_password: "Change encryption password",
         new_enc_password: "New encryption password",
-        repeat_new_enc_password: "Repeat new encryption password"
+        repeat_new_enc_password: "Repeat new encryption password",
+        offline_mode: "Offline mode"
     },
     de: {
         // TODO german language

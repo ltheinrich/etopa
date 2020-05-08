@@ -1,21 +1,27 @@
-import { load, api_fetch, login_data, lang, load_secrets, username, storage_key } from "../js/common.js";
+import { load, api_fetch, login_data, lang, load_secrets, storage_key, online } from "../js/common.js";
 
 let wasm;
 let secrets;
 
 const encpassword = document.getElementById("encpassword");
 const add = document.getElementById("add");
+const addform = document.getElementById("addform");
 const totp = document.getElementById("totp");
 const decryption = document.getElementById("decryption");
 const decrypt = document.getElementById("decrypt");
 const name = document.getElementById("name");
 const secret = document.getElementById("secret");
 const tokens = document.getElementById("tokens");
+const userbtn = document.getElementById("userbtn");
+const offline_mode = document.getElementById("offline_mode");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
     if (!await try_init()) {
-        decrypt.addEventListener("click", decrypt_storage);
+        decrypt.addEventListener("click", function () {
+            decrypt_storage();
+            return false;
+        });
         decryption.hidden = false;
     }
 });
@@ -23,6 +29,9 @@ load(async function (temp_wasm) {
 async function try_init() {
     try {
         await reload_secrets();
+        addform.hidden = !online;
+        userbtn.hidden = !online;
+        offline_mode.hidden = online;
         reload_tokens(true);
         setInterval(reload_tokens, 1000);
         add.addEventListener("click", add_token);
@@ -30,7 +39,6 @@ async function try_init() {
         decryption.hidden = true;
         return true;
     } catch (err) {
-        console.log(err);
         return false;
     }
 }
@@ -108,14 +116,16 @@ function gen_tokens() {
     for (const key in secrets) {
         const li = document.createElement("li");
         li.innerHTML = key + ": " + wasm.gen_token(secrets[key], BigInt(Date.now())) + "&nbsp;";
-        const button = document.createElement("button");
-        button.innerText = lang.delete;
-        button.addEventListener("click", function () {
-            if (confirm("Delete secret")) {
-                remove_token(key);
-            }
-        });
-        li.appendChild(button);
+        if (online) {
+            const button = document.createElement("button");
+            button.innerText = lang.delete;
+            button.addEventListener("click", function () {
+                if (confirm("Delete secret")) {
+                    remove_token(key);
+                }
+            });
+            li.appendChild(button);
+        }
         tokens.appendChild(li);
     }
 }

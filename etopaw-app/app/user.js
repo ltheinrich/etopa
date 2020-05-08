@@ -27,7 +27,7 @@ load(async function (temp_wasm) {
         delete_user();
         return false;
     };
-});
+}, true);
 
 async function change_username() {
     if (wasm.hash_key(enc_password.value) != storage_key()) {
