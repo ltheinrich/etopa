@@ -13,22 +13,45 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./index.js"></script>
-    <div id="vue">
-        <button id="logout">{{ lang.logout }}</button>
-        <div id="totp" hidden>
-            <a href="./user.html" id="userbtn" hidden><button>{{ lang.user }}</button></a><br>
-            <h5 id="offline_mode" hidden>{{ lang.offline_mode }}</h5><br>
-            <progress id="timeleft" max="30"></progress>
-            <ul id="tokens"></ul>
-            <div id="addform" hidden>
-                <input id="name" type="text" v-bind:placeholder="lang.name">
-                <input id="secret" type="text" v-bind:placeholder="lang.secret">
-                <button id="add">{{ lang.add }}</button>
+    <div id="vue" class="card container">
+        <div class="card-body">
+            <h5 class="card-title">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="./">
+                            <img src="../favicon.png" width="20" height="20">&nbsp;{{ config.TITLE }}</a>
+                        <a class="nav-item nav-link" href="./account.html" id="userbtn" hidden>Account</a>
+                        <a class="nav-item nav-link" href="#" id="logout">Logout ({{ username }})</a>
+                    </div>
+                </nav>
+            </h5>
+            <div id="totp" hidden>
+                <a href="#" id="offline_mode" hidden>
+                    <h5>{{ lang.disable_offline_mode }}</h5>
+                </a><br>
+                <div class="progress time-left-progress">
+                    <div id="time_left" class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="30"
+                        aria-valuemin="0" aria-valuemax="30">
+                    </div>
+                </div><br>
+                <div id="tokens" class="list-group"></div><br>
+                <textarea id="clipboard" hidden></textarea>
+                <form id="addform" hidden>
+                    <div class="row">
+                        <div class="col">
+                            <input id="name" type="text" class="form-control" v-bind:placeholder="lang.name">
+                        </div>
+                        <div class="col">
+                            <input id="secret" type="text" class="form-control" v-bind:placeholder="lang.secret">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="add">{{ lang.add_secret }}</button>
+                    </div>
+                </form>
             </div>
-        </div>
-        <div id="decryption" hidden>
-            <input id="encpassword" type="password" v-bind:placeholder="lang.enc_password">
-            <button id="decrypt">{{ lang.decrypt }}</button>
+            <div id="decryption" hidden>
+                <input id="encpassword" type="password" v-bind:placeholder="lang.enc_password">
+                <button id="decrypt">{{ lang.decrypt }}</button>
+            </div>
         </div>
     </div>
 </body>

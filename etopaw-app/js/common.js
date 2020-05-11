@@ -2,6 +2,7 @@ import * as config_import from "../config.js";
 import { lang as lang_import } from "./lang.js";
 import init, * as wasm from "../pkg/etopaw.js";
 
+let valid_login = false;
 export let online = false;
 
 export function username() {
@@ -52,23 +53,7 @@ export async function load_secrets(wasm) {
     }
 }
 
-export async function require_logout(rel = "./app/") {
-    if (await valid_login()) {
-        location.href = rel;
-        return false;
-    }
-    return true;
-}
-
-export async function require_login(rel = "../") {
-    if (!(await valid_login())) {
-        location.href = rel;
-        return false;
-    }
-    return true;
-}
-
-export async function valid_login() {
+export async function val_login() {
     if (username() == null || token() == null) {
         return false;
     }
@@ -77,37 +62,33 @@ export async function valid_login() {
     }, "user/valid", login_data());
 }
 
-export async function load(exec = async function (wasm) { }, login, rel) {
+export async function load(exec = async function (wasm) { }, login, rel = "") {
     document.title = config.TITLE;
     await init();
     wasm.set_panic_hook();
-    let ok;
-    if (login == undefined) {
-        ok = true;
-    } else if (login) {
-        ok = await require_login(rel);
-    } else {
-        ok = await require_logout(rel);
+    valid_login = await val_login();
+    if (login == true && !valid_login) {
+        location.href = rel + "../";
+    } else if (login == false && valid_login) {
+        location.href = rel + "./app/";
     }
-    if (ok) {
-        return await exec(wasm);
-    }
+    return await exec(wasm);
 }
 
-export async function api_fetch(exec = async function (json = {}) { }, url = "", data = {}, body = new Uint8Array(0)) {
+export async function api_fetch(exec = async function (json = {}) { }, url = "", headers = {}, body = new Uint8Array(0)) {
     return await raw_fetch(async function (data) {
         const json = JSON.parse(new TextDecoder("utf-8").decode(data));
         if (json.error != undefined && json.error != false) {
             online = false;
         }
         return await exec(json);
-    }, url, data, body);
+    }, url, headers, body);
 }
 
-export async function raw_fetch(exec = async function (data = new Uint8Array(0)) { }, url = "", data = {}, body = new Uint8Array(0)) {
-    const headers = new Headers({ "content-type": "application/json" });
-    for (var key in data) {
-        headers.append(key, data[key]);
+export async function raw_fetch(exec = async function (data = new Uint8Array(0)) { }, url = "", headers = {}, body = new Uint8Array(0)) {
+    const http_headers = new Headers({ "content-type": "application/json" });
+    for (var key in headers) {
+        http_headers.append(key, headers[key]);
     }
     let req = {
         method: "POST",
@@ -118,11 +99,11 @@ export async function raw_fetch(exec = async function (data = new Uint8Array(0))
     try {
         const resp = await fetch(`${config.API_URL}/${url}`, req);
         const data = new Uint8Array(await resp.arrayBuffer());
-        online = true;
+        online = valid_login;
         return await exec(data);
     } catch (err) {
         online = false;
-        return await exec(new Response(JSON.stringify({ error: err.toString() })));
+        return await exec(new TextEncoder("utf-8").encode(JSON.stringify({ error: err.toString() })));
     }
 }
 
@@ -133,6 +114,7 @@ new Vue({
     el: "#vue",
     data: {
         lang,
-        config
+        config,
+        username: localStorage.getItem("username")
     }
 });

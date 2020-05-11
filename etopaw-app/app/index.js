@@ -13,7 +13,10 @@ const name = document.getElementById("name");
 const secret = document.getElementById("secret");
 const tokens = document.getElementById("tokens");
 const userbtn = document.getElementById("userbtn");
+const logout = document.getElementById("logout");
 const offline_mode = document.getElementById("offline_mode");
+const time_left = document.getElementById("time_left");
+const clipboard = document.getElementById("clipboard");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -29,16 +32,21 @@ load(async function (temp_wasm) {
 async function try_init() {
     try {
         await reload_secrets();
+        reload_tokens(true);
+        setInterval(reload_tokens, 1000);
+        addform.onsubmit = function () { add_token(); return false; };
+        offline_mode.addEventListener("click", function () {
+            sessionStorage.removeItem("storage_key");
+            location.href = "../";
+        })
         addform.hidden = !online;
         userbtn.hidden = !online;
         offline_mode.hidden = online;
-        reload_tokens(true);
-        setInterval(reload_tokens, 1000);
-        add.addEventListener("click", add_token);
         totp.hidden = false;
         decryption.hidden = true;
         return true;
     } catch (err) {
+        console.log(err);
         return false;
     }
 }
@@ -105,7 +113,10 @@ function remove_token(name) {
 
 function reload_tokens(force = false) {
     const left = 30 - (Date.now() / 1000) % 30;
-    document.getElementById("timeleft").value = Math.round(left);
+    const round_left = Math.round(left);
+    time_left.setAttribute("aria-valuenow", round_left);
+    time_left.style = "width: " + (round_left / 30) * 100 + "%";
+    time_left.innerText = round_left;
     if (left > 29 || force) {
         gen_tokens();
     }
@@ -114,23 +125,42 @@ function reload_tokens(force = false) {
 function gen_tokens() {
     tokens.innerHTML = "";
     for (const key in secrets) {
-        const li = document.createElement("li");
-        li.innerHTML = key + ": " + wasm.gen_token(secrets[key], BigInt(Date.now())) + "&nbsp;";
+        const a = document.createElement("a");
+        const token = wasm.gen_token(secrets[key], BigInt(Date.now()));
+        a.innerHTML = "<strong>" + key + "</strong>" + token;
+        a.addEventListener("click", function () {
+            const el = document.createElement("textarea");
+            el.value = token;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        });
+        a.classList.add("list-group-item");
+        a.classList.add("list-group-item-action");
+        a.classList.add("d-flex");
+        a.classList.add("justify-content-between");
+        a.classList.add("align-items-center");
+        a.href = "#";
         if (online) {
-            const button = document.createElement("button");
+            const button = document.createElement("a");
             button.innerText = lang.delete;
             button.addEventListener("click", function () {
                 if (confirm("Delete secret")) {
                     remove_token(key);
                 }
             });
-            li.appendChild(button);
+            button.classList.add("badge");
+            button.classList.add("badge-danger");
+            button.classList.add("badge-pill");
+            button.href = "#";
+            a.appendChild(button);
         }
-        tokens.appendChild(li);
+        tokens.appendChild(a);
     }
 }
 
-document.getElementById("logout").onclick = function () {
+logout.onclick = function () {
     api_fetch(async function (json) { }, "user/logout", login_data());
     localStorage.removeItem("username");
     localStorage.removeItem("token");
