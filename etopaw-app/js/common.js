@@ -107,6 +107,66 @@ export async function raw_fetch(exec = async function (data = new Uint8Array(0))
     }
 }
 
+export const modal = document.querySelector(".modal");
+const modal_close = document.querySelector(".modal-close");
+const modal_body = document.querySelector(".modal-body");
+const modal_title = document.querySelector(".modal-title");
+const modal_btn = document.getElementById("modal_btn");
+const modal_btn_close = document.getElementById("modal_btn_close");
+modal.addEventListener("click", function (e) {
+    if (e.target !== modal) return;
+    modal.hidden = true;
+});
+modal_close.addEventListener("click", function () {
+    modal.hidden = true;
+});
+
+export function alert(text = "") {
+    modal_title.innerText = config.TITLE;
+    modal_body.innerText = text;
+    modal_btn.innerText = lang.ok;
+    modal_btn_close.innerText = lang.close;
+    modal_btn_close.onclick = function () {
+        modal.hidden = true;
+    };
+    modal_btn.onclick = function () {
+        modal.hidden = true;
+    };
+    modal.hidden = false;
+    return false;
+}
+
+export function alert_error(text = "") {
+    modal_title.innerText = lang.error;
+    modal_body.innerText = text;
+    modal_btn.innerText = lang.ok;
+    modal_btn_close.innerText = lang.close;
+    modal_btn_close.onclick = function () {
+        modal.hidden = true;
+    };
+    modal_btn.onclick = function () {
+        modal.hidden = true;
+    };
+    modal.hidden = false;
+    return false;
+}
+
+export function confirm(text = "", exec_fn = async function () { }) {
+    modal_title.innerText = lang.confirmation;
+    modal_body.innerText = text;
+    modal_btn.innerText = lang.confirm;
+    modal_btn_close.innerText = lang.close;
+    modal_btn_close.onclick = function () {
+        modal.hidden = true;
+    };
+    modal_btn.onclick = function () {
+        modal.hidden = true;
+        exec_fn();
+    };
+    modal.hidden = false;
+    return false;
+}
+
 export const config = config_import;
 export const lang = lang_import[localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")];
 

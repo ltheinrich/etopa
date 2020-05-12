@@ -1,4 +1,4 @@
-import { load, api_fetch, load_secrets } from "./js/common.js";
+import { load, api_fetch, load_secrets, alert_error } from "./js/common.js";
 
 const username = document.getElementById("username");
 const password = document.getElementById("password");
@@ -23,7 +23,7 @@ function handle_login(wasm) {
             sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value));
             return location.href = "./app/";
         }
-        return alert("Empty username or password");
+        return alert_error("Empty username or password");
     }
     disabled(true);
     const password_hash = wasm.hash_password(password.value);
@@ -35,7 +35,7 @@ function handle_login(wasm) {
             sessionStorage.setItem("storage_key", storage_key);
             location.href = "./app/";
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
             disabled(false);
         }
     }, "user/login", { username: username.value, password: password_hash });
@@ -43,7 +43,7 @@ function handle_login(wasm) {
 
 function handle_register(wasm) {
     if (empty_inputs()) {
-        return alert("Empty username or (encryption) password");
+        return alert_error("Empty username or (encryption) password");
     }
     disabled(true);
     const argon2_hash = wasm.argon2_hash(password.value);
@@ -55,7 +55,7 @@ function handle_register(wasm) {
             sessionStorage.setItem("storage_key", storage_key);
             location.href = "./app/";
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
             disabled(false);
         }
     }, "user/register", { username: username.value, password: argon2_hash });

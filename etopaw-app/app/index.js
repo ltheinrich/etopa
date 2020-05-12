@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, lang, load_secrets, storage_key, online } from "../js/common.js";
+import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error } from "../js/common.js";
 
 let wasm;
 let secrets;
@@ -52,11 +52,11 @@ async function try_init() {
 
 async function decrypt_storage() {
     if (enc_password.value == "") {
-        return alert("Empty encryption password") == true;
+        return alert_error("Empty encryption password") == true;
     }
     sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value))
     if (!await try_init()) {
-        return alert("Could not decrypt secure storage") == true;
+        return alert_error("Could not decrypt secure storage") == true;
     }
     return false;
 }
@@ -80,15 +80,15 @@ async function add_token() {
                     name.value = "";
                     secret.value = "";
                 } else {
-                    alert("API error: " + json.error);
+                    alert_error("API error: " + json.error);
                 }
                 disabled(false);
             }, "data/update", { secretname: secret_name, secretvalue: secret_value, secretnameencrypted: secret_name_encrypted, ...login_data() });
         } else {
-            alert("Name for secret already exists")
+            alert_error("Name for secret already exists")
         }
     } else {
-        alert("Name or secret empty");
+        alert_error("Name or secret empty");
     }
 }
 
@@ -107,14 +107,14 @@ function remove_token(name) {
                     delete secrets[name];
                     gen_tokens();
                 } else {
-                    alert("API error: " + json.error);
+                    alert_error("API error: " + json.error);
                 }
             }, "data/delete", { secretname: secret_name, ...login_data() });
         } else {
-            alert("Name does not exists")
+            alert_error("Name does not exists")
         }
     } else {
-        alert("Name empty");
+        alert_error("Name empty");
     }
 }
 

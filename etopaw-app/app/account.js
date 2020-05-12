@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, username, storage_key, load_secrets } from "../js/common.js";
+import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error } from "../js/common.js";
 
 let wasm;
 
@@ -28,14 +28,14 @@ load(async function (temp_wasm) {
         return false;
     };
     document.getElementById("delete_user").onsubmit = function () {
-        delete_user();
+        confirm("Delete user?", delete_user);
         return false;
     };
 }, true);
 
 async function change_username() {
     if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert("Encryption password incorrect");
+        return alert_error("Encryption password incorrect");
     }
     disabled(true);
     await api_fetch(async function (json) {
@@ -44,7 +44,7 @@ async function change_username() {
             clear_inputs();
             alert("Username successfully changed");
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
         }
         disabled(false);
     }, "user/change_username", { newusername: new_username.value, ...login_data() });
@@ -52,9 +52,9 @@ async function change_username() {
 
 async function change_password() {
     if (new_password.value != repeat_new_password.value) {
-        return alert("Passwords do not match");
+        return alert_error("Passwords do not match");
     } else if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert("Encryption password incorrect");
+        return alert_error("Encryption password incorrect");
     }
     disabled(true);
     await api_fetch(async function (json) {
@@ -62,7 +62,7 @@ async function change_password() {
             clear_inputs();
             alert("Password successfully changed");
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
         }
         disabled(false);
     }, "user/change_password", { newpassword: wasm.argon2_hash(new_password.value), ...login_data() });
@@ -70,9 +70,9 @@ async function change_password() {
 
 async function change_enc_password() {
     if (new_enc_password.value != repeat_new_enc_password.value) {
-        return alert("Passwords do not match");
+        return alert_error("Passwords do not match");
     } else if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert("Encryption password incorrect");
+        return alert_error("Encryption password incorrect");
     }
     const new_storage_key = wasm.hash_key(new_enc_password.value);
     const secrets = await load_secrets(wasm);
@@ -85,7 +85,7 @@ async function change_enc_password() {
             clear_inputs();
             alert("Encryption password successfully changed");
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
         }
         disabled(false);
     }, "data/set_secure", login_data(), new_storage);
@@ -93,7 +93,7 @@ async function change_enc_password() {
 
 async function delete_user() {
     if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert("Encryption password incorrect");
+        return alert_error("Encryption password incorrect");
     }
     disabled(true);
     await api_fetch(async function (json) {
@@ -103,7 +103,7 @@ async function delete_user() {
             clear_inputs();
             location.href = "../";
         } else {
-            alert("API error: " + json.error);
+            alert_error("API error: " + json.error);
         }
         disabled(false);
     }, "user/delete", login_data());

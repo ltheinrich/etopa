@@ -30,7 +30,12 @@ export const lang = {
         offline_mode: "Offline mode",
         disable_offline_mode: "Disable offline mode",
         add_secret: "Add secret",
-        account: "Account"
+        account: "Account",
+        close: "Close",
+        ok: "Ok",
+        confirm: "Confirm",
+        error: "Error",
+        confirmation: "Confirmation"
     },
     de: {
         // TODO german language
