@@ -3,20 +3,19 @@ import { load, api_fetch, login_data, lang, load_secrets, storage_key, online } 
 let wasm;
 let secrets;
 
-const encpassword = document.getElementById("encpassword");
+const enc_password = document.getElementById("enc_password");
 const add = document.getElementById("add");
-const addform = document.getElementById("addform");
+const add_form = document.getElementById("add_form");
 const totp = document.getElementById("totp");
 const decryption = document.getElementById("decryption");
 const decrypt = document.getElementById("decrypt");
 const name = document.getElementById("name");
 const secret = document.getElementById("secret");
 const tokens = document.getElementById("tokens");
-const userbtn = document.getElementById("userbtn");
+const user_btn = document.getElementById("user_btn");
 const logout = document.getElementById("logout");
 const offline_mode = document.getElementById("offline_mode");
 const time_left = document.getElementById("time_left");
-const clipboard = document.getElementById("clipboard");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -34,13 +33,13 @@ async function try_init() {
         await reload_secrets();
         reload_tokens(true);
         setInterval(reload_tokens, 1000);
-        addform.onsubmit = function () { add_token(); return false; };
+        add_form.onsubmit = function () { add_token(); return false; };
         offline_mode.addEventListener("click", function () {
             sessionStorage.removeItem("storage_key");
             location.href = "../";
         })
-        addform.hidden = !online;
-        userbtn.hidden = !online;
+        add_form.hidden = !online;
+        user_btn.hidden = !online;
         offline_mode.hidden = online;
         totp.hidden = false;
         decryption.hidden = true;
@@ -52,10 +51,10 @@ async function try_init() {
 }
 
 async function decrypt_storage() {
-    if (encpassword.value == "") {
+    if (enc_password.value == "") {
         return alert("Empty encryption password") == true;
     }
-    sessionStorage.setItem("storage_key", wasm.hash_key(encpassword.value))
+    sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value))
     if (!await try_init()) {
         return alert("Could not decrypt secure storage") == true;
     }
@@ -70,6 +69,7 @@ async function reload_secrets() {
 async function add_token() {
     if (name.value != "" && secret.value != "") {
         if (secrets[name.value] == undefined) {
+            disabled(true);
             let secret_name = wasm.hash_name(name.value);
             let secret_value = wasm.encrypt_hex(secret.value, storage_key());
             let secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());
@@ -82,6 +82,7 @@ async function add_token() {
                 } else {
                     alert("API error: " + json.error);
                 }
+                disabled(false);
             }, "data/update", { secretname: secret_name, secretvalue: secret_value, secretnameencrypted: secret_name_encrypted, ...login_data() });
         } else {
             alert("Name for secret already exists")
@@ -89,6 +90,12 @@ async function add_token() {
     } else {
         alert("Name or secret empty");
     }
+}
+
+function disabled(disable) {
+    name.disabled = disable;
+    secret.disabled = disable;
+    add.disabled = disable;
 }
 
 function remove_token(name) {
@@ -127,7 +134,7 @@ function gen_tokens() {
     for (const key in secrets) {
         const a = document.createElement("a");
         const token = wasm.gen_token(secrets[key], BigInt(Date.now()));
-        a.innerHTML = "<strong>" + key + "</strong>" + token;
+        a.innerHTML = "<div><strong>" + key + "</strong>&nbsp;" + token + "</div>";
         a.addEventListener("click", function () {
             const el = document.createElement("textarea");
             el.value = token;

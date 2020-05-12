@@ -13,29 +13,73 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./account.js"></script>
-    <div id="vue">
-        <a href="./"><button>{{ lang.back }}</button></a>
-        <br><br>
-        <input id="enc_password" type="password" v-bind:placeholder="lang.enc_password">
-        <br><br>
-        <form id="change_username">
-            <input id="new_username" type="text" v-bind:placeholder="lang.new_username">
-            <button type="submit">{{ lang.change_username }}</button>
-        </form>
-        <form id="change_password">
-            <input id="new_password" type="password" v-bind:placeholder="lang.new_password">
-            <input id="repeat_new_password" type="password" v-bind:placeholder="lang.repeat_new_password">
-            <button type="submit">{{ lang.change_password }}</button>
-        </form>
-        <form id="change_enc_password">
-            <input id="new_enc_password" type="password" v-bind:placeholder="lang.new_enc_password">
-            <input id="repeat_new_enc_password" type="password" v-bind:placeholder="lang.repeat_new_enc_password">
-            <button type="submit">{{ lang.change_enc_password }}</button>
-        </form>
-        <br>
-        <form id="delete_user">
-            <button type="submit">{{ lang.delete_user }}</button>
-        </form>
+    <div id="vue" class="card container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="./"> <img src="../favicon.png" width="22" height="22"
+                    class="d-inline-block align-top"> Etopa</a>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-item nav-link active" href="./account.html" id="userbtn">{{ lang.account }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="#" id="logout">Logout ({{ username }})</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" id="enc_password"
+                        v-bind:placeholder="lang.enc_password">
+                </div>
+            </div>
+            <br>
+            <form id="change_username" class="form-row">
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="new_username" v-bind:placeholder="lang.new_username">
+                </div>
+                <div class="col">
+                    <button id="change_username_btn" type="submit"
+                        class="btn btn-outline-warning">{{ lang.change_username }}</button>
+                </div>
+            </form>
+            <br>
+            <form id="change_password" class="form-row">
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" id="new_password"
+                        v-bind:placeholder="lang.new_password">
+                </div>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" id="repeat_new_password"
+                        v-bind:placeholder="lang.repeat_new_password">
+                </div>
+                <div class="col">
+                    <button id="change_password_btn" type="submit"
+                        class="btn btn-outline-warning">{{ lang.change_password }}</button>
+                </div>
+            </form>
+            <br>
+            <form id="change_enc_password" class="form-row">
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" id="new_enc_password"
+                        v-bind:placeholder="lang.new_enc_password">
+                </div>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" id="repeat_new_enc_password"
+                        v-bind:placeholder="lang.repeat_new_enc_password">
+                </div>
+                <div class="col">
+                    <button id="change_enc_password_btn" type="submit"
+                        class="btn btn-outline-warning">{{ lang.change_enc_password }}</button>
+                </div>
+            </form>
+            <br>
+            <form id="delete_user">
+                <button id="delete_user_btn" type="submit" class="btn btn-danger">{{ lang.delete_user }}</button>
+            </form>
+        </div>
     </div>
 </body>
 

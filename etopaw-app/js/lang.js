@@ -29,7 +29,8 @@ export const lang = {
         repeat_new_enc_password: "Repeat new encryption password",
         offline_mode: "Offline mode",
         disable_offline_mode: "Disable offline mode",
-        add_secret: "Add secret"
+        add_secret: "Add secret",
+        account: "Account"
     },
     de: {
         // TODO german language

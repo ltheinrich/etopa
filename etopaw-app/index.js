@@ -2,8 +2,8 @@ import { load, api_fetch, load_secrets } from "./js/common.js";
 
 const username = document.getElementById("username");
 const password = document.getElementById("password");
-const encpassword = document.getElementById("encpassword");
-const loginbtn = document.getElementById("loginbtn");
+const enc_password = document.getElementById("enc_password");
+const login_btn = document.getElementById("login_btn");
 const login = document.getElementById("login");
 const register = document.getElementById("register");
 
@@ -19,15 +19,15 @@ load(async function (wasm) {
 
 function handle_login(wasm) {
     if (empty_inputs()) {
-        if (encpassword.value != "") {
-            sessionStorage.setItem("storage_key", wasm.hash_key(encpassword.value));
+        if (enc_password.value != "") {
+            sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value));
             return location.href = "./app/";
         }
         return alert("Empty username or password");
     }
     disabled(true);
     const password_hash = wasm.hash_password(password.value);
-    const storage_key = wasm.hash_key(encpassword.value);
+    const storage_key = wasm.hash_key(enc_password.value);
     api_fetch(async function (json) {
         if ("token" in json) {
             localStorage.setItem("username", username.value);
@@ -47,7 +47,7 @@ function handle_register(wasm) {
     }
     disabled(true);
     const argon2_hash = wasm.argon2_hash(password.value);
-    const storage_key = wasm.hash_key(encpassword.value);
+    const storage_key = wasm.hash_key(enc_password.value);
     api_fetch(async function (json) {
         if ("token" in json) {
             localStorage.setItem("username", username.value);
@@ -62,14 +62,14 @@ function handle_register(wasm) {
 }
 
 function empty_inputs() {
-    return username.value == "" || password.value == "" || encpassword.value == "";
+    return username.value == "" || password.value == "" || enc_password.value == "";
 }
 
 function disabled(val) {
     login.disabled = val;
-    loginbtn.disabled = val;
+    login_btn.disabled = val;
     register.disabled = val;
     username.disabled = val;
     password.disabled = val;
-    encpassword.disabled = val;
+    enc_password.disabled = val;
 }
