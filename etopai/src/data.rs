@@ -4,13 +4,15 @@ use etopa::data::{parse, serialize};
 use etopa::Fail;
 use std::collections::BTreeMap;
 use std::convert::TryInto;
-use std::fs::{remove_file, rename, File, OpenOptions};
+use std::fs::{remove_file, File, OpenOptions};
+//use std::fs::rename;
 use std::io::prelude::*;
 
 /// Raw data storage file
 #[derive(Debug)]
 pub struct StorageFile {
     file: File,
+    raw: String,
     cache: BTreeMap<String, String>,
 }
 
@@ -19,10 +21,25 @@ impl StorageFile {
     pub fn new(file_name: impl AsRef<str>) -> Result<Self, Fail> {
         // open file and parse
         let mut file = open_file(file_name)?;
-        let cache = parse(read_file(&mut file)?)?;
+        let raw = read_file(&mut file)?;
+        let raw = String::from_utf8(raw).or_else(Fail::from)?;
+        let cache = parse(&raw);
 
         // return
-        Ok(Self { file, cache })
+        Ok(Self { file, raw, cache })
+    }
+
+    /// Get raw
+    pub fn raw(&self) -> &str {
+        &self.raw
+    }
+
+    /// Write directly to file and parse
+    pub fn raw_write(&mut self, raw: String) -> Result<(), Fail> {
+        // parse and write to file
+        self.raw = raw;
+        self.cache = parse(&self.raw);
+        write_file(&mut self.file, &self.raw).or_else(Fail::from)
     }
 
     /// Get map from cache
@@ -38,8 +55,8 @@ impl StorageFile {
     /// Serialize map to string and write to file
     pub fn write(&mut self) -> Result<(), Fail> {
         // serialize and write
-        let buf = serialize(self.cache())?;
-        write_file(&mut self.file, buf.as_bytes()).or_else(Fail::from)
+        self.raw = serialize(self.cache());
+        write_file(&mut self.file, &self.raw).or_else(Fail::from)
     }
 }
 
@@ -60,11 +77,13 @@ pub fn delete_file(file_name: impl AsRef<str>) -> Result<(), Fail> {
     remove_file(file_name.as_ref()).or_else(Fail::from)
 }
 
+/*
 /// Move file
 pub fn move_file(file_name: impl AsRef<str>, new_file_name: impl AsRef<str>) -> Result<(), Fail> {
     // delete file
     rename(file_name.as_ref(), new_file_name.as_ref()).or_else(Fail::from)
 }
+*/
 
 /// Read data from file
 pub fn read_file(file: &mut File) -> Result<Vec<u8>, Fail> {
@@ -83,7 +102,7 @@ pub fn read_file(file: &mut File) -> Result<Vec<u8>, Fail> {
 }
 
 /// Write data to file
-pub fn write_file(file: &mut File, data: &[u8]) -> Result<(), Fail> {
+pub fn write_file(file: &mut File, data: impl AsRef<[u8]>) -> Result<(), Fail> {
     // truncate file
     file.set_len(0).or_else(Fail::from)?;
 
@@ -91,5 +110,5 @@ pub fn write_file(file: &mut File, data: &[u8]) -> Result<(), Fail> {
     file.seek(std::io::SeekFrom::Start(0)).or_else(Fail::from)?;
 
     // write data
-    file.write_all(data).or_else(Fail::from)
+    file.write_all(data.as_ref()).or_else(Fail::from)
 }

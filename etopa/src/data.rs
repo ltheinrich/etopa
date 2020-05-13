@@ -1,13 +1,9 @@
 //! Data handling
 
-use kern::Fail;
 use std::collections::BTreeMap;
 
 /// Parse storage file buf to map
-pub fn parse(buf: Vec<u8>) -> Result<BTreeMap<String, String>, Fail> {
-    // to string
-    let buf = String::from_utf8(buf).or_else(Fail::from)?;
-
+pub fn parse(buf: &str) -> BTreeMap<String, String> {
     // initialize map and split lines
     let mut conf = BTreeMap::new();
     buf.split('\n')
@@ -22,11 +18,11 @@ pub fn parse(buf: Vec<u8>) -> Result<BTreeMap<String, String>, Fail> {
         });
 
     // return
-    Ok(conf)
+    conf
 }
 
 /// Serialize map to string
-pub fn serialize(data: &BTreeMap<String, String>) -> Result<String, Fail> {
+pub fn serialize(data: &BTreeMap<String, String>) -> String {
     // create buffer
     let mut buf = String::with_capacity(data.len() * 10);
 
@@ -39,5 +35,5 @@ pub fn serialize(data: &BTreeMap<String, String>) -> Result<String, Fail> {
     }
 
     // return
-    Ok(buf)
+    buf
 }

@@ -1,16 +1,13 @@
 //! User API handlers
 
-use crate::data::move_file;
-use crate::utils::*;
-use crate::{jsonify, SharedData};
+use crate::common::*;
 use etopa::crypto::argon2_verify;
 use etopa::Fail;
 use lhi::server::HttpRequest;
-use std::fs::remove_file;
 use std::sync::RwLockReadGuard;
 
 /// Token validation handler
-pub fn valid(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn valid(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -23,7 +20,7 @@ pub fn valid(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resul
 }
 
 /// Account logout handler
-pub fn logout(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn logout(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -43,7 +40,7 @@ pub fn logout(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 }
 
 /// Account deletion handler
-pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -51,12 +48,15 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 
     // verify login
     if shared.logins().valid(username, token) {
+        // delete storage file
+        let mut files = shared.files_mut();
+        files.delete(username)?;
+
         // delete user
         let mut users = shared.users_mut();
         users.cache_mut().remove(username);
         users.write()?;
         shared.logins_mut().remove_user(username);
-        remove_file(format!("{}/{}.edb", shared.data_dir, username)).ok();
 
         // successfully deleted
         Ok(jsonify(object!(error: false)))
@@ -67,7 +67,7 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 }
 
 /// Login handler
-pub fn login(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn login(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -90,10 +90,7 @@ pub fn login(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resul
 }
 
 /// Account registration handler
-pub fn register(
-    req: HttpRequest,
-    shared: RwLockReadGuard<'_, SharedData>,
-) -> Result<Vec<u8>, Fail> {
+pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -118,7 +115,7 @@ pub fn register(
 /// Change username handler
 pub fn change_username(
     req: HttpRequest,
-    shared: RwLockReadGuard<'_, SharedData>,
+    shared: RwLockReadGuard<SharedData>,
 ) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
@@ -128,17 +125,16 @@ pub fn change_username(
 
     // verify login
     if shared.logins().valid(username, token) {
-        // update secure storage
-        let edb_path = format!("{}/{}.edb", shared.data_dir, username);
-
         // check if user already exists
         if shared.users().cache().contains_key(new_username) {
             return Fail::from("new username already exists");
         }
 
-        // move storage file
-        let new_edb_path = format!("{}/{}.edb", shared.data_dir, new_username);
-        move_file(&edb_path, &new_edb_path)?;
+        // create storage file if not exists and move it
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+        shared.files_mut().rename(username, new_username)?;
 
         // change username
         let mut users = shared.users_mut();
@@ -147,16 +143,16 @@ pub fn change_username(
                 .cache_mut()
                 .insert(new_username.to_string(), password_hash),
             None => {
-                // revert filename change
-                move_file(&new_edb_path, &edb_path)?;
+                // revert storage file move
+                shared.files_mut().rename(username, new_username)?;
                 return Fail::from("internal error: user entry does not exist in cache");
             }
         };
 
         // change users file
         if let Err(err) = users.write() {
-            // revert filename change
-            move_file(&new_edb_path, &edb_path)?;
+            // revert storage file move
+            shared.files_mut().rename(username, new_username)?;
             return Err(err);
         }
 
@@ -173,7 +169,7 @@ pub fn change_username(
 /// Change password handler
 pub fn change_password(
     req: HttpRequest,
-    shared: RwLockReadGuard<'_, SharedData>,
+    shared: RwLockReadGuard<SharedData>,
 ) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();

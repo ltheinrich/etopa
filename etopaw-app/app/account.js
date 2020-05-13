@@ -1,4 +1,5 @@
-import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error } from "../js/common.js";
+import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout } from "../js/common.js";
+import { lang } from "../js/lang.js";
 
 let wasm;
 
@@ -12,6 +13,7 @@ const change_username_btn = document.getElementById("change_username_btn");
 const change_password_btn = document.getElementById("change_password_btn");
 const change_enc_password_btn = document.getElementById("change_enc_password_btn");
 const delete_user_btn = document.getElementById("delete_user_btn");
+const logout_el = document.getElementById("logout");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -40,6 +42,7 @@ async function change_username() {
     disabled(true);
     await api_fetch(async function (json) {
         if (json.error == false) {
+            logout_el.innerText = logout_el.innerText.replace("(" + username() + ")", "(" + new_username.value + ")");
             localStorage.setItem("username", new_username.value);
             clear_inputs();
             alert("Username successfully changed");
@@ -75,20 +78,26 @@ async function change_enc_password() {
         return alert_error("Encryption password incorrect");
     }
     const new_storage_key = wasm.hash_key(new_enc_password.value);
-    const secrets = await load_secrets(wasm);
-    const new_storage = wasm.serialize_storage(secrets, new_storage_key);
-    disabled(true);
-    await api_fetch(async function (json) {
-        if (json.error == false) {
-            localStorage.setItem("storage_data", new_storage);
-            sessionStorage.setItem("storage_key", new_storage_key);
-            clear_inputs();
-            alert("Encryption password successfully changed");
-        } else {
-            alert_error("API error: " + json.error);
-        }
-        disabled(false);
-    }, "data/set_secure", login_data(), new_storage);
+    try {
+        const secrets = await load_secrets(wasm);
+        const new_storage = wasm.serialize_storage(secrets, new_storage_key);
+        disabled(true);
+        await api_fetch(async function (json) {
+            if (json.error == false) {
+                localStorage.setItem("storage_data", new_storage);
+                sessionStorage.setItem("storage_key", new_storage_key);
+                clear_inputs();
+                alert("Encryption password successfully changed");
+            } else {
+                alert_error("API error: " + json.error);
+            }
+            disabled(false);
+        }, "data/set_secure", login_data(), new_storage);
+    } catch (err) {
+        alert_error(err);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        location.href = "./";
+    }
 }
 
 async function delete_user() {
@@ -134,3 +143,5 @@ function disabled(disable) {
     change_enc_password_btn.disabled = disable;
     delete_user_btn.disabled = disable;
 }
+
+logout(logout_el);

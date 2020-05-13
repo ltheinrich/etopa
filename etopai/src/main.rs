@@ -3,13 +3,13 @@
 #[macro_use]
 extern crate json;
 
-pub mod common;
-pub mod data;
-pub mod utils;
+mod common;
+mod data;
+mod utils;
 
 mod api;
 
-use common::{json_error, jsonify, SharedData, CARGO_TOML, HELP};
+use common::{json_error, SharedData, CARGO_TOML, HELP};
 use data::StorageFile;
 use etopa::{
     meta::{init_name, init_version},
@@ -44,6 +44,7 @@ fn main() {
     let port = cmd.param("port", config.value("port", "4490"));
     let addr = cmd.param("addr", config.value("addr", "[::]"));
     let threads = cmd.parameter("threads", config.get("threads", 2));
+    let vlt = cmd.parameter("vlt", config.get("vlt", 604_800));
     let data = cmd.param("data", config.value("data", "data"));
     let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
     let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
@@ -59,7 +60,7 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData::new(users, data.to_string()))),
+        Arc::new(RwLock::new(SharedData::new(users, vlt, data.to_string()))),
     )
     .unwrap();
 

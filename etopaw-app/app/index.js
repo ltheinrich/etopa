@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error } from "../js/common.js";
+import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error, logout, set_valid_login } from "../js/common.js";
 
 let wasm;
 let secrets;
@@ -13,19 +13,30 @@ const name = document.getElementById("name");
 const secret = document.getElementById("secret");
 const tokens = document.getElementById("tokens");
 const user_btn = document.getElementById("user_btn");
-const logout = document.getElementById("logout");
+const logout_el = document.getElementById("logout");
 const offline_mode = document.getElementById("offline_mode");
 const time_left = document.getElementById("time_left");
+const loading = document.getElementById("loading");
+const username = document.getElementById("username");
+const password = document.getElementById("password");
+const disable_offline = document.getElementById("disable_offline");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
     if (!await try_init()) {
-        decrypt.addEventListener("click", function () {
+        decryption.onsubmit = function () {
+            enc_password.disabled = true;
+            decryption.disabled = true;
+            decrypt.disabled = true;
             decrypt_storage();
+            enc_password.disabled = false;
+            decryption.disabled = false;
+            decrypt.disabled = false;
             return false;
-        });
+        };
         decryption.hidden = false;
     }
+    loading.hidden = true;
 });
 
 async function try_init() {
@@ -34,18 +45,43 @@ async function try_init() {
         reload_tokens(true);
         setInterval(reload_tokens, 1000);
         add_form.onsubmit = function () { add_token(); return false; };
-        offline_mode.addEventListener("click", function () {
-            sessionStorage.removeItem("storage_key");
-            location.href = "../";
-        })
+        disable_offline.onsubmit = function () {
+            username.disabled = true;
+            password.disabled = true;
+            offline_mode.disabled = true;
+            const password_hash = wasm.hash_password(password.value);
+            api_fetch(async function (json) {
+                if ("token" in json) {
+                    localStorage.setItem("username", username.value);
+                    localStorage.setItem("token", json.token);
+                    set_valid_login(true);
+                    await reload_secrets();
+                    add_form.hidden = !online;
+                    user_btn.hidden = !online;
+                    disable_offline.hidden = online;
+                    totp.hidden = false;
+                    decryption.hidden = true;
+                } else {
+                    alert_error("API error: " + json.error);
+                }
+                username.disabled = false;
+                password.disabled = false;
+                offline_mode.disabled = false;
+            }, "user/login", { username: username.value, password: password_hash });
+            return false;
+        };
         add_form.hidden = !online;
         user_btn.hidden = !online;
-        offline_mode.hidden = online;
+        disable_offline.hidden = online;
         totp.hidden = false;
         decryption.hidden = true;
         return true;
     } catch (err) {
-        console.log(err);
+        if (err == lang.invalid_encryption_password) {
+            alert_error(err);
+        } else {
+            console.log(err);
+        }
         return false;
     }
 }
@@ -167,10 +203,4 @@ function gen_tokens() {
     }
 }
 
-logout.onclick = function () {
-    api_fetch(async function (json) { }, "user/logout", login_data());
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("storage_key");
-    location.href = "../";
-};
+logout(logout_el);

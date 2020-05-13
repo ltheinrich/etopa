@@ -54,7 +54,7 @@ pub fn decrypt_hex(data: &str, key: &str) -> String {
     let dec = crypto::hex_decode(data).unwrap();
 
     // return decrypted
-    crypto::decrypt(dec, key).unwrap_or("FAILED TO DECRYPT".to_string())
+    crypto::decrypt(dec, key).unwrap()
 }
 
 /// Encrypt to hex
@@ -103,7 +103,8 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
     }
 
     // parse and iterate through entries
-    let mut map = parse(data).unwrap();
+    let data = String::from_utf8(data).unwrap();
+    let mut map = parse(&data);
     map.iter_mut().for_each(|(k, v)| {
         // check if secret or secret name
         if k.ends_with("_secret") || k.ends_with("_secret_name") {
@@ -111,7 +112,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
             let dec = crypto::hex_decode(&v).unwrap();
 
             // decrypt secret and modify
-            *v = crypto::decrypt(dec, key).unwrap_or("FAILED TO DECRYPT".to_string())
+            *v = crypto::decrypt(dec, key).unwrap()
         }
     });
 
@@ -145,5 +146,5 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
     }
 
     // return serialized
-    serialize(&map).unwrap()
+    serialize(&map)
 }

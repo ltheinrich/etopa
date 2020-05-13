@@ -25,6 +25,10 @@ export function login_data() {
     return { username: username(), token: token() };
 }
 
+export function set_valid_login(valid) {
+    valid_login = valid;
+}
+
 export async function reload_storage_data(wasm) {
     return await raw_fetch(async function (data) {
         const dec = new TextDecoder("utf-8").decode(data);
@@ -42,15 +46,30 @@ export async function load_secrets(wasm) {
     try {
         await reload_storage_data(wasm);
     } finally {
-        const storage = wasm.parse_storage(storage_data(), storage_key());
-        let secrets = {};
-        for (const key in storage) {
-            if (key.endsWith("_secret")) {
-                secrets[storage[key + "_name"]] = storage[key];
+        try {
+            const storage = wasm.parse_storage(storage_data(), storage_key());
+            let secrets = {};
+            for (const key in storage) {
+                if (key.endsWith("_secret")) {
+                    secrets[storage[key + "_name"]] = storage[key];
+                }
             }
+            return secrets;
+        } catch (err) {
+            throw lang.invalid_encryption_password;
         }
-        return secrets;
     }
+}
+
+export function logout(logout_el) {
+    logout_el.onclick = function () {
+        api_fetch(async function (json) { }, "user/logout", login_data());
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        localStorage.removeItem("storage_data");
+        sessionStorage.removeItem("storage_key");
+        location.href = "../";
+    };
 }
 
 export async function val_login() {

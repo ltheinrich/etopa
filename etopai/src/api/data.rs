@@ -1,16 +1,12 @@
 //! Data API handlers
 
-use crate::data::{open_file, read_file, write_file, StorageFile};
-use crate::{common::*, SharedData};
+use crate::common::*;
 use etopa::Fail;
 use lhi::server::{respond, HttpRequest};
 use std::sync::RwLockReadGuard;
 
 /// Get storage file handler
-pub fn get_secure(
-    req: HttpRequest,
-    shared: RwLockReadGuard<'_, SharedData>,
-) -> Result<Vec<u8>, Fail> {
+pub fn get_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -18,13 +14,25 @@ pub fn get_secure(
 
     // verify login
     if shared.logins().valid(username, token) {
-        // read storage file
-        let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
-        Ok(respond(
-            read_file(&mut file)?,
-            "application/octet-stream",
-            cors_headers(),
-        ))
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
+        // get storage file
+        let files = shared.files();
+        let file = files.read(username);
+        if let Ok(storage) = file {
+            // return storage file
+            Ok(respond(
+                storage.raw(),
+                "application/octet-stream",
+                cors_headers(),
+            ))
+        } else {
+            // empty storage file
+            Ok(respond("", "application/octet-stream", cors_headers()))
+        }
     } else {
         // wrong login token
         Fail::from("unauthenticated")
@@ -32,10 +40,7 @@ pub fn get_secure(
 }
 
 /// Set storage file handler
-pub fn set_secure(
-    req: HttpRequest,
-    shared: RwLockReadGuard<'_, SharedData>,
-) -> Result<Vec<u8>, Fail> {
+pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -43,9 +48,16 @@ pub fn set_secure(
 
     // verify login
     if shared.logins().valid(username, token) {
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
         // write to storage file
-        let mut file = open_file(format!("{}/{}.edb", shared.data_dir, username))?;
-        write_file(&mut file, req.body())?;
+        let files = shared.files();
+        let mut storage = files.write(username)?;
+        let raw = String::from_utf8_lossy(req.body());
+        storage.raw_write(raw.to_string())?;
 
         // return success
         Ok(jsonify(object!(error: false)))
@@ -56,7 +68,7 @@ pub fn set_secure(
 }
 
 /// Update storage file handler
-pub fn update(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -67,8 +79,14 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 
     // verify login
     if shared.logins().valid(username, token) {
-        // read storage file
-        let mut storage = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
+        // get storage file
+        let files = shared.files();
+        let mut storage = files.write(username)?;
         let cache = storage.cache_mut();
 
         // update in storage file
@@ -88,7 +106,7 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 }
 
 /// Delete from storage file handler
-pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -97,8 +115,14 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<'_, SharedData>) -> Resu
 
     // verify login
     if shared.logins().valid(username, token) {
-        // read storage file
-        let mut storage = StorageFile::new(format!("{}/{}.edb", shared.data_dir, username))?;
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
+        // get storage file
+        let files = shared.files();
+        let mut storage = files.write(username)?;
         let cache = storage.cache_mut();
 
         // update in storage file

@@ -35,7 +35,9 @@ export const lang = {
         ok: "Ok",
         confirm: "Confirm",
         error: "Error",
-        confirmation: "Confirmation"
+        confirmation: "Confirmation",
+        invalid_encryption_password: "Invalid encryption password",
+        empty_username_password: "Empty username or (encryption) password"
     },
     de: {
         // TODO german language

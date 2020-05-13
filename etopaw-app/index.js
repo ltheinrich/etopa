@@ -18,32 +18,32 @@ load(async function (wasm) {
 }, false);
 
 function handle_login(wasm) {
-    if (empty_inputs()) {
-        if (enc_password.value != "") {
-            sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value));
-            return location.href = "./app/";
-        }
-        return alert_error("Empty username or password");
+    if (enc_password.value != "" && username.value == "" && password.value == "") {
+        sessionStorage.setItem("storage_key", wasm.hash_key(enc_password.value));
+        location.href = "./app/";
+    } else if (username.value != "" && password.value != "") {
+        disabled(true);
+        const password_hash = wasm.hash_password(password.value);
+        const storage_key = wasm.hash_key(enc_password.value);
+        api_fetch(async function (json) {
+            if ("token" in json) {
+                localStorage.setItem("username", username.value);
+                localStorage.setItem("token", json.token);
+                sessionStorage.setItem("storage_key", storage_key);
+                location.href = "./app/";
+            } else {
+                alert_error("API error: " + json.error);
+                disabled(false);
+            }
+        }, "user/login", { username: username.value, password: password_hash });
+    } else {
+        alert_error(lang.empty_username_password);
     }
-    disabled(true);
-    const password_hash = wasm.hash_password(password.value);
-    const storage_key = wasm.hash_key(enc_password.value);
-    api_fetch(async function (json) {
-        if ("token" in json) {
-            localStorage.setItem("username", username.value);
-            localStorage.setItem("token", json.token);
-            sessionStorage.setItem("storage_key", storage_key);
-            location.href = "./app/";
-        } else {
-            alert_error("API error: " + json.error);
-            disabled(false);
-        }
-    }, "user/login", { username: username.value, password: password_hash });
 }
 
 function handle_register(wasm) {
-    if (empty_inputs()) {
-        return alert_error("Empty username or (encryption) password");
+    if (username.value == "" || password.value == "" || enc_password.value == "") {
+        return alert_error(lang.empty_username_password);
     }
     disabled(true);
     const argon2_hash = wasm.argon2_hash(password.value);
@@ -59,10 +59,6 @@ function handle_register(wasm) {
             disabled(false);
         }
     }, "user/register", { username: username.value, password: argon2_hash });
-}
-
-function empty_inputs() {
-    return username.value == "" || password.value == "" || enc_password.value == "";
 }
 
 function disabled(val) {
