@@ -1,17 +1,16 @@
-import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout } from "../js/common.js";
-import { lang } from "../js/lang.js";
+import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout, lang } from "../js/common.js";
 
 let wasm;
 
-const enc_password = document.getElementById("enc_password")
+const key = document.getElementById("key")
 const new_username = document.getElementById("new_username");
 const new_password = document.getElementById("new_password");
 const repeat_new_password = document.getElementById("repeat_new_password");
-const new_enc_password = document.getElementById("new_enc_password");
-const repeat_new_enc_password = document.getElementById("repeat_new_enc_password");
+const new_key = document.getElementById("new_key");
+const repeat_new_key = document.getElementById("repeat_new_key");
 const change_username_btn = document.getElementById("change_username_btn");
 const change_password_btn = document.getElementById("change_password_btn");
-const change_enc_password_btn = document.getElementById("change_enc_password_btn");
+const change_key_btn = document.getElementById("change_key_btn");
 const delete_user_btn = document.getElementById("delete_user_btn");
 const logout_el = document.getElementById("logout");
 
@@ -25,19 +24,19 @@ load(async function (temp_wasm) {
         change_password();
         return false;
     };
-    document.getElementById("change_enc_password").onsubmit = function () {
-        change_enc_password();
+    document.getElementById("change_key").onsubmit = function () {
+        change_key();
         return false;
     };
     document.getElementById("delete_user").onsubmit = function () {
-        confirm("Delete user?", delete_user);
+        confirm(lang.delete_user_qm, delete_user);
         return false;
     };
 }, true);
 
 async function change_username() {
-    if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert_error("Encryption password incorrect");
+    if (wasm.hash_key(key.value) != storage_key()) {
+        return alert_error(lang.invalid_key);
     }
     disabled(true);
     await api_fetch(async function (json) {
@@ -45,9 +44,9 @@ async function change_username() {
             logout_el.innerText = logout_el.innerText.replace("(" + username() + ")", "(" + new_username.value + ")");
             localStorage.setItem("username", new_username.value);
             clear_inputs();
-            alert("Username successfully changed");
+            alert(lang.username_changed);
         } else {
-            alert_error("API error: " + json.error);
+            alert_error(lang.api_error_cs + json.error);
         }
         disabled(false);
     }, "user/change_username", { newusername: new_username.value, ...login_data() });
@@ -55,29 +54,29 @@ async function change_username() {
 
 async function change_password() {
     if (new_password.value != repeat_new_password.value) {
-        return alert_error("Passwords do not match");
-    } else if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert_error("Encryption password incorrect");
+        return alert_error(lang.passwords_no_match);
+    } else if (wasm.hash_key(key.value) != storage_key()) {
+        return alert_error(lang.key_incorrect);
     }
     disabled(true);
     await api_fetch(async function (json) {
         if (json.error == false) {
             clear_inputs();
-            alert("Password successfully changed");
+            alert(lang.password_changed);
         } else {
-            alert_error("API error: " + json.error);
+            alert_error(lang.api_error_cs + json.error);
         }
         disabled(false);
     }, "user/change_password", { newpassword: wasm.argon2_hash(new_password.value), ...login_data() });
 }
 
-async function change_enc_password() {
-    if (new_enc_password.value != repeat_new_enc_password.value) {
-        return alert_error("Passwords do not match");
-    } else if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert_error("Encryption password incorrect");
+async function change_key() {
+    if (new_key.value != repeat_new_key.value) {
+        return alert_error(lang.passwords_no_match);
+    } else if (wasm.hash_key(key.value) != storage_key()) {
+        return alert_error(lang.key_incorrect);
     }
-    const new_storage_key = wasm.hash_key(new_enc_password.value);
+    const new_storage_key = wasm.hash_key(new_key.value);
     try {
         const secrets = await load_secrets(wasm);
         const new_storage = wasm.serialize_storage(secrets, new_storage_key);
@@ -87,9 +86,9 @@ async function change_enc_password() {
                 localStorage.setItem("storage_data", new_storage);
                 sessionStorage.setItem("storage_key", new_storage_key);
                 clear_inputs();
-                alert("Encryption password successfully changed");
+                alert(lang.key_changed);
             } else {
-                alert_error("API error: " + json.error);
+                alert_error(lang.api_error_cs + json.error);
             }
             disabled(false);
         }, "data/set_secure", login_data(), new_storage);
@@ -101,8 +100,8 @@ async function change_enc_password() {
 }
 
 async function delete_user() {
-    if (wasm.hash_key(enc_password.value) != storage_key()) {
-        return alert_error("Encryption password incorrect");
+    if (wasm.hash_key(key.value) != storage_key()) {
+        return alert_error(lang.key_incorrect);
     }
     disabled(true);
     await api_fetch(async function (json) {
@@ -112,35 +111,35 @@ async function delete_user() {
             clear_inputs();
             location.href = "../";
         } else {
-            alert_error("API error: " + json.error);
+            alert_error(lang.api_error_cs + json.error);
         }
         disabled(false);
     }, "user/delete", login_data());
 }
 
 function clear_inputs() {
-    enc_password.value = "";
+    key.value = "";
     new_username.value = "";
     new_password.value = "";
     repeat_new_password.value = "";
-    new_enc_password.value = "";
-    repeat_new_enc_password.value = "";
+    new_key.value = "";
+    repeat_new_key.value = "";
 }
 
 function disabled(disable) {
     document.getElementById("change_username").disabled = disable;
     document.getElementById("change_password").disabled = disable;
-    document.getElementById("change_enc_password").disabled = disable;
+    document.getElementById("change_key").disabled = disable;
     document.getElementById("delete_user").disabled = disable;
-    enc_password.disabled = disable;
+    key.disabled = disable;
     new_username.disabled = disable;
     new_password.disabled = disable;
     repeat_new_password.disabled = disable;
-    new_enc_password.disabled = disable;
-    repeat_new_enc_password.disabled = disable;
+    new_key.disabled = disable;
+    repeat_new_key.disabled = disable;
     change_username_btn.disabled = disable;
     change_password_btn.disabled = disable;
-    change_enc_password_btn.disabled = disable;
+    change_key_btn.disabled = disable;
     delete_user_btn.disabled = disable;
 }
 

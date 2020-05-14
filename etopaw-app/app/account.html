@@ -23,8 +23,17 @@
                     <li class="nav-item">
                         <a class="nav-item nav-link active" href="./account.html" id="userbtn">{{ lang.account }}</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav navbar-right">
                     <li class="nav-item">
-                        <a class="nav-item nav-link" href="#" id="logout">Logout ({{ username }})</a>
+                        <a class="nav-item nav-link" href="#" id="logout">{{ lang.logout }} ({{ username }})</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
+                        <div class="dropdown-menu" id="lang_menu">
+                            <a class="dropdown-item change-lang" href="#" lang="en">English</a>
+                            <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -32,8 +41,7 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="col-sm-4">
-                    <input type="password" class="form-control" id="enc_password"
-                        v-bind:placeholder="lang.enc_password">
+                    <input type="password" class="form-control" id="key" v-bind:placeholder="lang.key">
                 </div>
             </div>
             <br>
@@ -62,18 +70,17 @@
                 </div>
             </form>
             <br>
-            <form id="change_enc_password" class="form-row">
+            <form id="change_key" class="form-row">
                 <div class="col-sm-4">
-                    <input type="password" class="form-control" id="new_enc_password"
-                        v-bind:placeholder="lang.new_enc_password">
+                    <input type="password" class="form-control" id="new_key" v-bind:placeholder="lang.new_key">
                 </div>
                 <div class="col-sm-4">
-                    <input type="password" class="form-control" id="repeat_new_enc_password"
-                        v-bind:placeholder="lang.repeat_new_enc_password">
+                    <input type="password" class="form-control" id="repeat_new_key"
+                        v-bind:placeholder="lang.repeat_new_key">
                 </div>
                 <div class="col">
-                    <button id="change_enc_password_btn" type="submit"
-                        class="btn btn-outline-warning">{{ lang.change_enc_password }}</button>
+                    <button id="change_key_btn" type="submit"
+                        class="btn btn-outline-warning">{{ lang.change_key }}</button>
                 </div>
             </form>
             <br>

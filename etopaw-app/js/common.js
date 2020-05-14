@@ -18,7 +18,8 @@ export function storage_key() {
 }
 
 export function storage_data() {
-    return new TextEncoder("utf-8").encode(localStorage.getItem("storage_data"));
+    const data = localStorage.getItem("storage_data");
+    return data == null ? null : new TextEncoder("utf-8").encode(data);
 }
 
 export function login_data() {
@@ -46,6 +47,7 @@ export async function load_secrets(wasm) {
     try {
         await reload_storage_data(wasm);
     } finally {
+        vue.username = lang.offline_mode;
         try {
             const storage = wasm.parse_storage(storage_data(), storage_key());
             let secrets = {};
@@ -66,7 +68,6 @@ export function logout(logout_el) {
         api_fetch(async function (json) { }, "user/logout", login_data());
         localStorage.removeItem("username");
         localStorage.removeItem("token");
-        localStorage.removeItem("storage_data");
         sessionStorage.removeItem("storage_key");
         location.href = "../";
     };
@@ -91,6 +92,7 @@ export async function load(exec = async function (wasm) { }, login, rel = "") {
     } else if (login == false && valid_login) {
         location.href = rel + "./app/";
     }
+    lang_changer();
     return await exec(wasm);
 }
 
@@ -99,6 +101,10 @@ export async function api_fetch(exec = async function (json = {}) { }, url = "",
         const json = JSON.parse(new TextDecoder("utf-8").decode(data));
         if (json.error != undefined && json.error != false) {
             online = false;
+            switch (json.error) {
+                case "unauthenticated":
+                    json.error = lang.unauthenticated;
+            }
         }
         return await exec(json);
     }, url, headers, body);
@@ -140,6 +146,28 @@ modal_close.addEventListener("click", function () {
     modal.hidden = true;
 });
 
+export function lang_changer() {
+    const lang_btn = document.getElementById("lang_btn");
+    const lang_menu = document.getElementById("lang_menu");
+    lang_btn.addEventListener("click", function () {
+        if (lang_menu.classList.contains("show")) {
+            lang_menu.classList.remove("show");
+        } else {
+            lang_menu.classList.add("show");
+        }
+    });
+    document.body.addEventListener("click", function (e) {
+        if (e.target != lang_btn && lang_menu.classList.contains("show")) {
+            lang_menu.classList.remove("show");
+        }
+    });
+    document.querySelectorAll(".change-lang").forEach((el) => {
+        el.addEventListener("click", function () {
+            set_lang(el.lang);
+        })
+    });
+}
+
 export function alert(text = "") {
     modal_title.innerText = config.TITLE;
     modal_body.innerText = text;
@@ -174,7 +202,7 @@ export function confirm(text = "", exec_fn = async function () { }) {
     modal_title.innerText = lang.confirmation;
     modal_body.innerText = text;
     modal_btn.innerText = lang.confirm;
-    modal_btn_close.innerText = lang.close;
+    modal_btn_close.innerText = lang.cancel;
     modal_btn_close.onclick = function () {
         modal.hidden = true;
     };
@@ -187,13 +215,22 @@ export function confirm(text = "", exec_fn = async function () { }) {
 }
 
 export const config = config_import;
-export const lang = lang_import[localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")];
+export let lang = lang_import[localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")];
 
-new Vue({
+export function set_lang(lang) {
+    if (lang == undefined) {
+        localStorage.removeItem("lang");
+    } else {
+        localStorage.setItem("lang", lang);
+    }
+    location.reload();
+}
+
+export const vue = new Vue({
     el: "#vue",
     data: {
         lang,
         config,
-        username: localStorage.getItem("username")
+        username: username()
     }
 });
