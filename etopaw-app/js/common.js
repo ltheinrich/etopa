@@ -35,6 +35,7 @@ export async function reload_storage_data(wasm) {
         const dec = new TextDecoder("utf-8").decode(data);
         try {
             JSON.parse(dec).error;
+            vue.username = lang.offline_mode;
             return false;
         } catch (err) {
             localStorage.setItem("storage_data", dec);
@@ -47,7 +48,6 @@ export async function load_secrets(wasm) {
     try {
         await reload_storage_data(wasm);
     } finally {
-        vue.username = lang.offline_mode;
         try {
             const storage = wasm.parse_storage(storage_data(), storage_key());
             let secrets = {};
