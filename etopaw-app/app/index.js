@@ -24,11 +24,7 @@ const disable_offline = document.getElementById("disable_offline");
 load(async function (temp_wasm) {
     wasm = temp_wasm;
     const can_decrypt = await try_init();
-    if (storage_data() == null) {
-        alert_error(lang.empty_storage);
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        return location.href = "../";
-    } else if (!can_decrypt) {
+    if (!can_decrypt) {
         decryption.onsubmit = function () {
             key.disabled = true;
             decryption.disabled = true;
@@ -47,6 +43,11 @@ load(async function (temp_wasm) {
 async function try_init() {
     try {
         await reload_secrets();
+        if (storage_data().length == 4) {
+            alert_error(lang.empty_storage);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            return location.href = "../";
+        }
         reload_tokens(true);
         setInterval(reload_tokens, 1000);
         add_form.onsubmit = function () { add_token(); return false; };
@@ -83,7 +84,7 @@ async function try_init() {
         decryption.hidden = true;
         return true;
     } catch (err) {
-        if (err == lang.invalid_encryption_password) {
+        if (err == lang.invalid_key) {
             alert_error(err);
         } else {
             console.log(err);

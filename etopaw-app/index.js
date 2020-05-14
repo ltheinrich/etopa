@@ -10,13 +10,12 @@ const register = document.getElementById("register");
 load(async function (wasm) {
     try {
         await load_secrets(wasm);
-        if (storage_data() != null) {
+        if (storage_data().length != 4) {
             return location.href = "./app/";
         }
-    } catch (err) {
-        login.onsubmit = function () { handle_login(wasm); return false; };
-        register.onclick = function () { handle_register(wasm); return false; };
-    }
+    } catch (err) { }
+    login.onsubmit = function () { handle_login(wasm); return false; };
+    register.onclick = function () { handle_register(wasm); return false; };
 }, false);
 
 function handle_login(wasm) {

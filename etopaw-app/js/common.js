@@ -18,8 +18,7 @@ export function storage_key() {
 }
 
 export function storage_data() {
-    const data = localStorage.getItem("storage_data");
-    return data == null ? null : new TextEncoder("utf-8").encode(data);
+    return new TextEncoder("utf-8").encode(localStorage.getItem("storage_data"));
 }
 
 export function login_data() {
@@ -58,7 +57,7 @@ export async function load_secrets(wasm) {
             }
             return secrets;
         } catch (err) {
-            throw lang.invalid_encryption_password;
+            throw lang.invalid_key;
         }
     }
 }
