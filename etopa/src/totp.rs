@@ -11,7 +11,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 pub struct Generator {
     secret: Vec<u8>,
     key: Key,
-    digits: u32,
+    digits: usize,
     algorithm: Algorithm,
 }
 
@@ -34,7 +34,7 @@ impl Generator {
     }
 
     /// Change number of digits
-    pub fn set_digits(mut self, digits: u32) -> Self {
+    pub fn set_digits(mut self, digits: usize) -> Self {
         self.digits = digits;
         self
     }
@@ -64,7 +64,7 @@ impl Generator {
             | ((u32::from(hash[1]) & 0xff) << 16)
             | ((u32::from(hash[2]) & 0xff) << 8)
             | (u32::from(hash[3]) & 0xff);
-        let mut token = (code % 10u32.pow(self.digits)).to_string();
+        let mut token = (code % 10u32.pow(self.digits as u32)).to_string();
         while token.len() < self.digits.try_into().or_else(Fail::from)? {
             token.insert_str(0, "0")
         }

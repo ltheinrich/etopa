@@ -111,6 +111,10 @@ async function add_token() {
     if (name.value != "" && secret.value != "") {
         if (secrets[name.value] == undefined) {
             disabled(true);
+            if (wasm.gen_token(secret.value, BigInt(Date.now())) == "invalid secret") {
+                alert_error(lang.invalid_secret);
+                return disabled(false);
+            }
             let secret_name = wasm.hash_name(name.value);
             let secret_value = wasm.encrypt_hex(secret.value, storage_key());
             let secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());

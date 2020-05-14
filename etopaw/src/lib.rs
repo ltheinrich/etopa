@@ -86,8 +86,8 @@ pub fn gen_token(secret: &str, time_millis: u64) -> String {
     match Generator::new(secret) {
         Ok(gen) => gen
             .token_at(time_millis / 1000)
-            .unwrap_or("INVALID SECRET".to_string()),
-        Err(err) => err.to_string(),
+            .unwrap_or("invalid secret".to_string()),
+        _ => "invalid secret".to_string(),
     }
 }
 

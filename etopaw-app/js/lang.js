@@ -51,7 +51,8 @@ export const lang = {
         name_secret_empty: "Name or secret empty",
         name_empty: "Name empty",
         name_nonexistent: "Name does not exist",
-        unauthenticated: "Incorrect login credentials"
+        unauthenticated: "Incorrect login credentials",
+        invalid_secret: "Invalid secret"
     },
     de: {
         login: "Anmelden",
@@ -104,6 +105,7 @@ export const lang = {
         name_secret_empty: "Leerer Name oder Geheimnis",
         name_empty: "Leerer Name",
         name_nonexistent: "Name existiert nicht",
-        unauthenticated: "Ungültige Anmeldedaten"
+        unauthenticated: "Ungültige Anmeldedaten",
+        invalid_secret: "Ungültiges Geheimnis"
     }
 };
