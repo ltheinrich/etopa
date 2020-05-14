@@ -1,9 +1,11 @@
 #!/bin/bash
 
+mkdir -p target/build
 if [ "$#" -ne 1 ]; then
   echo "./build api|android|web|full"
 elif [ $1 == "api" ]; then
-  cross build -p etopai --release --target x86_64-unknown-linux-musl && strip target/x86_64-unknown-linux-musl/release/etopai
+  rm -f target/build/etopai && cross build -p etopai --release --target x86_64-unknown-linux-musl
+  strip target/x86_64-unknown-linux-musl/release/etopai && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
 elif [ $1 == "android" ]; then
   rm -rf etopan-app/app/build
   (cd etopan-app && ./gradlew :app:bundleRelease)
@@ -22,12 +24,12 @@ elif [ $1 == "android" ]; then
   cp target/aarch64-linux-android/release/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
   cp target/armv7-linux-androideabi/release/libetopan.so $JNI_LIBS/armeabi-v7a/libetopan.so
 elif [ $1 == "web" ]; then
-  wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
+  rm -f target/build/etopaw.tar.xz && wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
+  (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
 elif [ $1 == "full" ]; then
-  rm -rf target/build && mkdir -p target/build
-  ./build api && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
+  ./build api
   ./build android
-  ./build web && (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
+  ./build web
 else
   echo "./build api|android|web|full"
 fi
