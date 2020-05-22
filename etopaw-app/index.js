@@ -25,12 +25,13 @@ function handle_login(wasm) {
     } else if (username.value != "" && password.value != "") {
         disabled(true);
         const password_hash = wasm.hash_password(password.value);
-        const storage_key = wasm.hash_key(key.value);
         api_fetch(async function (json) {
             if ("token" in json) {
                 localStorage.setItem("username", username.value);
                 localStorage.setItem("token", json.token);
-                sessionStorage.setItem("storage_key", storage_key);
+                if (key.value != "") {
+                    sessionStorage.setItem("storage_key", wasm.hash_key(key.value));
+                }
                 location.href = "./app/";
             } else {
                 alert_error(json.error);

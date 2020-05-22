@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Anmelden</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="key">Schlüssel</string>
+    <string name="etopa_instance">Etopa Instanz</string>
+    <string name="inputs_empty">Eingabefelder sind leer</string>
+</resources>

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Etopa</string>
+    <string name="app_name" translatable="false">Etopa</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="key">Key</string>
+    <string name="etopa_instance">Etopa instance</string>
+    <string name="default_instance" translatable="false">preview.etopa.de</string>
+    <string name="inputs_empty">Input fields are empty</string>
 </resources>
