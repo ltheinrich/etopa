@@ -9,6 +9,7 @@ elif [ $1 == "api" ]; then
 elif [ $1 == "android" ]; then
   rm -rf etopan-app/app/build && rm -f target/build/etopan.aab
   ./build web
+  JNI_LIBS=etopan-app/app/src/main/jniLibs
   if ! [[ "$PATH" == ?(*:)"$HOME/.NDK/arm64/bin"?(:*) ]]; then
     export PATH="$PATH:$HOME/.NDK/arm64/bin"
   fi
@@ -23,7 +24,6 @@ elif [ $1 == "android" ]; then
   (cd etopan-app && ./gradlew :app:bundleRelease)
   java -jar ~/.bundletool-all.jar build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/out/base.zip --output=target/build/etopan.aab
   jarsigner -keystore ~/.ltheinrich.jks -sigalg SHA256withRSA -digest-alg SHA-256 target/build/etopan.aab etopa
-  JNI_LIBS=etopan-app/app/src/main/jniLibs
 elif [ $1 == "web" ]; then
   rm -f target/build/etopaw.tar.xz && wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
   (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
