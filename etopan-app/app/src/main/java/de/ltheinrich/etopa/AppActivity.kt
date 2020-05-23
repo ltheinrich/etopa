@@ -1,4 +1,4 @@
-package de.ltheinrich.etopan
+package de.ltheinrich.etopa
 
 import android.annotation.SuppressLint
 import android.app.Activity

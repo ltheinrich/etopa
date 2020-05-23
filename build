@@ -7,7 +7,8 @@ elif [ $1 == "api" ]; then
   rm -f target/build/etopai && cross build -p etopai --release --target x86_64-unknown-linux-musl
   strip target/x86_64-unknown-linux-musl/release/etopai && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
 elif [ $1 == "android" ]; then
-  rm -rf etopan-app/app/build
+  rm -rf etopan-app/app/build && rm -f target/build/etopan.aab
+  ./build web
   (cd etopan-app && ./gradlew :app:bundleRelease)
   java -jar ~/.bundletool-all.jar build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/out/base.zip --output=target/build/etopan.aab
   jarsigner -keystore ~/.ltheinrich.jks -sigalg SHA256withRSA -digest-alg SHA-256 target/build/etopan.aab etopa
@@ -28,8 +29,7 @@ elif [ $1 == "web" ]; then
   (cd etopaw-app && tar cfJ ../target/build/etopaw.tar.xz *)
 elif [ $1 == "full" ]; then
   ./build api
-  ./build android
-  ./build web
+  ./build android # also runs ./build web
 else
   echo "./build api|android|web|full"
 fi

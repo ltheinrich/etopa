@@ -46,19 +46,21 @@
                 </div>
             </div>
             <div id="totp" hidden>
-                <div class="d-flex justify-content-center">
-                    <form id="disable_offline" class="row" hidden>
-                        <div class="col-sm-4">
+                <form id="disable_offline" hidden>
+                    <div class="d-flex justify-content-center row">
+                        <div class="col-sm-4 text-center">
                             <input id="username" type="text" class="form-control" v-bind:placeholder="lang.username">
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 text-center">
                             <input id="password" type="password" class="form-control"
                                 v-bind:placeholder="lang.password">
                         </div>
-                        <button type="submit" class="btn btn-warning"
-                            id="offline_mode">{{ lang.disable_offline_mode }}</button>
-                    </form>
-                </div>
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-small btn-warning"
+                                id="offline_mode">{{ lang.disable_offline_mode }}</button>
+                        </div>
+                    </div>
+                </form>
                 <br>
                 <div class="progress time-left-progress">
                     <div id="time_left" class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="30"
@@ -68,25 +70,30 @@
                 <div id="tokens" class="list-group"></div><br>
                 <form id="add_form" hidden>
                     <div class="row">
-                        <div class="col">
+                        <div class="col text-center">
                             <input id="name" type="text" class="form-control" v-bind:placeholder="lang.name">
                         </div>
-                        <div class="col">
+                        <div class="col text-center">
                             <input id="secret" type="text" class="form-control" v-bind:placeholder="lang.secret">
                         </div>
-                        <button type="submit" class="btn btn-primary" id="add">{{ lang.add_secret }}</button>
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary" id="add">{{ lang.add_secret }}</button>
+                        </div>
                     </div>
                 </form>
             </div>
-            <form id="decryption" hidden>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <input id="key" type="password" class="form-control" v-bind:placeholder="lang.key">
-                    </div>
+        </div>
+        <form id="decryption" hidden>
+            <div class="row">
+                <div class="col-sm-8 text-center">
+                    <input id="key" type="password" class="form-control" v-bind:placeholder="lang.key">
+                </div>
+                <div class="col text-center">
                     <button type="submit" id="decrypt" class="btn btn-primary">{{ lang.decrypt }}</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
     </div>
     <div class="modal" tabindex="-1" role="dialog" hidden>
         <div class="modal-dialog" role="document">

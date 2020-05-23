@@ -13,6 +13,7 @@ const change_password_btn = document.getElementById("change_password_btn");
 const change_key_btn = document.getElementById("change_key_btn");
 const delete_user_btn = document.getElementById("delete_user_btn");
 const logout_el = document.getElementById("logout");
+const delete_user_check = document.getElementById("delete_user_check");
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -28,10 +29,13 @@ load(async function (temp_wasm) {
         change_key();
         return false;
     };
-    document.getElementById("delete_user").onsubmit = function () {
+    delete_user_btn.addEventListener("click", function () {
         confirm(lang.delete_user_qm, delete_user);
         return false;
-    };
+    });
+    delete_user_check.addEventListener("click", function () {
+        delete_user_btn.hidden = !delete_user_check.checked;
+    });
 }, true);
 
 async function change_username() {

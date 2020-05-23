@@ -1,4 +1,4 @@
-package de.ltheinrich.etopan
+package de.ltheinrich.etopa
 
 import android.content.Context
 import android.content.Intent
