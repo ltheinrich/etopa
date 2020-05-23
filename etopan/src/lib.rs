@@ -10,7 +10,7 @@ use jni::JNIEnv;
 use std::ffi::{CStr, CString};
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_de_ltheinrich_etopan_MainActivity_hashkey(
+pub unsafe extern "C" fn Java_de_ltheinrich_etopan_MainActivity_hashKey(
     env: JNIEnv,
     _: JObject,
     j_recipient: JString,

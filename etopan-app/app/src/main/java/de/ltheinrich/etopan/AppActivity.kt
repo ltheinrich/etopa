@@ -1,6 +1,7 @@
 package de.ltheinrich.etopan
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,16 +10,16 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.view.KeyEvent
 import android.webkit.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebViewAssetLoader
 import java.net.InetSocketAddress
 import java.net.Socket
 
-class AppActivity : AppCompatActivity() {
+class AppActivity : Activity() {
 
     lateinit var preferences: SharedPreferences
     private lateinit var webView: WebView
     private var online = false
+    private var removeLogin = false;
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,13 +64,20 @@ class AppActivity : AppCompatActivity() {
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                if(removeLogin) {
+                    view?.evaluateJavascript("localStorage.removeItem(\"username\");",null)
+                    view?.evaluateJavascript("localStorage.removeItem(\"token\");",null)
+                    removeLogin = false
+                }
                 val key = intent.extras?.getString("key").orEmpty()
                 view?.evaluateJavascript("sessionStorage.setItem(\"storage_key\", \"$key\");",null)
                 if(preferences.contains("storage_data")) {
                     val storageData = preferences.getString("storage_data", "").orEmpty().replace("\n", "\\n")
-                    val a = "localStorage.setItem(\"storage_data\", `$storageData`.replace(\"\\\\n\", \"\\n\"));"
-                    println(a)
-                    view?.evaluateJavascript(a, null)
+                    view?.evaluateJavascript("localStorage.setItem(\"storage_data\", `$storageData`.replace(\"\\\\n\", \"\\n\"));", null)
+                }
+                if(preferences.contains("token")) {
+                    val token = preferences.getString("token", "").orEmpty()
+                    view?.evaluateJavascript("localStorage.setItem(\"token\", \"$token\");",null)
                 }
             }
 
@@ -89,25 +97,31 @@ class AppActivity : AppCompatActivity() {
                     }
                 }
                 view?.evaluateJavascript(
-                    "setTimeout(function() {if(localStorage.getItem(\"username\") != null) {Android.setUsername(localStorage.getItem(\"username\"));}}, 2000);",
+                    "setTimeout(function() {if(localStorage.getItem(\"username\") != null) {Android.setUsername(localStorage.getItem(\"username\"));}}, 1000);",
                     null
                 )
                 view?.evaluateJavascript(
-                    "setTimeout(function() {if(sessionStorage.getItem(\"storage_key\") != null) {Android.setKey(sessionStorage.getItem(\"storage_key\"));}}, 2000);",
+                    "setTimeout(function() {if(localStorage.getItem(\"token\") != null) {Android.setToken(localStorage.getItem(\"token\"));}}, 2000);",
                     null
                 )
                 view?.evaluateJavascript(
-                    "setTimeout(function() {if(localStorage.getItem(\"storage_data\") != null) {Android.setStorageData(localStorage.getItem(\"storage_data\"));}}, 2000);",
+                    "setTimeout(function() {if(localStorage.getItem(\"storage_data\") != null) {Android.setStorageData(localStorage.getItem(\"storage_data\"));}}, 2250);",
                     null
                 )
                 view?.evaluateJavascript(
-                    "setTimeout(function() {if(localStorage.getItem(\"lang\") != null) {Android.setLang(localStorage.getItem(\"lang\"));}}, 2000);",
+                    "setTimeout(function() {if(sessionStorage.getItem(\"storage_key\") != null) {Android.setKey(sessionStorage.getItem(\"storage_key\"));}}, 2500);",
                     null
                 )
+                view?.evaluateJavascript(
+                    "setTimeout(function() {if(localStorage.getItem(\"lang\") != null) {Android.setLang(localStorage.getItem(\"lang\"));}}, 2750);",
+                    null
+                )
+
             }
         }
 
         if (intent.extras?.containsKey("key")!!) {
+            removeLogin = !preferences.contains("token")
             val policy =
                 StrictMode.ThreadPolicy.Builder().permitAll().build()
             StrictMode.setThreadPolicy(policy)
@@ -119,7 +133,7 @@ class AppActivity : AppCompatActivity() {
                     InetSocketAddress(instance, 443)
                 }
                 Socket().connect(addr, 3000)
-                webView.loadUrl("https://$instance")
+                webView.loadUrl("https://$instance" + if (removeLogin){ "/index.html"} else {"/app/index.html"})
                 online = true
             } catch (e: Exception) {
                 webView.loadUrl("https://appassets.androidplatform.net/assets/app/index.html")
@@ -162,6 +176,11 @@ class AppActivity : AppCompatActivity() {
         @JavascriptInterface
         fun setLang(lang: String) {
             ctx.preferences.edit().putString("lang", lang).apply()
+        }
+
+        @JavascriptInterface
+        fun setToken(token: String) {
+            ctx.preferences.edit().putString("token", token).apply()
         }
     }
 }
