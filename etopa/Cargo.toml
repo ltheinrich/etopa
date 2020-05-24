@@ -16,7 +16,7 @@ ring = "0.16.13"
 data-encoding = "2.2.0"
 sha3 = "0.8.2"
 hex = "0.4.2"
-rust-argon2 = "=0.8.2"
+rust-argon2 = "0.8.2"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = { version = "0.2.62", features = ["serde-serialize"] }
