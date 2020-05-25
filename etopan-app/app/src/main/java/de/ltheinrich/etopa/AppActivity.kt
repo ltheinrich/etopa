@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.KeyEvent
@@ -40,15 +41,23 @@ class AppActivity : Activity() {
         webView.settings.setAppCachePath(this@AppActivity.applicationContext.cacheDir.absolutePath)
         webView.settings.setAppCacheEnabled(true)
         webView.addJavascriptInterface(WebAppInterface(this), "Android")
-        val webViewAssetLoader = WebViewAssetLoader.Builder().addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this)).build()
+        val webViewAssetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this)).build()
         webView.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(
                 view: WebView?,
                 request: WebResourceRequest
             ): WebResourceResponse? {
-                val interceptedWebRequest = webViewAssetLoader.shouldInterceptRequest(request.url)
+                var url = request.url.toString();
+                if (url.startsWith("https://appassets.androidplatform.net/assets/") && url.endsWith(
+                        "/"
+                    )
+                ) {
+                    url += "index.html";
+                }
+                val interceptedWebRequest =
+                    webViewAssetLoader.shouldInterceptRequest(Uri.parse(url))
                 interceptedWebRequest?.let {
-                    val url = request.url.toString()
                     if (url.endsWith("js", true)) {
                         it.mimeType = "text/javascript"
                         if (url.endsWith("/config.js") && !online) {
@@ -59,30 +68,35 @@ class AppActivity : Activity() {
                     } else if (url.endsWith("wasm", true)) {
                         it.mimeType = "application/wasm"
                     }
+
                 }
                 return interceptedWebRequest
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                if(removeLogin) {
-                    view?.evaluateJavascript("localStorage.removeItem(\"username\");",null)
-                    view?.evaluateJavascript("localStorage.removeItem(\"token\");",null)
+                if (removeLogin) {
+                    view?.evaluateJavascript("localStorage.removeItem(\"username\");", null)
+                    view?.evaluateJavascript("localStorage.removeItem(\"token\");", null)
                     removeLogin = false
                 }
                 val key = intent.extras?.getString("key").orEmpty()
-                view?.evaluateJavascript("sessionStorage.setItem(\"storage_key\", \"$key\");",null)
-                if(preferences.contains("storage_data")) {
-                    val storageData = preferences.getString("storage_data", "").orEmpty().replace("\n", "\\n")
-                    view?.evaluateJavascript("localStorage.setItem(\"storage_data\", `$storageData`.replace(\"\\\\n\", \"\\n\"));", null)
+                view?.evaluateJavascript("sessionStorage.setItem(\"storage_key\", \"$key\");", null)
+                if (preferences.contains("storage_data")) {
+                    val storageData =
+                        preferences.getString("storage_data", "").orEmpty().replace("\n", "\\n")
+                    view?.evaluateJavascript(
+                        "localStorage.setItem(\"storage_data\", `$storageData`.replace(\"\\\\n\", \"\\n\"));",
+                        null
+                    )
                 }
-                if(preferences.contains("token")) {
+                if (preferences.contains("token")) {
                     val token = preferences.getString("token", "").orEmpty()
-                    view?.evaluateJavascript("localStorage.setItem(\"token\", \"$token\");",null)
+                    view?.evaluateJavascript("localStorage.setItem(\"token\", \"$token\");", null)
                 }
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                if(url != null) {
+                if (url != null) {
                     val splitUrl = url.split('#')[0].split('?')[0]
                     if (splitUrl.endsWith("/index.html") || splitUrl.endsWith("/")) {
                         webView.evaluateJavascript(
@@ -92,7 +106,18 @@ class AppActivity : Activity() {
                             ).orEmpty() + "\";password.value = \"" + preferences.getString(
                                 "password",
                                 ""
-                            ).orEmpty() + "\";setTimeout(function() {" + if (splitUrl.endsWith("/app/") || splitUrl.endsWith("/app/index.html")) { "offline_mode" } else { "login_btn"} + ".click();}, 1000);", null
+                            ).orEmpty() + "\";" + if (online) {
+                                "setTimeout(function() {" + if (splitUrl.endsWith("/app/") || splitUrl.endsWith(
+                                        "/app/index.html"
+                                    )
+                                ) {
+                                    "offline_mode"
+                                } else {
+                                    "login_btn"
+                                } + ".click();}, 1000);"
+                            } else {
+                                ""
+                            }, null
                         )
                     }
                 }
@@ -133,7 +158,13 @@ class AppActivity : Activity() {
                     InetSocketAddress(instance, 443)
                 }
                 Socket().connect(addr, 3000)
-                webView.loadUrl("https://$instance" + if (removeLogin){ "/index.html"} else {"/app/index.html"})
+                webView.loadUrl(
+                    "https://$instance" + if (removeLogin) {
+                        "/index.html"
+                    } else {
+                        "/app/index.html"
+                    }
+                )
                 online = true
             } catch (e: Exception) {
                 webView.loadUrl("https://appassets.androidplatform.net/assets/app/index.html")
