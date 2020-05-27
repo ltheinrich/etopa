@@ -16,7 +16,7 @@
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./index.js"></script>
     <div id="vue" class="card container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <a class="navbar-brand" href="./"> <img src="../favicon.png" width="22" height="22"
                     class="d-inline-block align-top"> Etopa</a>
             <div class="navbar-collapse">
@@ -48,14 +48,14 @@
             <div id="totp" hidden>
                 <form id="disable_offline" hidden>
                     <div class="d-flex justify-content-center row">
-                        <div class="col-sm-4 text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <input id="username" type="text" class="form-control" v-bind:placeholder="lang.username">
                         </div>
-                        <div class="col-sm-4 text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <input id="password" type="password" class="form-control"
                                 v-bind:placeholder="lang.password">
                         </div>
-                        <div class="col text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <button type="submit" class="btn btn-small btn-warning"
                                 id="offline_mode">{{ lang.disable_offline_mode }}</button>
                         </div>
@@ -63,20 +63,20 @@
                 </form>
                 <br>
                 <div class="progress time-left-progress">
-                    <div id="time_left" class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="30"
-                        aria-valuemin="0" aria-valuemax="30">
+                    <div id="time_left" class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0"
+                        aria-valuemax="30">
                     </div>
                 </div><br>
                 <div id="tokens" class="list-group"></div><br>
                 <form id="add_form" hidden>
                     <div class="row">
-                        <div class="col-sm col-xs-12 text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <input id="name" type="text" class="form-control" v-bind:placeholder="lang.name">
                         </div>
-                        <div class="col-sm col-xs-12 text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <input id="secret" type="text" class="form-control" v-bind:placeholder="lang.secret">
                         </div>
-                        <div class="col-sm col-xs-12 text-center">
+                        <div class="col-12 col-lg-4 text-center">
                             <button type="submit" class="btn btn-primary" id="add">{{ lang.add_secret }}</button>
                         </div>
                     </div>
@@ -85,10 +85,10 @@
         </div>
         <form id="decryption" hidden>
             <div class="row">
-                <div class="col-sm-8 text-center">
+                <div class="col-12 col-lg-8 text-center">
                     <input id="key" type="password" class="form-control" v-bind:placeholder="lang.key">
                 </div>
-                <div class="col text-center">
+                <div class="col-12 col-lg-4 text-center">
                     <button type="submit" id="decrypt" class="btn btn-primary">{{ lang.decrypt }}</button>
                 </div>
             </div>

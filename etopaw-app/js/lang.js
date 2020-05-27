@@ -52,7 +52,26 @@ export const lang = {
         name_empty: "Name empty",
         name_nonexistent: "Name does not exist",
         unauthenticated: "Incorrect login credentials",
-        invalid_secret: "Invalid secret"
+        invalid_secret: "Invalid secret",
+        help: "Help",
+        help_qa: {
+            download: {
+                q: "Download",
+                a: "You can use an Etopa instance directly in your <a href=\"../\">browser</a> or in the <a href=\"https://play.google.com/store/apps/details?id=de.ltheinrich.etopa\">Android app</a>"
+            },
+            what_is: {
+                q: "What is Etopa?",
+                a: "Etopa is a time-based one-time password authenticator.<br>It was built with simplicity, data privacy and security in mind.<br>The Etopa web application or app generates 6-digit one-time login tokens for websites and services that support 2-factor-authentication (2FA)."
+            },
+            usage: {
+                q: "How does it work?",
+                a: "First you need to create an account (registration) with an unique username, a password and key that will be used for encrypting your data.<br>Second you enable 2FA for the service or website you want to use Etopa with.<br>Copy the given secret (e.g. JBSWY3DPEHPK3PXP) in combination with a chosen name into the add secret section on the bottom.<br>Once you've added the secret, you'll be shown a different token every 30 seconds in the list.<br>Now you can use that token to login or verify your 2FA on the other website or service."
+            },
+            questions: {
+                q: "Any questions?",
+                a: "If you still have any questions or you've found a bug, please contact the developer via email <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> or create an <a href=\"https://ltheinrich.de/etopa/issues\">Issue on GitHub</a>."
+            }
+        }
     },
     de: {
         login: "Anmelden",
@@ -106,6 +125,25 @@ export const lang = {
         name_empty: "Leerer Name",
         name_nonexistent: "Name existiert nicht",
         unauthenticated: "Ungültige Anmeldedaten",
-        invalid_secret: "Ungültiges Geheimnis"
+        invalid_secret: "Ungültiges Geheimnis",
+        help: "Hilfe",
+        help_qa: {
+            download: {
+                q: "Herunterladen",
+                a: "Du kannst Etopa direkt im <a href=\"../\">Browser</a> oder in der <a href=\"https://play.google.com/store/apps/details?id=de.ltheinrich.etopa\">Android App</a> nutzen"
+            },
+            what_is: {
+                q: "Was ist Etopa?",
+                a: "Etopa ist eine Anwendung zur zeitbasierten Einmal-Passwort Authentifizierung.<br>Es wurde mit Blick auf Einfachheit, Datenschutz und Sicherheit entwickelt.<br>Die Etopa Web-Anwendung oder Android App generiert 6-stellige Einmal-Passwörter (Token) zur Anmeldung bei Webseiten und Diensten, die 2-Faktor-Authentifizierung (2FA) unterstützen."
+            },
+            usage: {
+                q: "Wie funktioniert Etopa?",
+                a: "Zuerst musst du dir ein Benutzerkonto (Account) mit einem einmaligen Benutzernamen, einem Passwort und einem Schlüssel erstellen.<br>Der gewählte Schlüssel wird zur Verschlüsselung der Daten verwendet.<br>Anschließend aktivierst du 2FA beim Dienst oder Webseite, die du mit Etopa nutzen möchtest.<br>Das dabei generierte/erhaltene Geheimnis (z.B. JBSWY3DPEHPK3PXP) musst du nun zusammen mit einem frei gewählten Namen in das Formular nach der Anmeldung eingeben und es hinzufügen.<br>Sobald das Geheimnis hinzugefügt wurde, wird alle 30 Sekunden ein neues Einmal-Passwort (Token) in der Liste generiert.<br>Nun kann dieses Einmal-Passwort zum Anmelden oder zum Verifizieren beim anderen Dienst oder Webseite verwendet werden."
+            },
+            questions: {
+                q: "Noch Fragen?",
+                a: "Solltest du dennoch Fragen oder einen Fehler gefunden haben, wende dich bitte an den Entwickler per E-Mail <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> oder über einen <a href=\"https://ltheinrich.de/etopa/issues\">Issue auf GitHub</a>."
+            }
+        }
     }
 };

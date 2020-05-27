@@ -29,7 +29,11 @@ class MainActivity : AppCompatActivity() {
         key = findViewById(R.id.key);
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        instance.text = preferences.getString("instance", "").orEmpty()
+        preferences.getString("instance", "")?.also {
+            if (it != "") {
+                instance.text = it
+            }
+        }
         username.text = preferences.getString("username", "").orEmpty()
         password.text = preferences.getString("password", "").orEmpty()
 
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loginClick(view: View?) {
-        (view?:key).visibility = View.INVISIBLE
+        (view ?: key).visibility = View.INVISIBLE
         if (instance.text.isNotEmpty() && username.text.isNotEmpty() && password.text.isNotEmpty() && key.text.isNotEmpty()) {
             val editor = preferences.edit()
             if (instance.text.toString() != preferences.getString(
@@ -66,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this@MainActivity, R.string.inputs_empty, Toast.LENGTH_LONG).show()
         }
-        (view?:key).visibility = View.VISIBLE
+        (view ?: key).visibility = View.VISIBLE
     }
 
     private fun openApp(key: String) {

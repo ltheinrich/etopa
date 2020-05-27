@@ -16,11 +16,15 @@
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./index.js"></script>
     <div id="vue" class="card container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <a class="navbar-brand" href="./"> <img src="./favicon.png" width="22" height="22"
                     class="d-inline-block align-top"> Etopa</a>
             <div class="navbar-collapse">
-                <ul class="navbar-nav mr-auto"></ul>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="./app/help.html">{{ lang.help }}</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav navbar-right">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
@@ -34,20 +38,20 @@
         </nav>
         <form id="login" class="card-body">
             <div class="form-group row justify-content-md-center">
-                <label for="username" class="col-sm-2 col-form-label">{{ lang.username }}</label>
-                <div class="col-sm-10">
+                <label for="username" class="col-12 col-lg-2 col-form-label">{{ lang.username }}</label>
+                <div class="col-12 col-lg-10">
                     <input type="text" class="form-control" id="username" v-bind:placeholder="lang.username">
                 </div>
             </div>
             <div class="form-group row justify-content-md-center">
-                <label for="password" class="col-sm-2 col-form-label">{{ lang.password }}</label>
-                <div class="col-sm-10">
+                <label for="password" class="col-12 col-lg-2 col-form-label">{{ lang.password }}</label>
+                <div class="col-12 col-lg-10">
                     <input type="password" class="form-control" id="password" v-bind:placeholder="lang.password">
                 </div>
             </div>
             <div class="form-group row justify-content-md-center">
-                <label for="key" class="col-sm-2 col-form-label">{{ lang.key }}</label>
-                <div class="col-sm-10">
+                <label for="key" class="col-12 col-lg-2 col-form-label">{{ lang.key }}</label>
+                <div class="col-12 col-lg-10">
                     <input type="password" class="form-control" id="key" v-bind:placeholder="lang.key">
                 </div>
             </div>

@@ -67,6 +67,7 @@ export function logout(logout_el) {
         api_fetch(async function (json) { }, "user/logout", login_data());
         localStorage.removeItem("username");
         localStorage.removeItem("token");
+        localStorage.removeItem("storage_data");
         sessionStorage.removeItem("storage_key");
         location.href = "../";
     };

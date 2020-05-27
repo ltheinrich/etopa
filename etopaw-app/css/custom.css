@@ -1,5 +1,5 @@
 /* Desktop */
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .card {
     margin-top: 3%;
     margin-bottom: 3%;
@@ -37,7 +37,7 @@
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .card {
     margin-top: -1px;
     border: none;
@@ -58,7 +58,7 @@
   }
 
   #add {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
   #decrypt {

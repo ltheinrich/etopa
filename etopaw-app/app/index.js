@@ -45,8 +45,10 @@ async function try_init() {
         await reload_secrets();
         if (storage_data().length == 4) {
             alert_error(lang.empty_storage);
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            return location.href = "../";
+            setTimeout(function () {
+                location.href = "../";
+            }, 3000);
+            return false;
         }
         reload_tokens(true);
         setInterval(reload_tokens, 1000);
