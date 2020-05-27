@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "etopa"
-version = "0.0.1-beta.0"
+version = "0.0.1"
 dependencies = [
  "aes-gcm",
  "data-encoding",
@@ -255,7 +255,7 @@ dependencies = [
 
 [[package]]
 name = "etopai"
-version = "0.0.1-beta.0"
+version = "0.0.1"
 dependencies = [
  "etopa",
  "json",
@@ -264,7 +264,7 @@ dependencies = [
 
 [[package]]
 name = "etopan"
-version = "0.0.1-beta.0"
+version = "0.0.1-rc.0"
 dependencies = [
  "etopa",
  "jni",
@@ -272,7 +272,7 @@ dependencies = [
 
 [[package]]
 name = "etopaw"
-version = "0.0.1-beta.0"
+version = "0.0.1-rc.0"
 dependencies = [
  "console_error_panic_hook",
  "etopa",
@@ -378,9 +378,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lhi"
-version = "0.0.0-dev.14"
+version = "0.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5775c453540fb23a17eaf384f602d0c626e5df256be7e495686bafa6928b2443"
+checksum = "10e713ee49af14f12393eb76bb02b78584e2991b576ecb544e778f2ec4964852"
 dependencies = [
  "kern",
  "rustls",
@@ -388,9 +388,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.70"
+version = "0.2.71"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3baa92041a6fec78c687fa0cc2b3fae8884f743d672cf551bed1d6dac6988d0f"
+checksum = "9457b06509d27052635f90d6466700c65095fdf75409b3fbdd903e988b886f49"
 
 [[package]]
 name = "log"
@@ -620,9 +620,9 @@ checksum = "7c65d530b10ccaeac294f349038a597e435b18fb456aadd0840a623f83b9e941"
 
 [[package]]
 name = "syn"
-version = "1.0.23"
+version = "1.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95b5f192649e48a5302a13f2feb224df883b98933222369e4b3b0fe2a5447269"
+checksum = "ef781e621ee763a2a40721a8861ec519cb76966aee03bb5d00adb6a31dc1c1de"
 dependencies = [
  "proc-macro2",
  "quote",

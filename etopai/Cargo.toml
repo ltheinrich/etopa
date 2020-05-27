@@ -1,6 +1,6 @@
 [package]
 name = "etopai"
-version = "0.0.1-beta.0"
+version = "0.0.1"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2018"
 license = "ISC"
@@ -10,5 +10,5 @@ homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
-lhi = "=0.0.0-dev.14" # 0.0.0 is outdated
+lhi = "0.0.1"
 json = "0.12.4"

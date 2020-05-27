@@ -48,7 +48,7 @@ class AppActivity : Activity() {
                 view: WebView?,
                 request: WebResourceRequest
             ): WebResourceResponse? {
-                var url = request.url.toString();
+                var url = request.url.toString().replace("#", "").replace("?", "");
                 if (url.startsWith("https://appassets.androidplatform.net/assets/") && url.endsWith(
                         "/"
                     )

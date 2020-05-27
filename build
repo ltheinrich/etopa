@@ -7,7 +7,7 @@ elif [ $1 == "api" ]; then
   rm -f target/build/etopai && cross build -p etopai --release --target x86_64-unknown-linux-musl
   strip target/x86_64-unknown-linux-musl/release/etopai && cp target/x86_64-unknown-linux-musl/release/etopai target/build/etopai
 elif [ $1 == "android" ]; then
-  rm -rf etopan-app/app/build && rm -f target/build/etopan.aab && rm -f target/build/etopan.apk
+  rm -f target/build/etopan.aab && rm -f target/build/etopan.apk
   ./build web
   JNI_LIBS=etopan-app/app/src/main/jniLibs
   if ! [[ "$PATH" == ?(*:)"$HOME/.NDK/arm64/bin"?(:*) ]]; then
@@ -21,10 +21,9 @@ elif [ $1 == "android" ]; then
   rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/arm64-v8a && mkdir -p $JNI_LIBS/armeabi-v7a
   cp target/aarch64-linux-android/release/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
   cp target/armv7-linux-androideabi/release/libetopan.so $JNI_LIBS/armeabi-v7a/libetopan.so
-  (cd etopan-app && ./gradlew :app:bundleRelease)
+  (cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assemble)
   java -jar ~/.bundletool-all.jar build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/out/base.zip --output=target/build/etopan.aab
   jarsigner -keystore ~/.ltheinrich.jks -sigalg SHA256withRSA -digest-alg SHA-256 target/build/etopan.aab etopa
-  (cd etopan-app && ./gradlew assemble)
   zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
   apksigner sign --ks ~/.ltheinrich.jks --ks-key-alias etopa --out target/build/etopan.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
 elif [ $1 == "web" ]; then

@@ -1,6 +1,6 @@
 [package]
 name = "etopaw"
-version = "0.0.1-beta.0"
+version = "0.0.1-rc.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2018"
 license = "ISC"
