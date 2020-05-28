@@ -87,7 +87,9 @@ async function try_init() {
         return true;
     } catch (err) {
         if (err == lang.invalid_key) {
-            alert_error(err);
+            if (storage_key() != null) {
+                alert_error(err);
+            }
         } else {
             console.log(err);
         }

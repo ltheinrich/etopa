@@ -130,11 +130,11 @@ export const lang = {
         help_qa: {
             download: {
                 q: "Herunterladen",
-                a: "Du kannst Etopa direkt im <a href=\"../\">Browser</a> oder in der <a href=\"https://play.google.com/store/apps/details?id=de.ltheinrich.etopa\">Android App</a> nutzen"
+                a: "Du kannst Etopa direkt im <a href=\"../\">Browser</a> oder in der <a href=\"https://play.google.com/store/apps/details?id=de.ltheinrich.etopa\">Android-App</a> nutzen"
             },
             what_is: {
                 q: "Was ist Etopa?",
-                a: "Etopa ist eine Anwendung zur zeitbasierten Einmal-Passwort Authentifizierung.<br>Es wurde mit Blick auf Einfachheit, Datenschutz und Sicherheit entwickelt.<br>Die Etopa Web-Anwendung oder Android App generiert 6-stellige Einmal-Passwörter (Token) zur Anmeldung bei Webseiten und Diensten, die 2-Faktor-Authentifizierung (2FA) unterstützen."
+                a: "Etopa ist eine Anwendung zur zeitbasierten Einmal-Passwort Authentifizierung.<br>Es wurde mit Blick auf Einfachheit, Datenschutz und Sicherheit entwickelt.<br>Die Etopa Web-Anwendung oder Android-App generiert 6-stellige Einmal-Passwörter (Token) zur Anmeldung bei Webseiten und Diensten, die 2-Faktor-Authentifizierung (2FA) unterstützen."
             },
             usage: {
                 q: "Wie funktioniert Etopa?",

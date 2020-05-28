@@ -1,10 +1,21 @@
 //! Time-based one-time password
 
-use data_encoding::BASE32;
+use base32::Alphabet::{self, RFC4648};
 use kern::Fail;
-use ring::hmac::{sign, Algorithm, Key, HMAC_SHA1_FOR_LEGACY_USE_ONLY};
+use ring::hmac::{sign, Algorithm, Key};
 use std::convert::TryInto;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+/// Hashing algorithms
+pub mod algorithms {
+    pub use ring::hmac::HMAC_SHA1_FOR_LEGACY_USE_ONLY as SHA1;
+    pub use ring::hmac::HMAC_SHA256 as SHA256;
+    pub use ring::hmac::HMAC_SHA384 as SHA384;
+    pub use ring::hmac::HMAC_SHA512 as SHA512;
+}
+
+/// Alphabet for Base32 secret decoding
+static ALPHABET: Alphabet = RFC4648 { padding: false };
 
 /// TOTP generator
 #[derive(Clone, Debug)]
@@ -12,37 +23,34 @@ pub struct Generator {
     secret: Vec<u8>,
     key: Key,
     digits: usize,
-    algorithm: Algorithm,
 }
 
 impl Generator {
     /// Create new TOTP generator
-    pub fn new(secret: impl AsRef<[u8]>) -> Result<Self, Fail> {
-        let secret = secret.as_ref();
-        let mut output = vec![0; BASE32.decode_len(secret.len()).or_else(Fail::from)?];
-        let len = BASE32
-            .decode_mut(secret, &mut output)
-            .or_else(|e| Fail::from(e.error))?;
-        let secret = Vec::from(&output[0..len]);
-        let key = Key::new(HMAC_SHA1_FOR_LEGACY_USE_ONLY, &secret);
+    pub fn new(secret: impl AsRef<str>) -> Result<Self, Fail> {
+        // decode base32 secret
+        let decoded = base32::decode(ALPHABET, secret.as_ref());
+        let secret = decoded.ok_or_else(|| Fail::new("invalid base32 secret"))?;
+
+        // generate key with algorithm
+        let key = Key::new(algorithms::SHA1, &secret);
         Ok(Self {
             secret,
             key,
             digits: 6,
-            algorithm: HMAC_SHA1_FOR_LEGACY_USE_ONLY,
         })
     }
 
     /// Change number of digits
-    pub fn set_digits(mut self, digits: usize) -> Self {
+    pub fn digits(mut self, digits: usize) -> Self {
         self.digits = digits;
         self
     }
 
     /// Change hashing algorithm
-    pub fn set_algorithm(mut self, algorithm: Algorithm) -> Self {
-        self.algorithm = algorithm;
-        self.key = Key::new(self.algorithm, &self.secret);
+    pub fn algorithm(mut self, algorithm: Algorithm) -> Self {
+        // set algorithm and generate new key
+        self.key = Key::new(algorithm, &self.secret);
         self
     }
 
