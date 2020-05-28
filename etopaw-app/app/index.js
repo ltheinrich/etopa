@@ -114,7 +114,7 @@ async function reload_secrets() {
 }
 
 async function add_token() {
-    let secret_value_raw = secret.value.replace(" ", "");
+    let secret_value_raw = secret.value.replace(/ /g, '').toUpperCase();
     if (name.value != "" && secret_value_raw != "") {
         if (secrets[name.value] == undefined) {
             disabled(true);
