@@ -40,7 +40,7 @@ export const lang = {
         decryption_failed: "Could not decrypt secure storage",
         empty_storage: "Empty storage (offline mode unavailable)",
         delete_user_qm: "Delete user?",
-        delete_secret_qm: "Delete secret?",
+        delete_secret_qm: "Delete secret $name?",
         api_error_cs: "API error: ",
         language: "Language",
         logout: "Logout",
@@ -71,7 +71,12 @@ export const lang = {
                 q: "Any questions?",
                 a: "If you still have any questions or you've found a bug, please contact the developer via email <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> or create an <a href=\"https://ltheinrich.de/etopa/issues\">Issue on GitHub</a>."
             }
-        }
+        },
+        rename: "Rename",
+        rename_secret_qm: "Rename secret $name?",
+        new_name_for: "New name for $name",
+        sure_to_delete: "Are you really sure to delete $name?",
+        delete_timeout: "5s timeout to delete"
     },
     de: {
         login: "Anmelden",
@@ -113,7 +118,7 @@ export const lang = {
         decryption_failed: "Sicherer Speicher konnte nicht entschlüsselt werden",
         empty_storage: "Leerer Speicher (Offline-Modus nicht verfügbar)",
         delete_user_qm: "Benutzer wirklich löschen?",
-        delete_secret_qm: "Geheimnis wirklich löschen?",
+        delete_secret_qm: "Geheimnis $name löschen?",
         api_error_cs: "Server/API Fehler: ",
         language: "Sprache",
         logout: "Abmelden",
@@ -144,6 +149,11 @@ export const lang = {
                 q: "Noch Fragen?",
                 a: "Solltest du dennoch Fragen oder einen Fehler gefunden haben, wende dich bitte an den Entwickler per E-Mail <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> oder über einen <a href=\"https://ltheinrich.de/etopa/issues\">Issue auf GitHub</a>."
             }
-        }
+        },
+        rename: "Umbenennen",
+        rename_secret_qm: "Geheimnis $name umbenennen?",
+        new_name_for: "Neuer Name für $name",
+        sure_to_delete: "Geheimnis $name wirklich löschen?",
+        delete_timeout: "5s Timeout zum Löschen"
     }
 };

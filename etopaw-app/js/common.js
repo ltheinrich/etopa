@@ -139,7 +139,7 @@ const modal_title = document.querySelector(".modal-title");
 const modal_btn = document.getElementById("modal_btn");
 const modal_btn_close = document.getElementById("modal_btn_close");
 modal.addEventListener("click", function (e) {
-    if (e.target !== modal) return;
+    if (e.target != modal) return;
     modal.hidden = true;
 });
 modal_close.addEventListener("click", function () {
@@ -198,9 +198,12 @@ export function alert_error(text = "") {
     return false;
 }
 
-export function confirm(text = "", exec_fn = async function () { }) {
+export function confirm(text = "", exec_fn = async function () { }, custom_body) {
     modal_title.innerText = lang.confirmation;
     modal_body.innerText = text;
+    if (custom_body != null) {
+        modal_body.innerHTML += custom_body;
+    }
     modal_btn.innerText = lang.confirm;
     modal_btn_close.innerText = lang.cancel;
     modal_btn_close.onclick = function () {

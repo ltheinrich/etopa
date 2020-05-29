@@ -105,6 +105,50 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
     }
 }
 
+/// Rename storage file entry handler
+pub fn rename(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+    // get values
+    let headers = req.headers();
+    let username = get_username(headers)?;
+    let token = get_str(headers, "token")?;
+    let secret_name = get_str(headers, "secretname")?;
+    let new_secret_name = get_str(headers, "newsecretname")?;
+    let secret_name_encrypted = get_str(headers, "secretnameencrypted")?;
+
+    // verify login
+    if shared.logins().valid(username, token) {
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
+        // get storage file
+        let files = shared.files();
+        let mut storage = files.write(username)?;
+        let cache = storage.cache_mut();
+
+        // update in storage file
+        let secret = cache
+            .remove(&format!("{}_secret", secret_name))
+            .ok_or_else(|| Fail::new(""))?;
+        cache
+            .remove(&format!("{}_secret_name", secret_name))
+            .ok_or_else(|| Fail::new(""))?;
+        cache.insert(format!("{}_secret", new_secret_name), secret);
+        cache.insert(
+            format!("{}_secret_name", new_secret_name),
+            secret_name_encrypted.to_string(),
+        );
+        storage.write()?;
+
+        // return success
+        Ok(jsonify(object!(error: false)))
+    } else {
+        // wrong login token
+        Fail::from("unauthenticated")
+    }
+}
+
 /// Delete from storage file handler
 pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values

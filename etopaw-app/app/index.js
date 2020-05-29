@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error, logout, set_valid_login, storage_data, confirm, username as get_username, vue } from "../js/common.js";
+import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error, logout, set_valid_login, storage_data, confirm, username as get_username, vue, alert } from "../js/common.js";
 
 let wasm;
 let secrets;
@@ -114,7 +114,7 @@ async function reload_secrets() {
 }
 
 async function add_token() {
-    let secret_value_raw = secret.value.replace(/ /g, '').toUpperCase();
+    const secret_value_raw = secret.value.replace(/ /g, '').toUpperCase();
     if (name.value != "" && secret_value_raw != "") {
         if (secrets[name.value] == undefined) {
             disabled(true);
@@ -122,9 +122,9 @@ async function add_token() {
                 alert_error(lang.invalid_secret);
                 return disabled(false);
             }
-            let secret_name = wasm.hash_name(name.value);
-            let secret_value = wasm.encrypt_hex(secret_value_raw, storage_key());
-            let secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());
+            const secret_name = wasm.hash_name(name.value);
+            const secret_value = wasm.encrypt_hex(secret_value_raw, storage_key());
+            const secret_name_encrypted = wasm.encrypt_hex(name.value, storage_key());
             api_fetch(async function (json) {
                 if (json.error == false) {
                     reload_secrets();
@@ -137,10 +137,36 @@ async function add_token() {
                 disabled(false);
             }, "data/update", { secretname: secret_name, secretvalue: secret_value, secretnameencrypted: secret_name_encrypted, ...login_data() });
         } else {
-            alert_error(lang.name_exists)
+            alert_error(lang.name_exists);
         }
     } else {
         alert_error(lang.name_secret_empty);
+    }
+}
+
+async function rename_token(name, new_name) {
+    if (name != "" && new_name != "") {
+        if (secrets[name] != undefined) {
+            if (secrets[new_name] == undefined) {
+                const secret_name = wasm.hash_name(name);
+                const new_secret_name = wasm.hash_name(new_name);
+                const secret_name_encrypted = wasm.encrypt_hex(new_name, storage_key());
+                api_fetch(async function (json) {
+                    if (json.error == false) {
+                        reload_secrets();
+                        gen_tokens();
+                    } else {
+                        alert_error(lang.api_error_cs + json.error);
+                    }
+                }, "data/rename", { secretname: secret_name, newsecretname: new_secret_name, secretnameencrypted: secret_name_encrypted, ...login_data() });
+            } else {
+                alert_error(lang.name_exists);
+            }
+        } else {
+            alert_error(lang.name_nonexistent);
+        }
+    } else {
+        alert_error(lang.name_empty);
     }
 }
 
@@ -184,16 +210,20 @@ function reload_tokens(force = false) {
 function gen_tokens() {
     tokens.innerHTML = "";
     for (const name in secrets) {
+        const button_rename = document.createElement("a");
+        const button_delete = document.createElement("a");
         const a = document.createElement("a");
         const token = wasm.gen_token(secrets[name], BigInt(Date.now()));
         a.innerHTML = "<div><strong>" + name + "</strong>&nbsp;" + token + "</div>";
-        a.addEventListener("click", function () {
-            const el = document.createElement("textarea");
-            el.value = token;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+        a.addEventListener("click", function (ev) {
+            if (ev.target != button_rename && ev.target != button_delete) {
+                const el = document.createElement("textarea");
+                el.value = token;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
         });
         a.classList.add("list-group-item");
         a.classList.add("list-group-item-action");
@@ -202,18 +232,44 @@ function gen_tokens() {
         a.classList.add("align-items-center");
         a.href = "#";
         if (online) {
-            const button = document.createElement("a");
-            button.innerText = lang.delete;
-            button.addEventListener("click", function () {
-                confirm(lang.delete_secret_qm, function () {
-                    remove_token(name);
+            const buttons_div = document.createElement("div");
+            button_rename.innerText = lang.rename;
+            button_rename.addEventListener("click", function () {
+                confirm(lang.rename_secret_qm.replace("$name", name), function () {
+                    rename_token(name, document.getElementById("temp_new_secret_name").value);
+                }, "<input autocomplete=\"off\" id=\"temp_new_secret_name\" class=\"form-control ten-top-margin\" type=\"text\" placeholder=\"" + lang.new_name_for.replace("$name", name) + "\">");
+            });
+            button_rename.classList.add("badge");
+            button_rename.classList.add("badge-info");
+            button_rename.classList.add("badge-pill");
+            button_rename.classList.add("rename-button");
+            button_rename.href = "#";
+            buttons_div.appendChild(button_rename);
+            button_delete.innerText = lang.delete;
+            button_delete.addEventListener("click", function () {
+                confirm(lang.delete_secret_qm.replace("$name", name), function () {
+                    const modal_btn = document.getElementById("modal_btn");
+                    modal_btn.disabled = true;
+                    confirm(lang.sure_to_delete.replace("$name", name), function () {
+                        remove_token(name);
+                    }, "<div class=\"progress ten-top-margin\"><div id=\"delete_timeout\" class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"5\" aria-valuemin=\"0\" aria-valuemax=\"5\" style=\"width:0%\"></div></div>");
+                    const delete_timeout = document.getElementById("delete_timeout");
+                    let i = 0;
+                    const progressInterval = setInterval(() => {
+                        delete_timeout.style = "width:" + (2.1 * i++) + "%;";
+                        if (i == 50) {
+                            clearInterval(progressInterval);
+                            modal_btn.disabled = false;
+                        }
+                    }, 100);
                 });
             });
-            button.classList.add("badge");
-            button.classList.add("badge-danger");
-            button.classList.add("badge-pill");
-            button.href = "#";
-            a.appendChild(button);
+            button_delete.classList.add("badge");
+            button_delete.classList.add("badge-danger");
+            button_delete.classList.add("badge-pill");
+            button_delete.href = "#";
+            buttons_div.appendChild(button_delete);
+            a.appendChild(buttons_div);
         }
         tokens.appendChild(a);
     }

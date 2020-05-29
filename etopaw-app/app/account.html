@@ -42,13 +42,15 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="password" class="form-control" id="key" v-bind:placeholder="lang.key">
+                    <input type="password" autocomplete="off" class="form-control" id="key"
+                        v-bind:placeholder="lang.key">
                 </div>
             </div>
             <br>
-            <form id="change_username" class="form-row">
+            <form id="change_username" class="form-row" autocomplete="off">
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="text" class="form-control" id="new_username" v-bind:placeholder="lang.new_username">
+                    <input type="text" autocomplete="off" class="form-control" id="new_username"
+                        v-bind:placeholder="lang.new_username">
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-12 col-lg-4 text-center">
@@ -57,13 +59,13 @@
                 </div>
             </form>
             <br>
-            <form id="change_password" class="form-row">
+            <form id="change_password" class="form-row" autocomplete="off">
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="password" class="form-control" id="new_password"
+                    <input type="password" autocomplete="off" class="form-control" id="new_password"
                         v-bind:placeholder="lang.new_password">
                 </div>
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="password" class="form-control" id="repeat_new_password"
+                    <input type="password" autocomplete="off" class="form-control" id="repeat_new_password"
                         v-bind:placeholder="lang.repeat_new_password">
                 </div>
                 <div class="col-12 col-lg-4 text-center">
@@ -72,12 +74,13 @@
                 </div>
             </form>
             <br>
-            <form id="change_key" class="form-row">
+            <form id="change_key" class="form-row" autocomplete="off">
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="password" class="form-control" id="new_key" v-bind:placeholder="lang.new_key">
+                    <input type="password" autocomplete="off" class="form-control" id="new_key"
+                        v-bind:placeholder="lang.new_key">
                 </div>
                 <div class="col-12 col-lg-4 text-center">
-                    <input type="password" class="form-control" id="repeat_new_key"
+                    <input type="password" autocomplete="off" class="form-control" id="repeat_new_key"
                         v-bind:placeholder="lang.repeat_new_key">
                 </div>
                 <div class="col-12 col-lg-4 text-center">

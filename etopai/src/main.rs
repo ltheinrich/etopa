@@ -92,6 +92,7 @@ fn handle(
         "/data/set_secure" => api::data::set_secure,
         "/data/update" => api::data::update,
         "/data/delete" => api::data::delete,
+        "/data/rename" => api::data::rename,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };
