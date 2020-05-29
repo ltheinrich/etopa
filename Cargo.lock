@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "etopa"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "aes-gcm",
  "base32",
@@ -255,7 +255,7 @@ dependencies = [
 
 [[package]]
 name = "etopai"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "etopa",
  "json",
@@ -264,7 +264,7 @@ dependencies = [
 
 [[package]]
 name = "etopan"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "etopa",
  "jni",
@@ -272,7 +272,7 @@ dependencies = [
 
 [[package]]
 name = "etopaw"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "console_error_panic_hook",
  "etopa",
@@ -614,15 +614,15 @@ checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
 name = "subtle"
-version = "2.2.2"
+version = "2.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c65d530b10ccaeac294f349038a597e435b18fb456aadd0840a623f83b9e941"
+checksum = "502d53007c02d7605a05df1c1a73ee436952781653da5d0bf57ad608f66932c1"
 
 [[package]]
 name = "syn"
-version = "1.0.27"
+version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef781e621ee763a2a40721a8861ec519cb76966aee03bb5d00adb6a31dc1c1de"
+checksum = "e7e33a62f20d3dc02a1bc9c1d385f92b459bbf35e4dc325eed20c53db5b90c03"
 dependencies = [
  "proc-macro2",
  "quote",
