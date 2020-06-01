@@ -40,7 +40,7 @@ export const lang = {
         decryption_failed: "Could not decrypt secure storage",
         empty_storage: "Empty storage (offline mode unavailable)",
         delete_user_qm: "Delete user?",
-        delete_secret_qm: "Delete secret $name?",
+        delete_secret_qm: "Delete secret \"$name\"?",
         api_error_cs: "API error: ",
         language: "Language",
         logout: "Logout",
@@ -73,10 +73,16 @@ export const lang = {
             }
         },
         rename: "Rename",
-        rename_secret_qm: "Rename secret $name?",
-        new_name_for: "New name for $name",
-        sure_to_delete: "Are you really sure to delete $name?",
-        delete_timeout: "5s timeout to delete"
+        rename_secret_qm: "Rename secret \"$name\"?",
+        new_name_for: "New name for \"$name\"",
+        sure_to_delete: "Are you really sure to delete \"$name\"?",
+        delete_timeout: "5s timeout to delete",
+        edit: "Edit",
+        edit_secret: "Edit secret",
+        no_action_selected: "No action selected",
+        repeat_secret_name: "Repeat secret name \"$name\"",
+        repeat_name_incorrect: "Repeated name is incorrect",
+        sure_to_rename_to: "Are you really sure to rename \"$name\" to $new_name?"
     },
     de: {
         login: "Anmelden",
@@ -118,7 +124,7 @@ export const lang = {
         decryption_failed: "Sicherer Speicher konnte nicht entschlüsselt werden",
         empty_storage: "Leerer Speicher (Offline-Modus nicht verfügbar)",
         delete_user_qm: "Benutzer wirklich löschen?",
-        delete_secret_qm: "Geheimnis $name löschen?",
+        delete_secret_qm: "Geheimnis \"$name\" löschen?",
         api_error_cs: "Server/API Fehler: ",
         language: "Sprache",
         logout: "Abmelden",
@@ -151,9 +157,15 @@ export const lang = {
             }
         },
         rename: "Umbenennen",
-        rename_secret_qm: "Geheimnis $name umbenennen?",
-        new_name_for: "Neuer Name für $name",
-        sure_to_delete: "Geheimnis $name wirklich löschen?",
-        delete_timeout: "5s Timeout zum Löschen"
+        rename_secret_qm: "Geheimnis \"$name\" umbenennen?",
+        new_name_for: "Neuer Name für \"$name\"",
+        sure_to_delete: "Geheimnis \"$name\" wirklich löschen?",
+        delete_timeout: "5s Timeout zum Löschen",
+        edit: "Bearbeiten",
+        edit_secret: "Geheimnis bearbeiten",
+        no_action_selected: "Keine Aktion ausgewählt",
+        repeat_secret_name: "Geheimnis-Namen \"$name\" wiederholen",
+        repeat_name_incorrect: "Der wiederholte Name ist inkorrekt",
+        sure_to_rename_to: "Geheimnis \"$name\" wirklich in \"$new_name\" umbenennen?"
     }
 };

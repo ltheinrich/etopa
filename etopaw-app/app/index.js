@@ -212,11 +212,12 @@ function gen_tokens() {
     for (const name in secrets) {
         const button_rename = document.createElement("a");
         const button_delete = document.createElement("a");
+        const edit = document.createElement("a");
         const a = document.createElement("a");
         const token = wasm.gen_token(secrets[name], BigInt(Date.now()));
         a.innerHTML = "<div><strong>" + name + "</strong>&nbsp;" + token + "</div>";
         a.addEventListener("click", function (ev) {
-            if (ev.target != button_rename && ev.target != button_delete) {
+            if (ev.target != edit) {
                 const el = document.createElement("textarea");
                 el.value = token;
                 document.body.appendChild(el);
@@ -232,44 +233,68 @@ function gen_tokens() {
         a.classList.add("align-items-center");
         a.href = "#";
         if (online) {
-            const buttons_div = document.createElement("div");
-            button_rename.innerText = lang.rename;
-            button_rename.addEventListener("click", function () {
-                confirm(lang.rename_secret_qm.replace("$name", name), function () {
-                    rename_token(name, document.getElementById("temp_new_secret_name").value);
-                }, "<input autocomplete=\"off\" id=\"temp_new_secret_name\" class=\"form-control ten-top-margin\" type=\"text\" placeholder=\"" + lang.new_name_for.replace("$name", name) + "\">");
-            });
-            button_rename.classList.add("badge");
-            button_rename.classList.add("badge-info");
-            button_rename.classList.add("badge-pill");
-            button_rename.classList.add("rename-button");
-            button_rename.href = "#";
-            buttons_div.appendChild(button_rename);
-            button_delete.innerText = lang.delete;
-            button_delete.addEventListener("click", function () {
-                confirm(lang.delete_secret_qm.replace("$name", name), function () {
-                    const modal_btn = document.getElementById("modal_btn");
-                    modal_btn.disabled = true;
-                    confirm(lang.sure_to_delete.replace("$name", name), function () {
-                        remove_token(name);
-                    }, "<div class=\"progress ten-top-margin\"><div id=\"delete_timeout\" class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"5\" aria-valuemin=\"0\" aria-valuemax=\"5\" style=\"width:0%\"></div></div>");
-                    const delete_timeout = document.getElementById("delete_timeout");
-                    let i = 0;
-                    const progressInterval = setInterval(() => {
-                        delete_timeout.style = "width:" + (2.1 * i++) + "%;";
-                        if (i == 50) {
-                            clearInterval(progressInterval);
-                            modal_btn.disabled = false;
+            edit.innerText = lang.edit;
+            edit.addEventListener("click", function () {
+                let action;
+                confirm("", function () {
+                    const input = document.getElementById("temp_input_edit_secret");
+                    if (action == "rename") {
+                        confirm(lang.sure_to_rename_to.replace("$name", name).replace("$new_name", input.value), function () {
+                            rename_token(name, input.value);
+                        });
+                    } else if (action == "delete") {
+                        if (input.value == name) {
+                            confirm(lang.delete_secret_qm.replace("$name", name), function () {
+                                const modal_btn = document.getElementById("modal_btn");
+                                modal_btn.disabled = true;
+                                confirm(lang.sure_to_delete.replace("$name", name), function () {
+                                    remove_token(name);
+                                }, "<div class=\"progress ten-top-margin\"><div id=\"delete_timeout\" class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"5\" aria-valuemin=\"0\" aria-valuemax=\"5\" style=\"width:0%\"></div></div>");
+                                const delete_timeout = document.getElementById("delete_timeout");
+                                let i = 0;
+                                const progressInterval = setInterval(() => {
+                                    delete_timeout.style = "width:" + (2.1 * i++) + "%;";
+                                    if (i == 50) {
+                                        clearInterval(progressInterval);
+                                        modal_btn.disabled = false;
+                                    }
+                                }, 100);
+                            });
+                        } else {
+                            alert_error(lang.repeat_name_incorrect);
                         }
-                    }, 100);
+                    } else {
+                        alert_error(lang.no_action_selected);
+                    }
+                }, "<button type=\"button\" class=\"btn btn-warning\" id=\"rename_secret\">" + lang.rename + "</button>" +
+                "<button type=\"button\" class=\"btn btn-danger\" id=\"delete_secret\">" + lang.delete + "</button>" +
+                "<input autocomplete=\"off\" id=\"temp_input_edit_secret\" class=\"form-control ten-top-margin\" type=\"text\" hidden>");
+                const input = document.getElementById("temp_input_edit_secret");
+                const rename_secret = document.getElementById("rename_secret");
+                const delete_secret = document.getElementById("delete_secret");
+                rename_secret.addEventListener("click", function () {
+                    rename_secret.disabled = true;
+                    delete_secret.disabled = false;
+                    input.hidden = false
+                    input.placeholder = lang.new_name_for.replace("$name", name);
+                    input.value = "";
+                    action = "rename";
+                });
+                delete_secret.addEventListener("click", function () {
+                    delete_secret.disabled = true;
+                    rename_secret.disabled = false;
+                    input.hidden = false
+                    input.placeholder = lang.repeat_secret_name.replace("$name", name);
+                    input.value = "";
+                    action = "delete";
                 });
             });
-            button_delete.classList.add("badge");
-            button_delete.classList.add("badge-danger");
-            button_delete.classList.add("badge-pill");
-            button_delete.href = "#";
-            buttons_div.appendChild(button_delete);
-            a.appendChild(buttons_div);
+            edit.classList.add("badge");
+            edit.classList.add("badge-info");
+            edit.classList.add("badge-pill");
+            edit.classList.add("rename-button");
+            edit.href = "#";
+            a.appendChild(edit);
         }
         tokens.appendChild(a);
     }
