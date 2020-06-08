@@ -87,7 +87,7 @@ pub fn hash(plaintext: impl AsRef<[u8]>) -> String {
 fn init_aes(raw_key: impl AsRef<[u8]>) -> Aes256Gcm {
     // initialize aes with key
     let key = GenericArray::clone_from_slice(raw_key.as_ref());
-    Aes256Gcm::new(key)
+    Aes256Gcm::new(&key)
 }
 
 /// Decrypt secure storage
