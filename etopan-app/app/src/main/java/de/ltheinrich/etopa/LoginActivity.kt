@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var preferences: SharedPreferences
     private lateinit var instance: TextView
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         instance = findViewById(R.id.instance);
         username = findViewById(R.id.username);
@@ -68,15 +68,15 @@ class MainActivity : AppCompatActivity() {
             val keyHash = hashKey(key.text.toString())
             openApp(keyHash)
         } else {
-            Toast.makeText(this@MainActivity, R.string.inputs_empty, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@LoginActivity, R.string.inputs_empty, Toast.LENGTH_LONG).show()
         }
         (view ?: key).visibility = View.VISIBLE
     }
 
     private fun openApp(key: String) {
-        val app = Intent(this@MainActivity, AppActivity::class.java)
+        val app = Intent(this@LoginActivity, AppActivity::class.java)
         app.putExtra("key", key)
-        this@MainActivity.startActivity(app)
+        this@LoginActivity.startActivity(app)
     }
 
     private external fun hashKey(to: String): String

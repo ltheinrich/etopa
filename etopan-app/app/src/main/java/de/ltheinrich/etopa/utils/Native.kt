@@ -1,5 +1,5 @@
-package de.ltheinrich.etopa
+package de.ltheinrich.etopa.utils
 
-class Native {
-    external fun hashKey(key: String): String
-}
+external fun hashKey(key: String): String
+
+external fun hashPassword(password: String): String

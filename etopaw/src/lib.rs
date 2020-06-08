@@ -1,4 +1,5 @@
 //! Etopa for Web
+
 #![cfg(target_arch = "wasm32")]
 
 #[global_allocator]

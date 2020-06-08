@@ -175,7 +175,7 @@ class AppActivity : Activity() {
     }
 
     private fun openMain() {
-        val main = Intent(this@AppActivity, MainActivity::class.java)
+        val main = Intent(this@AppActivity, LoginActivity::class.java)
         this@AppActivity.startActivity(main)
     }
 
