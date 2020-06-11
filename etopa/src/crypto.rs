@@ -14,14 +14,14 @@ use sha3::{Digest, Sha3_256};
 pub fn hash_password(password: impl AsRef<[u8]>) -> String {
     // init hasher and hash password
     let mut hasher = Sha3_256::new();
-    hasher.input(password);
-    let enc = hex_encode(hasher.result());
+    hasher.update(password);
+    let enc = hex_encode(hasher.finalize());
 
     // hash the hash with etopa
     hasher = Sha3_256::new();
-    hasher.input(b"etopa");
-    hasher.input(enc);
-    let result = hasher.result();
+    hasher.update(b"etopa");
+    hasher.update(enc);
+    let result = hasher.finalize();
 
     // return hex encoded
     hex_encode(result)
@@ -31,14 +31,14 @@ pub fn hash_password(password: impl AsRef<[u8]>) -> String {
 pub fn hash_name(name: impl AsRef<[u8]>) -> String {
     // init hasher and hash name
     let mut hasher = Sha3_256::new();
-    hasher.input(name);
-    let enc = hex_encode(hasher.result());
+    hasher.update(name);
+    let enc = hex_encode(hasher.finalize());
 
     // hash the hash with etopa_Secret
     hasher = Sha3_256::new();
-    hasher.input(b"etopa_secret");
-    hasher.input(enc);
-    let result = hasher.result();
+    hasher.update(b"etopa_secret");
+    hasher.update(enc);
+    let result = hasher.finalize();
 
     // return hex encoded
     hex_encode(result)
@@ -55,14 +55,14 @@ pub fn hash_key(password: impl AsRef<[u8]>) -> String {
 
     // init hasher and hash password
     let mut hasher = Sha3_256::new();
-    hasher.input(password);
-    let enc = hex_encode(hasher.result());
+    hasher.update(password);
+    let enc = hex_encode(hasher.finalize());
 
     // hash the hash with secure_storage
     hasher = Sha3_256::new();
-    hasher.input(b"secure_storage");
-    hasher.input(enc);
-    let result = hasher.result();
+    hasher.update(b"secure_storage");
+    hasher.update(enc);
+    let result = hasher.finalize();
 
     // hex encode and check uneven password length
     let mut full_key = hex_encode(result);
@@ -79,8 +79,8 @@ pub fn hash_key(password: impl AsRef<[u8]>) -> String {
 /// Generate sha3-256 hash
 pub fn hash(plaintext: impl AsRef<[u8]>) -> String {
     let mut hasher = Sha3_256::new();
-    hasher.input(plaintext);
-    hex_encode(hasher.result())
+    hasher.update(plaintext);
+    hex_encode(hasher.finalize())
 }
 
 /// Intialize Aes256Gcm with custom key
