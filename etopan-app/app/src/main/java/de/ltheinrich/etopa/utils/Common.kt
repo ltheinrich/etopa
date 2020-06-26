@@ -8,10 +8,10 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
-
 typealias Handler = (response: JSONObject) -> Unit
 
 class Common constructor(context: Context) {
+    
     fun login(username: String, password: String, handler: Handler) {
         requestRaw(
             "https://etopa.de/user/login", handler,

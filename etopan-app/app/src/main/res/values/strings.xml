@@ -7,4 +7,7 @@
     <string name="etopa_instance">Etopa instance</string>
     <string name="default_instance" translatable="false">etopa.de</string>
     <string name="inputs_empty">Input fields are empty</string>
+    <string name="pin">PIN</string>
+    <string name="unlock">Unlock</string>
+    <string name="set_pin">Set PIN</string>
 </resources>

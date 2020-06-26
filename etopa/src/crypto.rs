@@ -27,6 +27,34 @@ pub fn hash_password(password: impl AsRef<[u8]>) -> String {
     hex_encode(result)
 }
 
+/// Generate pin hash for app encryption (local data) -> sha3-256(sha3-256(etopan + (etopa_app_pin + sha3-256(pin)))
+pub fn hash_pin(pin: impl AsRef<[u8]>) -> String {
+    // init hasher and hash password
+    let mut hasher = Sha3_256::new();
+    hasher.update(pin);
+    let enc = hex_encode(hasher.finalize());
+
+    // hash the hash with app_pin
+    hasher = Sha3_256::new();
+    hasher.update(b"etopa_app_pin");
+    hasher.update(enc);
+    let enc = hasher.finalize();
+
+    // hash the hash with app_pin
+    hasher = Sha3_256::new();
+    hasher.update(b"etopan");
+    hasher.update(enc);
+    let enc = hasher.finalize();
+
+    // hash the hash with app_pin
+    hasher = Sha3_256::new();
+    hasher.update(enc);
+    let result = hasher.finalize();
+
+    // return hex encoded
+    hex_encode(result)
+}
+
 /// Generate secret name hash for API usage -> sha3-256(etopa_secret + sha3-256(name))
 pub fn hash_name(name: impl AsRef<[u8]>) -> String {
     // init hasher and hash name

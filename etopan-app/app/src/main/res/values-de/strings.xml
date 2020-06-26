@@ -6,4 +6,7 @@
     <string name="key">Schlüssel</string>
     <string name="etopa_instance">Etopa Instanz</string>
     <string name="inputs_empty">Eingabefelder sind leer</string>
+    <string name="pin">PIN</string>
+    <string name="unlock">Entsperren</string>
+    <string name="set_pin">PIN festlegen</string>
 </resources>
