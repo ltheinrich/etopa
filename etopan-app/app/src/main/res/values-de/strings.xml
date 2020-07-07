@@ -9,4 +9,7 @@
     <string name="pin">PIN</string>
     <string name="unlock">Entsperren</string>
     <string name="set_pin">PIN festlegen</string>
+    <string name="pin_set">PIN erfolgreich gesetzt</string>
+    <string name="incorrect_pin">Falsche PIN</string>
+    <string name="valid_pin">Gültige PIN</string>
 </resources>

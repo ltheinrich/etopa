@@ -10,4 +10,7 @@
     <string name="pin">PIN</string>
     <string name="unlock">Unlock</string>
     <string name="set_pin">Set PIN</string>
+    <string name="pin_set">PIN successfully set</string>
+    <string name="incorrect_pin">Incorrect PIN</string>
+    <string name="valid_pin">Valid PIN</string>
 </resources>

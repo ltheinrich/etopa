@@ -1,60 +1,113 @@
 //! Etopa for Android
 
-#![cfg(target_os = "android")]
+//#![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
+use etopa::crypto::decrypt;
+use etopa::crypto::encrypt;
 use etopa::crypto::hash_key;
 use etopa::crypto::hash_password;
 use etopa::crypto::hash_pin;
+use etopa::crypto::hex_decode;
+use etopa::crypto::hex_encode;
 use jni::objects::{JObject, JString};
+use jni::strings::JNIString;
 use jni::sys::jstring;
 use jni::JNIEnv;
-use std::ffi::{CStr, CString};
 
-#[no_mangle]
-pub unsafe extern "C" fn Java_de_ltheinrich_etopa_utils_NativeKt_hashKey(
-    env: JNIEnv,
-    _: JObject,
-    j_recipient: JString,
-) -> jstring {
-    let recipient = CString::from(CStr::from_ptr(
-        env.get_string(j_recipient).unwrap().as_ptr(),
-    ));
+/// Receive string from Java
+pub fn recv_string(env: &JNIEnv, input: JString) -> String {
+    env.get_string(input).unwrap().into()
+}
 
-    let output = env
-        .new_string(hash_key(recipient.to_str().unwrap()))
-        .unwrap();
+/// Make string for Java
+pub fn make_string(env: &JNIEnv, string: impl Into<JNIString>) -> jstring {
+    let output = env.new_string(string).unwrap();
     output.into_inner()
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn Java_de_ltheinrich_etopa_utils_NativeKt_hashPassword(
-    env: JNIEnv,
-    _: JObject,
-    j_recipient: JString,
-) -> jstring {
-    let recipient = CString::from(CStr::from_ptr(
-        env.get_string(j_recipient).unwrap().as_ptr(),
-    ));
-
-    let output = env
-        .new_string(hash_password(recipient.to_str().unwrap()))
-        .unwrap();
-    output.into_inner()
+/// Empty string for Java
+pub fn empty_string(env: &JNIEnv) -> jstring {
+    make_string(&env, "")
 }
 
+/// Hash key
 #[no_mangle]
-pub unsafe extern "C" fn Java_de_ltheinrich_etopa_utils_NativeKt_hashPin(
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashKey(
     env: JNIEnv,
     _: JObject,
-    j_recipient: JString,
+    jkey: JString,
 ) -> jstring {
-    let recipient = CString::from(CStr::from_ptr(
-        env.get_string(j_recipient).unwrap().as_ptr(),
-    ));
+    // receive and hash key
+    let key = recv_string(&env, jkey);
+    make_string(&env, hash_key(key))
+}
 
-    let output = env
-        .new_string(hash_pin(recipient.to_str().unwrap()))
-        .unwrap();
-    output.into_inner()
+/// Hash password
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPassword(
+    env: JNIEnv,
+    _: JObject,
+    jpassword: JString,
+) -> jstring {
+    // receive and hash password
+    let password = recv_string(&env, jpassword);
+    make_string(&env, hash_password(password))
+}
+
+/// Hash pin
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPin(
+    env: JNIEnv,
+    _: JObject,
+    jpin: JString,
+) -> jstring {
+    // receive and hash pin
+    let pin = recv_string(&env, jpin);
+    make_string(&env, hash_pin(pin))
+}
+
+/// Encrypt
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
+    env: JNIEnv,
+    _: JObject,
+    jkey: JString,
+    jdata: JString,
+) -> jstring {
+    let key = recv_string(&env, jkey);
+    let data = recv_string(&env, jdata);
+
+    // encrypt
+    let encrypted = encrypt(data, key);
+    let encoded = match encrypted {
+        Ok(encrypted) => hex_encode(encrypted),
+        _ => String::new(),
+    };
+
+    make_string(&env, encoded)
+}
+
+/// Decrypt
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
+    env: JNIEnv,
+    _: JObject,
+    jkey: JString,
+    jdata: JString,
+) -> jstring {
+    let key = recv_string(&env, jkey);
+    let data = recv_string(&env, jdata);
+
+    // decrypt
+    let decoded = match hex_decode(data) {
+        Ok(decoded) => decoded,
+        _ => return empty_string(&env),
+    };
+    let decrypted = match decrypt(decoded, key) {
+        Ok(decrypted) => decrypted,
+        _ => String::new(),
+    };
+
+    make_string(&env, decrypted)
 }
