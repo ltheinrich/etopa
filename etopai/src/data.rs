@@ -3,7 +3,6 @@
 use etopa::data::{parse, serialize};
 use etopa::Fail;
 use std::collections::BTreeMap;
-use std::convert::TryInto;
 use std::fs::{remove_file, File, OpenOptions};
 //use std::fs::rename;
 use std::io::prelude::*;
@@ -92,7 +91,7 @@ pub fn read_file(file: &mut File) -> Result<Vec<u8>, Fail> {
 
     // create buffer
     let mut buf = Vec::with_capacity(match file.metadata() {
-        Ok(metadata) => (metadata.len() as usize).try_into().unwrap_or(8192),
+        Ok(metadata) => metadata.len() as usize,
         Err(_) => 8192,
     });
 
