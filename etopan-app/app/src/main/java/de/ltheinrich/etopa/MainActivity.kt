@@ -1,15 +1,13 @@
 package de.ltheinrich.etopa
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.utils.Common
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,12 +35,18 @@ class MainActivity : AppCompatActivity() {
         unlock.setOnClickListener {
             val pinHash = common.hashPin(pin.text.toString())
             if (pinSet == null) {
-                val pinSetEncrypted = common.encrypt(pinHash, "pin_set")
+                val splitAt = Random().nextInt(30)
+                val uuid = UUID.randomUUID().toString()
+                val pinSetEncrypted =
+                    common.encrypt(
+                        pinHash,
+                        uuid.substring(0, splitAt) + "etopan_pin_set" + uuid.substring(splitAt)
+                    )
                 preferences.edit().putString("pin_set", pinSetEncrypted).apply()
                 common.toast(R.string.pin_set)
-            } else if (common.decrypt(pinHash, pinSet) != "pin_set") {
+            } else if (!common.decrypt(pinHash, pinSet).contains("etopan_pin_set")) {
                 pin.text.clear()
-                hideKeyboard(this@MainActivity)
+                common.hideKeyboard()
                 common.toast(R.string.incorrect_pin)
                 return@setOnClickListener
             }
@@ -54,13 +58,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideKeyboard(activity: Activity) {
-        val imm: InputMethodManager =
-            activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = activity.currentFocus
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
+
 }

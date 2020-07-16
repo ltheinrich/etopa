@@ -1,9 +1,10 @@
 package de.ltheinrich.etopa.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -15,7 +16,7 @@ import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
 
-class Common constructor(context: Context) {
+class Common constructor(activity: Activity) {
     fun request(
         url: String,
         handler: Handler,
@@ -37,35 +38,45 @@ class Common constructor(context: Context) {
         cls: KClass<T>,
         vararg extras: Pair<String, String>
     ) {
-        val app = Intent(context, cls.java)
+        val app = Intent(activity, cls.java)
         for ((key, value) in extras) {
             app.putExtra(key, value)
         }
-        context.startActivity(app)
+        activity.startActivity(app)
     }
 
     fun toast(stringId: Int) {
-        Toast.makeText(context, stringId, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, stringId, Toast.LENGTH_LONG).show()
+    }
+
+    fun hideKeyboard() {
+        val imm: InputMethodManager =
+            activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var view: View? = activity.currentFocus
+        if (view == null) {
+            view = View(activity)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     companion object {
         @Volatile
         private var INSTANCE: Common? = null
-        fun getInstance(context: Context) =
+        fun getInstance(activity: Activity) =
             INSTANCE ?: synchronized(this) {
                 INSTANCE
-                    ?: Common(context).also {
+                    ?: Common(activity).also {
                         INSTANCE = it
                     }
             }
     }
 
-    private val context: Context by lazy {
-        context
+    private val activity: Activity by lazy {
+        activity
     }
 
     private val http: RequestQueue by lazy {
-        Volley.newRequestQueue(context.applicationContext)
+        Volley.newRequestQueue(activity.applicationContext)
     }
 
     external fun hashKey(key: String): String
