@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun loginClick(view: View?) {
+	/*
         (view ?: key).visibility = View.INVISIBLE
         if (instance.text.isNotEmpty() && username.text.isNotEmpty() && password.text.isNotEmpty() && key.text.isNotEmpty()) {
             val editor = preferences.edit()
@@ -71,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this@LoginActivity, R.string.inputs_empty, Toast.LENGTH_LONG).show()
         }
         (view ?: key).visibility = View.VISIBLE
+	*/
     }
 
     private fun openApp(key: String) {

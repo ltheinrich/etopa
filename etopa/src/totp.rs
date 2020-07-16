@@ -3,7 +3,6 @@
 use base32::Alphabet::{self, RFC4648};
 use kern::Fail;
 use ring::hmac::{sign, Algorithm, Key};
-use std::convert::TryInto;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Hashing algorithms
@@ -73,7 +72,7 @@ impl Generator {
             | ((u32::from(hash[2]) & 0xff) << 8)
             | (u32::from(hash[3]) & 0xff);
         let mut token = (code % 10u32.pow(self.digits as u32)).to_string();
-        while token.len() < self.digits.try_into().or_else(Fail::from)? {
+        while token.len() < self.digits {
             token.insert_str(0, "0")
         }
         Ok(token)
