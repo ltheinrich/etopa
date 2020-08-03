@@ -17,3 +17,6 @@ serde_derive = "1.0.114"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false #["-Oz", "--enable-mutable-globals"]
