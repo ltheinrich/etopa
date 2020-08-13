@@ -45,18 +45,14 @@ class MainActivity : AppCompatActivity() {
                 preferences.edit().putString("pin_set", pinSetEncrypted).apply()
                 common.toast(R.string.pin_set)
             } else if (!common.decrypt(pinHash, pinSet).contains("etopan_pin_set")) {
-                pin.text.clear()
-                common.hideKeyboard()
-                common.toast(R.string.incorrect_pin)
+                //pin.text.clear()
+                //common.hideKeyboard()
+                common.toast(R.string.incorrect_pin, 500)
                 return@setOnClickListener
             }
 
-            common.openActivity(
-                LoginActivity::class,
-                Pair("pin", common.hashPin(pin.text.toString()))
-            )
+            common.pinHash = pinHash
+            common.openActivity(LoginActivity::class)
         }
     }
-
-
 }

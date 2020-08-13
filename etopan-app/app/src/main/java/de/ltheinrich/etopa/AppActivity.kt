@@ -10,10 +10,11 @@ import android.view.KeyEvent
 class AppActivity : Activity() {
 
     lateinit var preferences: SharedPreferences
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app)
+        System.loadLibrary("etopan")
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
     }

@@ -13,4 +13,5 @@
     <string name="pin_set">PIN successfully set</string>
     <string name="incorrect_pin">Incorrect PIN</string>
     <string name="valid_pin">Valid PIN</string>
+    <string name="incorrect_login">Incorrect login data</string>
 </resources>

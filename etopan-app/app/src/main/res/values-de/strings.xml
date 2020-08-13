@@ -12,4 +12,5 @@
     <string name="pin_set">PIN erfolgreich gesetzt</string>
     <string name="incorrect_pin">Falsche PIN</string>
     <string name="valid_pin">Gültige PIN</string>
+    <string name="incorrect_login">Ungültige Anmeldedaten</string>
 </resources>

@@ -3,6 +3,7 @@ package de.ltheinrich.etopa.utils
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -13,17 +14,23 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
-
 typealias Handler = (response: JSONObject) -> Unit
 
 class Common constructor(activity: Activity) {
+    lateinit var instance: String
+    lateinit var username: String
+    lateinit var passwordHash: String
+    lateinit var keyHash: String
+    lateinit var pinHash: String
+    lateinit var token: String
+
     fun request(
         url: String,
         handler: Handler,
         vararg data: Pair<String, String>
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, url, null,
+            Method.POST, "https://$instance/$url", null,
             Response.Listener { response -> handler(response) },
             Response.ErrorListener { error -> Log.e("HTTP Request", error.toString()) }
         ) {
@@ -45,8 +52,11 @@ class Common constructor(activity: Activity) {
         activity.startActivity(app)
     }
 
-    fun toast(stringId: Int) {
-        Toast.makeText(activity, stringId, Toast.LENGTH_LONG).show()
+    fun toast(stringId: Int, height: Int = 0) {
+        val toast = Toast.makeText(activity, stringId, Toast.LENGTH_LONG)
+        if (height != 0)
+            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, height)
+        toast.show()
     }
 
     fun hideKeyboard() {
