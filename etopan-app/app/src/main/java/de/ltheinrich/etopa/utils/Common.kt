@@ -2,6 +2,7 @@ package de.ltheinrich.etopa.utils
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -9,30 +10,71 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
+typealias ErrorHandler = (error: VolleyError) -> Unit
 
 class Common constructor(activity: Activity) {
+
     lateinit var instance: String
     lateinit var username: String
     lateinit var passwordHash: String
     lateinit var keyHash: String
     lateinit var pinHash: String
     lateinit var token: String
+    var offline: Boolean = false
+
+    fun decryptLogin(preferences: SharedPreferences) {
+        instance = preferences.getString("instance", encrypt(pinHash, "etopa.de"))?.let {
+            decrypt(
+                pinHash,
+                it
+            )
+        }.toString()
+        username = decrypt(
+            pinHash,
+            preferences.getString("username", encrypt(pinHash, "")).orEmpty()
+        )
+        passwordHash = decrypt(
+            pinHash,
+            preferences.getString("passwordHash", encrypt(pinHash, "")).orEmpty()
+        )
+        keyHash = decrypt(
+            pinHash,
+            preferences.getString("keyHash", encrypt(pinHash, "")).orEmpty()
+        )
+        token = decrypt(
+            pinHash,
+            preferences.getString("token", encrypt(pinHash, "")).orEmpty()
+        )
+    }
 
     fun request(
         url: String,
         handler: Handler,
-        vararg data: Pair<String, String>
+        vararg data: Pair<String, String>,
+        error_handler: ErrorHandler = { error: VolleyError ->
+            Log.e(
+                "HTTP Request",
+                error.toString()
+            )
+        }
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST, "https://$instance/$url", null,
-            Response.Listener { response -> handler(response) },
-            Response.ErrorListener { error -> Log.e("HTTP Request", error.toString()) }
+            Response.Listener { response ->
+                offline = false
+                handler(response)
+            },
+            Response.ErrorListener { error ->
+                offline = true
+                error_handler(error)
+            }
         ) {
             override fun getHeaders(): Map<String, String> {
                 return data.toMap()

@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             common.pinHash = pinHash
+            common.decryptLogin(preferences)
             common.openActivity(LoginActivity::class)
         }
     }
