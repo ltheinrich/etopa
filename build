@@ -12,11 +12,11 @@ elif [ $1 == "android" ]; then
   rm -f $OUT/etopa.aab && rm -f $OUT/etopa.apk
   ./build web
   JNI_LIBS=etopan-app/app/src/main/jniLibs
-  if ! [[ "$PATH" == ?(*:)"$HOME/.NDK/arm64/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.NDK/arm64/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndkarm64/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/ndkarm64/bin"
   fi
-  if ! [[ "$PATH" == ?(*:)"$HOME/.NDK/arm/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.NDK/arm/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndkarm/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/ndkarm/bin"
   fi
   cross build -p etopan --release --target aarch64-linux-android
   cross build -p etopan --release --target armv7-linux-androideabi
