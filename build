@@ -12,11 +12,11 @@ elif [ $1 == "android" ]; then
   rm -f $OUT/etopa.aab && rm -f $OUT/etopa.apk
   ./build web
   JNI_LIBS=etopan-app/app/src/main/jniLibs
-  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndkarm64/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.android/ndkarm64/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndk/arm64/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/ndk/arm64/bin"
   fi
-  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndkarm/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.android/ndkarm/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndk/arm/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/ndk/arm/bin"
   fi
   cross build -p etopan --release --target aarch64-linux-android
   cross build -p etopan --release --target armv7-linux-androideabi
@@ -26,13 +26,13 @@ elif [ $1 == "android" ]; then
   (cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assemble)
   java -jar ~/.bundletool-all.jar build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/out/base.zip --output=$OUT/etopa.aab
   jarsigner -keystore ~/.ltheinrich.jks -sigalg SHA256withRSA -digest-alg SHA-256 $OUT/etopa.aab etopa
-  zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
-  apksigner sign --ks ~/.ltheinrich.jks --ks-key-alias etopa --out $OUT/etopa.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+  ~/.android/sdk/build-tools/30.0.2/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+  ~/.android/sdk/build-tools/30.0.2/apksigner sign --ks ~/.ltheinrich.jks --ks-key-alias etopa --out $OUT/etopa.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
 elif [ $1 == "web" ]; then
   rm -f $OUT/etopa.tar.xz && rm -rf $OUT/ewm
   wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
   cp -r etopaw-app $OUT/ewm
-  minify -r -o $OUT/ewm/ etopaw-app/
+  gominify -r -o $OUT/ewm/ etopaw-app/
   \cp etopaw-app/config.js $OUT/ewm/config.js
   (cd $OUT/ewm && tar cfJ ../etopa.tar.xz *)
   rm -rf $OUT/ewm
