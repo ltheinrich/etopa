@@ -27,7 +27,7 @@ elif [ $1 == "android" ]; then
   java -jar ~/.bundletool-all.jar build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/out/base.zip --output=$OUT/etopa.aab
   jarsigner -keystore ~/.ltheinrich.jks -sigalg SHA256withRSA -digest-alg SHA-256 $OUT/etopa.aab etopa
   ~/.android/sdk/build-tools/30.0.2/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
-  ~/.android/sdk/build-tools/30.0.2/apksigner sign --ks ~/.ltheinrich.jks --ks-key-alias etopa --out $OUT/etopa.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
+  ~/.android/sdk/build-tools/30.0.2/apksigner sign --v4-signing-enabled false --ks ~/.ltheinrich.jks --ks-key-alias etopa --out $OUT/etopa.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk
 elif [ $1 == "web" ]; then
   rm -f $OUT/etopa.tar.xz && rm -rf $OUT/ewm
   wasm-pack build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw

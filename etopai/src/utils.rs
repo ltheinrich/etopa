@@ -154,7 +154,7 @@ impl UserLogins {
     fn check_unexpired(expiration: &SystemTime) -> bool {
         expiration
             .elapsed()
-            .unwrap_or(Duration::from_secs(u64::max_value()))
+            .unwrap_or_else(|_| Duration::from_secs(u64::max_value()))
             .as_secs()
             < VALID_LOGIN_SECS
     }
