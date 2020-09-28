@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.utils.Common
 import java.util.*
 
-
 class MainActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
