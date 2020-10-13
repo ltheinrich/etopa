@@ -1,9 +1,11 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-  echo "./run api|android|web"
+  echo "./run api|web|android"
 elif [ $1 == "api" ]; then
   cargo run -p etopai
+elif [ $1 == "web" ]; then
+  wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
 elif [ $1 == "android" ]; then
   JNI_LIBS=etopan-app/app/src/main/jniLibs
   if ! [[ "$PATH" == ?(*:)"$HOME/.android/ndk/arm64/bin"?(:*) ]]; then
@@ -12,8 +14,6 @@ elif [ $1 == "android" ]; then
   cross build -p etopan --target aarch64-linux-android
   rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/arm64-v8a
   cp target/aarch64-linux-android/debug/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
-elif [ $1 == "web" ]; then
-  wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
 else
-  echo "./run api|android|web"
+  echo "./run api|web|android"
 fi
