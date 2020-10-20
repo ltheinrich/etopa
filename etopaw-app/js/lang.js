@@ -82,7 +82,7 @@ export const lang = {
         no_action_selected: "No action selected",
         repeat_secret_name: "Repeat secret name \"$name\"",
         repeat_name_incorrect: "Repeated name is incorrect",
-        sure_to_rename_to: "Are you really sure to rename \"$name\" to $new_name?"
+        sure_to_rename_to: "Are you really sure to rename \"$name\" to \"$new_name\"?"
     },
     de: {
         login: "Anmelden",

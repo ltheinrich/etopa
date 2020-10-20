@@ -8,11 +8,12 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[macro_use]
 extern crate serde_derive;
 
+#[cfg(target_arch = "wasm32")]
+use etopa::wasm_bindgen::{self, prelude::*};
 use etopa::{
     crypto,
     data::{parse, serialize},
     totp::Generator,
-    wasm_bindgen::{self, prelude::*},
 };
 use std::collections::BTreeMap;
 

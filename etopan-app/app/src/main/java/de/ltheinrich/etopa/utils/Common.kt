@@ -12,11 +12,13 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
+typealias StringHandler = (response: String) -> Unit
 typealias ErrorHandler = (error: VolleyError) -> Unit
 
 class Common constructor(activity: Activity) {
@@ -81,6 +83,35 @@ class Common constructor(activity: Activity) {
             }
         }
         http.add(jsonObjectRequest)
+    }
+
+    fun requestString(
+        url: String,
+        handler: StringHandler,
+        vararg data: Pair<String, String>,
+        error_handler: ErrorHandler = { error: VolleyError ->
+            Log.e(
+                "HTTP Request",
+                error.toString()
+            )
+        }
+    ) {
+        val stringRequest = object : StringRequest(
+            Method.POST, "https://$instance/$url",
+            Response.Listener<String> { response ->
+                offline = false
+                handler(response)
+            },
+            Response.ErrorListener { error ->
+                offline = true
+                error_handler(error)
+            }
+        ) {
+            override fun getHeaders(): Map<String, String> {
+                return data.toMap()
+            }
+        }
+        http.add(stringRequest)
     }
 
     fun <T : Activity> openActivity(
