@@ -21,18 +21,19 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        System.loadLibrary("etopan")
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        instance = findViewById(R.id.instance);
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
-        key = findViewById(R.id.key);
+        instance = findViewById(R.id.instance)
+        username = findViewById(R.id.username)
+        password = findViewById(R.id.password)
+        key = findViewById(R.id.key)
 
         instance.text = common.instance
         username.text = common.username
 
-        if (!preferences.getString("token", "").isNullOrEmpty()) {
+        if (!preferences.getString("token", "")
+                .isNullOrEmpty() && !intent.hasExtra("noAutoLogin")
+        ) {
             common.toast(R.string.logging_in)
             common.request(
                 "user/valid",

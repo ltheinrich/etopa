@@ -3,13 +3,13 @@
 //#![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
-use etopa::crypto::decrypt;
 use etopa::crypto::encrypt;
 use etopa::crypto::hash_key;
 use etopa::crypto::hash_password;
 use etopa::crypto::hash_pin;
 use etopa::crypto::hex_decode;
 use etopa::crypto::hex_encode;
+use etopa::{crypto::decrypt, totp::Generator};
 use jni::objects::{JObject, JString};
 use jni::strings::JNIString;
 use jni::sys::jstring;
@@ -110,4 +110,20 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
     };
 
     make_string(&env, decrypted)
+}
+
+/// Generate token
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
+    env: JNIEnv,
+    _: JObject,
+    jsecret: JString,
+) -> jstring {
+    // receive and hash password
+    let secret = recv_string(&env, jsecret);
+    let token = match Generator::new(secret) {
+        Ok(gen) => gen.token().unwrap_or("invalid".to_string()),
+        _ => "invalid".to_string(),
+    };
+    make_string(&env, token)
 }

@@ -1,6 +1,8 @@
 package de.ltheinrich.etopa.utils
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
@@ -8,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -20,6 +23,8 @@ import kotlin.reflect.KClass
 typealias Handler = (response: JSONObject) -> Unit
 typealias StringHandler = (response: String) -> Unit
 typealias ErrorHandler = (error: VolleyError) -> Unit
+
+var library: Boolean = false
 
 class Common constructor(activity: Activity) {
 
@@ -98,7 +103,7 @@ class Common constructor(activity: Activity) {
     ) {
         val stringRequest = object : StringRequest(
             Method.POST, "https://$instance/$url",
-            Response.Listener<String> { response ->
+            Response.Listener { response ->
                 offline = false
                 handler(response)
             },
@@ -142,15 +147,30 @@ class Common constructor(activity: Activity) {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    fun copyToClipboard(toCopy: String) {
+        val clipboard = ContextCompat.getSystemService(
+            activity,
+            ClipboardManager::class.java
+        )
+        val clip = ClipData.newPlainText(toCopy, toCopy)
+        clipboard?.setPrimaryClip(clip)
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: Common? = null
-        fun getInstance(activity: Activity) =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE
-                    ?: Common(activity).also {
-                        INSTANCE = it
-                    }
+        fun getInstance(activity: Activity): Common =
+            if (library) {
+                INSTANCE ?: synchronized(this) {
+                    INSTANCE
+                        ?: Common(activity).also {
+                            INSTANCE = it
+                        }
+                }
+            } else {
+                System.loadLibrary("etopan")
+                library = true
+                getInstance(activity)
             }
     }
 
@@ -171,6 +191,8 @@ class Common constructor(activity: Activity) {
     external fun encrypt(key: String, data: String): String
 
     external fun decrypt(key: String, data: String): String
+
+    external fun generateToken(secret: String): String
 
     /*val imageLoader: ImageLoader by lazy {
         ImageLoader(requestQueue,

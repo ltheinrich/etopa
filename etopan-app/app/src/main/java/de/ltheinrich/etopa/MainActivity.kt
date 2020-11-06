@@ -12,14 +12,13 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
-    lateinit var preferences: SharedPreferences
-    lateinit var pin: EditText
-    lateinit var unlock: Button
+    private lateinit var preferences: SharedPreferences
+    private lateinit var pin: EditText
+    private lateinit var unlock: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        System.loadLibrary("etopan")
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         pin = findViewById(R.id.pin)

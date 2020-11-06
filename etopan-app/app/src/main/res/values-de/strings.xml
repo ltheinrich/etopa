@@ -13,7 +13,8 @@
     <string name="incorrect_pin">Falsche PIN</string>
     <string name="valid_pin">Gültige PIN</string>
     <string name="incorrect_login">Ungültige Anmeldedaten</string>
-    <string name="logging_in">Anmelden...</string>
+    <string name="logging_in">Anmelden…</string>
     <string name="network_unreachable">Netzwerk unerreichbar</string>
     <string name="offline_mode">Offline-Modus</string>
+    <string name="decryption_failed">Entschlüsselung fehlgeschlagen</string>
 </resources>

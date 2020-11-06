@@ -14,7 +14,8 @@
     <string name="incorrect_pin">Incorrect PIN</string>
     <string name="valid_pin">Valid PIN</string>
     <string name="incorrect_login">Incorrect login data</string>
-    <string name="logging_in">Logging in...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="network_unreachable">Network unreachable</string>
     <string name="offline_mode">Offline mode</string>
+    <string name="decryption_failed">Decryption failed</string>
 </resources>

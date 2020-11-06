@@ -1,14 +1,19 @@
 package de.ltheinrich.etopa.utils
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import de.ltheinrich.etopa.AppActivity
 import de.ltheinrich.etopa.R
 import kotlinx.android.synthetic.main.secret_item.view.*
 
-class SecretAdapter(val items: ArrayList<Pair<String, String>>, val context: Context) :
+class TokenAdapter(
+    private val items: ArrayList<Pair<String, String>>,
+    private val context: AppActivity
+) :
     RecyclerView.Adapter<ViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -22,12 +27,15 @@ class SecretAdapter(val items: ArrayList<Pair<String, String>>, val context: Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.name?.text = items.get(position).first
-        holder?.token?.text = items.get(position).second
+        holder.name.text = items[position].first
+        holder.token.text = items[position].second
+        holder.token.setOnClickListener {
+            context.common.copyToClipboard(items[position].second)
+        }
     }
 }
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val name = view.name
-    val token = view.token
+    val name: TextView = view.name
+    val token: Button = view.token
 }
