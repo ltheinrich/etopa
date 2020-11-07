@@ -122,7 +122,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
     // receive and hash password
     let secret = recv_string(&env, jsecret);
     let token = match Generator::new(secret) {
-        Ok(gen) => gen.token().unwrap_or("invalid".to_string()),
+        Ok(gen) => gen.token().unwrap_or_else(|_| "invalid".to_string()),
         _ => "invalid".to_string(),
     };
     make_string(&env, token)
