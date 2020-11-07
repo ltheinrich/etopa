@@ -27,7 +27,7 @@ TEMP_EWM=/tmp/etopa_ewm
 
 .PHONY: build api web android
 
-build: api android # android builds web
+build: api web android
 
 api:
 	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${API_FILE}
@@ -43,7 +43,7 @@ web:
 	(cd ${TEMP_EWM} && tar cfJ ${OUTPUT}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
-android: web
+android:
 	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${AAB_FILE} && rm -f ${OUTPUT}/${APK_FILE}
 	${BUILDER} build -p etopan --release --target aarch64-linux-android
 	${BUILDER} build -p etopan --release --target armv7-linux-androideabi
