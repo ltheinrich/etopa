@@ -15,6 +15,7 @@ JNI_LIBS=etopan-app/app/src/main/jniLibs
 BUNDLETOOL=~/.bundletool-all.jar
 AAB_FILE=etopa.aab
 APK_FILE=etopa.apk
+UAPK_FILE=etopa-unsigned.apk
 KEYSTORE=~/.etopa.jks
 KS_PASS=$(shell cat ~/.etopa.jks.pass)
 KS_ALIAS=etopa
@@ -25,9 +26,11 @@ WASM_PACK=wasm-pack
 GOMINIFY=gominify
 TEMP_EWM=/tmp/etopa_ewm
 
-.PHONY: build api web android
+.PHONY: build signed api web android signandroid
 
 build: api web android
+
+signed: api web android signandroid
 
 api:
 	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${API_FILE}
@@ -51,6 +54,9 @@ android:
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS}/arm64-v8a/libetopan.so
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS}/armeabi-v7a/libetopan.so
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
+	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${UAPK_FILE}
+
+signandroid:
 	java -jar ${BUNDLETOOL} build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${OUTPUT}/${AAB_FILE}
 	jarsigner -keystore ${KEYSTORE} -storepass ${KS_PASS} -sigalg SHA256withRSA -digest-alg SHA-256 ${OUTPUT}/${AAB_FILE} etopa
 	# already aligned # ${ANDROID_BT}/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line's file to ..unsigned-aligned.apk

@@ -80,6 +80,8 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
 
     // encrypt
     let encrypted = encrypt(data, key);
+
+    // encode
     let encoded = match encrypted {
         Ok(encrypted) => hex_encode(encrypted),
         _ => String::new(),
@@ -99,11 +101,13 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
     let key = recv_string(&env, jkey);
     let data = recv_string(&env, jdata);
 
-    // decrypt
+    // decode
     let decoded = match hex_decode(data) {
         Ok(decoded) => decoded,
         _ => return empty_string(&env),
     };
+
+    // decrypt
     let decrypted = match decrypt(decoded, key) {
         Ok(decrypted) => decrypted,
         _ => String::new(),
@@ -119,11 +123,16 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
     _: JObject,
     jsecret: JString,
 ) -> jstring {
-    // receive and hash password
+    // receive secret
     let secret = recv_string(&env, jsecret);
+
+    // create token generator
     let token = match Generator::new(secret) {
+        // generate token
         Ok(gen) => gen.token().unwrap_or_else(|_| "invalid".to_string()),
         _ => "invalid".to_string(),
     };
+
+    // return token
     make_string(&env, token)
 }
