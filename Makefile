@@ -16,6 +16,8 @@ BUNDLETOOL=~/.bundletool-all.jar
 AAB_FILE=etopa.aab
 APK_FILE=etopa.apk
 UAPK_FILE=etopa-unsigned.apk
+MAPPING=mapping.txt
+DEBUG_SYMBOLS=native-debug-symbols.zip
 KEYSTORE=~/.etopa.jks
 KS_PASS=$(shell cat ~/.etopa.jks.pass)
 KS_ALIAS=etopa
@@ -61,3 +63,5 @@ signandroid:
 	jarsigner -keystore ${KEYSTORE} -storepass ${KS_PASS} -sigalg SHA256withRSA -digest-alg SHA-256 ${OUTPUT}/${AAB_FILE} etopa
 	# already aligned # ${ANDROID_BT}/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line's file to ..unsigned-aligned.apk
 	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${OUTPUT}/${MAPPING}
+	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${OUTPUT}/${DEBUG_SYMBOLS}
