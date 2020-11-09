@@ -3,6 +3,7 @@ package de.ltheinrich.etopa
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -116,5 +117,14 @@ class LoginActivity : AppCompatActivity() {
         } else {
             common.toast(R.string.inputs_empty)
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            common.openActivity(MainActivity::class)
+            return true
+        }
+
+        return super.onKeyDown(keyCode, event)
     }
 }

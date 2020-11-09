@@ -17,6 +17,7 @@ use etopa::{
 };
 use lhi::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
+use std::fs::create_dir_all;
 use std::sync::{Arc, RwLock};
 
 /// Main function
@@ -50,6 +51,7 @@ fn main() {
     let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
 
     // open username/password storage
+    create_dir_all(data).ok();
     let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
 
     // start server

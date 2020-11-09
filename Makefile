@@ -54,7 +54,7 @@ android:
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS}/arm64-v8a/libetopan.so
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS}/armeabi-v7a/libetopan.so
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
-	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${UAPK_FILE}
+	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${OUTPUT}/${UAPK_FILE}
 
 signandroid:
 	java -jar ${BUNDLETOOL} build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${OUTPUT}/${AAB_FILE}
