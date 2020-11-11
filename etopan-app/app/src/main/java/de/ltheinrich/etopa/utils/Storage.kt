@@ -1,6 +1,6 @@
 package de.ltheinrich.etopa.utils
 
-class Storage(private val common: Common, val data: String) {
+class Storage(private val common: Common, private val data: String) {
 
     val map = HashMap<String, String>()
 

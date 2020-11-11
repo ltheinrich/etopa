@@ -18,7 +18,7 @@
         <EditText
             android:id="@+id/pin"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:ems="15"
             android:hint="@string/pin"
             android:importantForAutofill="no"

@@ -1,5 +1,6 @@
 package de.ltheinrich.etopa
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -24,37 +25,46 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app)
 
+        preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         rv_tokens.adapter = TokenAdapter(tokens, this)
-        rv_tokens.layoutManager =
-            LinearLayoutManager(this) //rv_secrets.layoutManager = GridLayoutManager(this, 2)
+        rv_tokens.layoutManager = LinearLayoutManager(this)
 
         common.requestString("data/get_secure",
-            { response ->
-                storage = Storage(common, response)
-                if (storage.map.containsValue(""))
-                    common.toast(R.string.decryption_failed)
-                handleTokens()
+            { secureStorage ->
+                handleStorage(secureStorage)
             },
             Pair("username", common.username),
             Pair("token", common.token),
             error_handler = {
                 common.toast(R.string.network_unreachable)
-                if (preferences.contains("secretStorage")) {
-                    common.openActivity(AppActivity::class)
+                preferences.getString("secretStorage", null)?.let {
+                    val secureStorage =
+                        common.decrypt(common.pinHash, it)
+                    handleStorage(secureStorage, false)
                 }
             })
+    }
+
+    private fun handleStorage(secureStorage: String, update: Boolean = true) {
+        storage = Storage(common, secureStorage)
+        if (storage.map.containsValue(""))
+            common.toast(R.string.decryption_failed)
+        else
+            preferences.edit()
+                .putString("secretStorage", common.encrypt(common.pinHash, secureStorage)).apply()
+        handleTokens()
     }
 
     private fun handleTokens() {
         updateTokens()
         object : Runnable {
-            override fun run() {
-                try {
-                    if (System.currentTimeMillis() / 1000 % 30 == 0L)
-                        updateTokens()
-                } finally {
-                    handler.postDelayed(this, 1000)
-                }
+            override fun run() = try {
+                val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble();
+                if (timeLeft < 1)
+                    updateTokens()
+                time.progress = 100 - (timeLeft / 30 * 100).toInt()
+            } finally {
+                handler.postDelayed(this, 1000)
             }
         }.run()
     }
