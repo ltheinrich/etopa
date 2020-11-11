@@ -49,7 +49,7 @@ class AppActivity : AppCompatActivity() {
         storage = Storage(common, secureStorage)
         if (storage.map.containsValue(""))
             common.toast(R.string.decryption_failed)
-        else
+        else if (update)
             preferences.edit()
                 .putString("secretStorage", common.encrypt(common.pinHash, secureStorage)).apply()
         handleTokens()
