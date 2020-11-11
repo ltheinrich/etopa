@@ -59,7 +59,7 @@ class AppActivity : AppCompatActivity() {
         updateTokens()
         object : Runnable {
             override fun run() = try {
-                val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble();
+                val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble()
                 if (timeLeft < 1)
                     updateTokens()
                 time.progress = 100 - (timeLeft / 30 * 100).toInt()
