@@ -208,7 +208,7 @@ dependencies = [
 
 [[package]]
 name = "etopa"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "aes-gcm",
  "base32",
@@ -223,7 +223,7 @@ dependencies = [
 
 [[package]]
 name = "etopai"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "etopa",
  "json",
@@ -232,7 +232,7 @@ dependencies = [
 
 [[package]]
 name = "etopan"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "etopa",
  "jni",
@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "etopaw"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "console_error_panic_hook",
  "etopa",

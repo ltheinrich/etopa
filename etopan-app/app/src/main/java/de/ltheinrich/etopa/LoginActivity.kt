@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -80,13 +81,13 @@ class LoginActivity : AppCompatActivity() {
         key.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
                 common.toast(R.string.logging_in)
-                loginClick()
+                loginClick(null)
             }
             false
         }
     }
-
-    fun loginClick() {
+    
+    fun loginClick(@SuppressWarnings("unused") view: View?) {
         common.hideKeyboard()
         if (instance.text.isNotEmpty() && username.text.isNotEmpty() && password.text.isNotEmpty() && key.text.isNotEmpty()) {
             common.instance = instance.text.toString()
