@@ -30,9 +30,9 @@ TEMP_EWM=/tmp/etopa_ewm
 
 .PHONY: build signed api web android signandroid
 
-build: api web android
+build: rmtarget api web android
 
-signed: api web android signandroid
+signed: build signandroid
 
 api:
 	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${API_FILE}
@@ -65,3 +65,6 @@ signandroid:
 	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${OUTPUT}/${MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${OUTPUT}/${DEBUG_SYMBOLS}
+
+rmtarget:
+	rm -rf target/build
