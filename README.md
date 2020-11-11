@@ -13,7 +13,7 @@ It is currently under development. If you want to contribute and encounter probl
 You can use the [Etopa.de instance](https://etopa.de/) or host your own.
 
 ### Download Android app
-F-Droid: Add repository ht<span></span>tps://fdroid.ltheinrich.de and search for Etopa
+F-Droid: [Add repository](fdroidrepo://fdroid.ltheinrich.de/?fingerprint=B90FC7691EC5BE977DCBBCB18C3984C794CCAFA5BB8712ED2D64F9FD8703B636) ht<span></span>tps://fdroid.ltheinrich.de and search for Etopa
 
 Google Play Store: [Etopa 2FA](https://play.google.com/store/apps/details?id=de.ltheinrich.etopa)
 
