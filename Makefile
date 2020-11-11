@@ -15,6 +15,7 @@ JNI_LIBS=etopan-app/app/src/main/jniLibs
 BUNDLETOOL=~/.bundletool-all.jar
 AAB_FILE=etopa.aab
 APK_FILE=etopa.apk
+S2APK_FILE=etopa-s2.apk
 UAPK_FILE=etopa-unsigned.apk
 MAPPING=mapping.txt
 DEBUG_SYMBOLS=native-debug-symbols.zip
@@ -49,7 +50,7 @@ web:
 	rm -rf ${TEMP_EWM}
 
 android:
-	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${AAB_FILE} && rm -f ${OUTPUT}/${APK_FILE}
+	mkdir -p ${OUTPUT} && rm -f ${OUTPUT}/${AAB_FILE} && rm -f ${OUTPUT}/${APK_FILE} && rm -f ${OUTPUT}/${S2APK_FILE} && rm -f ${OUTPUT}/${UAPK_FILE}
 	${BUILDER} build -p etopan --release --target aarch64-linux-android
 	${BUILDER} build -p etopan --release --target armv7-linux-androideabi
 	rm -rf ${JNI_LIBS} && mkdir -p ${JNI_LIBS}/arm64-v8a && mkdir -p ${JNI_LIBS}/armeabi-v7a
@@ -62,7 +63,8 @@ signandroid:
 	java -jar ${BUNDLETOOL} build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${OUTPUT}/${AAB_FILE}
 	jarsigner -keystore ${KEYSTORE} -storepass ${KS_PASS} -sigalg SHA256withRSA -digest-alg SHA-256 ${OUTPUT}/${AAB_FILE} etopa
 	# already aligned # ${ANDROID_BT}/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line's file to ..unsigned-aligned.apk
-	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --v3-signing-enabled true --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${S2APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${OUTPUT}/${MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${OUTPUT}/${DEBUG_SYMBOLS}
 
