@@ -4,8 +4,24 @@
 
 # Etopa
 ### Time-based one-time password authenticator (2FA)
-Etopa is a two-factor-authentication app, which runs as a web server and can be accessed using a web browser or using an app.
+Etopa is a two-factor-authentication app, which runs as a web server and can be accessed using a web browser or using an Android app.
 It is currently under development. If you want to contribute and encounter problems, feel free to ask me for help anytime.
+
+<hr>
+
+### Etopa<span></span>.de instance
+You can use the [Etopa.de instance](https://etopa.de/) or host your own.
+
+### Download Android app
+F-Droid: Add repository ht<span></span>tps://fdroid.ltheinrich.de and search for Etopa
+
+Google Play Store: [Etopa 2FA](https://play.google.com/store/apps/details?id=de.ltheinrich.etopa)
+
+Amazon Appstore: [Etopa](http://www.amazon.com/gp/mas/dl/android?p=de.ltheinrich.etopa)
+
+Samsung Galaxy Store: [Etopa](https://apps.samsung.com/gear/appDetail.as?appId=de.ltheinrich.etopa)
+
+<hr>
 
 ### Build
 Add rustup targets
