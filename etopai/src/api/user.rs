@@ -3,7 +3,7 @@
 use crate::common::*;
 use etopa::crypto::argon2_verify;
 use etopa::Fail;
-use lhi::server::HttpRequest;
+use kern::http::server::HttpRequest;
 use std::sync::RwLockReadGuard;
 
 /// Token validation handler

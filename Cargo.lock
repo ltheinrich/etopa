@@ -227,7 +227,7 @@ version = "0.0.5"
 dependencies = [
  "etopa",
  "json",
- "lhi",
+ "kern",
 ]
 
 [[package]]
@@ -335,25 +335,18 @@ checksum = "67c21572b4949434e4fc1e1978b99c5f77064153c59d998bf13ecd96fb5ecba7"
 
 [[package]]
 name = "kern"
-version = "1.1.6"
+version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "231129465395bd4048b3345ffe52a77365248269e4b9e8b3eff5f3a36a90346d"
+checksum = "154525b3606e91d6be54b1a4c33ea6b5aa2ad1c595626b1f7ae4ea2826991ca5"
+dependencies = [
+ "rustls",
+]
 
 [[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
-
-[[package]]
-name = "lhi"
-version = "0.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3d9b6057ba4df553fb03d6b1d3ebaee6883453574ada3f150da81831bdbb35d"
-dependencies = [
- "kern",
- "rustls",
-]
 
 [[package]]
 name = "libc"
@@ -384,9 +377,9 @@ checksum = "8452105ba047068f40ff7093dd1d9da90898e63dd61736462e9cdda6a90ad3c3"
 
 [[package]]
 name = "once_cell"
-version = "1.5.1"
+version = "1.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f53cef67919d7d247eb9a2f128ca9e522789967ef1eb4ccd8c71a95a8aedf596"
+checksum = "13bd41f508810a131401606d54ac32a467c97172d74ba7662562ebba5ad07fa0"
 
 [[package]]
 name = "opaque-debug"
