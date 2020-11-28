@@ -9,6 +9,3 @@ updates:
   open-pull-requests-limit: 99
   allow:
     - dependency-type: "all"
-  labels:
-    - "dependencies"
-    - "automerge"
