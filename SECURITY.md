@@ -12,3 +12,4 @@ Currently supported with security updates.
 ## Reporting a Vulnerability
 
 If you detect a vulnerability, please contact me via email: lennart@ltheinrich.de
+I will try to respond as soon as possible.
