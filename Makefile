@@ -26,7 +26,7 @@ KS_ALIAS=etopa
 # web
 WEB_FILE=etopa.tar.xz
 WASM_PACK=wasm-pack
-GOMINIFY=gominify
+GOMINIFY=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
 TEMP_EWM=/tmp/etopa_ewm
 
 .PHONY: build signed api web android signandroid
