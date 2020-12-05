@@ -1,0 +1,14 @@
+#!/bin/sh
+
+chown -R etopa:etopa /var/lib/etopa
+systemctl daemon-reload
+
+case "$1" in
+	install)
+		systemctl enable etopa.service
+		;;
+esac
+
+systemctl restart etopa.service
+
+exit 0

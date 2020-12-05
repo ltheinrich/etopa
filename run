@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -lt 1 ]; then
   echo "./run api|web|android"
 elif [ $1 == "api" ]; then
-  cargo run -p etopai
+  cargo run -p etopai -- $@
 elif [ $1 == "web" ]; then
   wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
 elif [ $1 == "android" ]; then

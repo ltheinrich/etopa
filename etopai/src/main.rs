@@ -9,7 +9,7 @@ mod utils;
 
 mod api;
 
-use common::{json_error, SharedData, CARGO_TOML, HELP};
+use common::{json_error, SharedData, CARGO_TOML, HELP, LICENSES};
 use data::StorageFile;
 use etopa::{
     meta::{init_name, init_version},
@@ -34,6 +34,8 @@ fn main() {
     let cmd = Command::from(&args, &["help"]);
     if cmd.option("help") {
         return println!("{}", HELP);
+    } else if cmd.option("licenses") {
+        return println!("{}", LICENSES);
     }
 
     // load file config

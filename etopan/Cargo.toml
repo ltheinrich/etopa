@@ -4,7 +4,7 @@ version = "0.0.5"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2018"
 license = "ISC"
-repository = "https://github.com/ltheinrich/etopa"
+repository = "https://ltheinrich.de/etopa"
 description = "Etopa for Android"
 homepage = "https://etopa.de"
 

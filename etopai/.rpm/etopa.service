@@ -1,0 +1,16 @@
+[Unit]
+Description=Etopa HTTPS API
+After=network.target
+
+[Service]
+Type=simple
+User=etopa
+Group=etopa
+WorkingDirectory=/var/lib/etopa
+ExecStart=/usr/bin/etopa
+KillMode=process
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target

@@ -17,10 +17,14 @@ Options:
   --vlt        I       Valid login time in seconds (604800/1 week)
   --data       S       Data directory (data)
   --cert       S       Path to TLS certificate (DATA_DIR/cert.pem)
-  --key        S       Path to TLS certificate key (DATA_DIR/key.pem)";
+  --key        S       Path to TLS certificate key (DATA_DIR/key.pem)
+  --licenses           List licenses of project and libraries";
 
 /// Cargo.toml
 pub const CARGO_TOML: &str = include_str!("../Cargo.toml");
+
+/// licenses
+pub const LICENSES: &str = include_str!("../../NOTICE.txt");
 
 /// Data shared between handlers
 #[derive(Debug)]

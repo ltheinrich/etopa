@@ -1,0 +1,8 @@
+#!/bin/sh
+
+chown -R root:root /var/lib/etopa
+deluser etopa
+systemctl stop etopa.service
+systemctl disable etopa.service
+
+exit 0

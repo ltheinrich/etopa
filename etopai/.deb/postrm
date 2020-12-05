@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case "$1" in
+	purge)
+		# disabled (data security) 
+		#rm -rf /var/lib/etopa
+		;;
+esac
+
+exit 0

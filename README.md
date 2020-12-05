@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/ltheinrich/etopa/workflows/CI/badge.svg)](https://github.com/ltheinrich/etopa/actions?query=workflow%3ACI)
+[![Build Status](https://ltheinrich.de/etopa/workflows/CI/badge.svg)](https://ltheinrich.de/etopa/actions?query=workflow%3ACI)
 [![Matrix](https://img.shields.io/matrix/etopa:matrix.org?label=Matrix)](https://matrix.to/#/!SuZAJrFcmgupnUNURc:matrix.org?via=matrix.org)
 [![Discord](https://img.shields.io/discord/694617177717735457?label=Discord)](https://discord.gg/ZWFNBgR)
 
