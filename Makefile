@@ -4,6 +4,7 @@ BUILDER=cross
 
 # api
 API_FILE=etopa
+NATIVE_FILE=${EXTRA}/etopa-native
 API_TARGET=x86_64-unknown-linux-musl
 API_STRIP=strip
 RPM_FILE=etopa.rpm
@@ -42,6 +43,9 @@ full: build sign
 api:
 	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA}
 	rm -f ${OUTPUT}/${API_FILE}
+	${BUILDER} rustc -p etopai --release --target ${API_TARGET} -- -C target-cpu=native
+	${API_STRIP} target/${API_TARGET}/release/etopai
+	mv target/${API_TARGET}/release/etopai ${OUTPUT}/${NATIVE_FILE}
 	${BUILDER} build -p etopai --release --target ${API_TARGET}
 	${API_STRIP} target/${API_TARGET}/release/etopai
 	cp target/${API_TARGET}/release/etopai ${OUTPUT}/${API_FILE}
