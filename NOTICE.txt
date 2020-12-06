@@ -904,8 +904,8 @@ rustls	0.18.1	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/rust
 ryu	1.0.5	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion
 same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/same-file	MIT OR Unlicense		A simple crate for determining whether two file paths point to the same file.
 sct	0.6.0	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/sct.rs	Apache-2.0 OR ISC OR MIT		Certificate transparency SCT verification library
-serde	1.0.117	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
-serde_derive	1.0.117	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
+serde	1.0.118	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
+serde_derive	1.0.118	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
 serde_json	1.0.60	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.9.1	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		SHA-3 (Keccak) hash function
 spin	0.5.2	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>	https://github.com/mvdnes/spin-rs.git	MIT		Synchronization primitives based on spinning. They may contain data, are usable without `std`, and static initializers are available.
@@ -926,7 +926,7 @@ wasm-bindgen-macro	0.2.69	The wasm-bindgen Developers	https://github.com/rustwas
 wasm-bindgen-macro-support	0.2.69	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/macro-support	Apache-2.0 OR MIT		The part of the implementation of the `#[wasm_bindgen]` attribute that is not in the shared backend crate
 wasm-bindgen-shared	0.2.69	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
 web-sys	0.3.46	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/web-sys	Apache-2.0 OR MIT		Bindings for all Web APIs, a procedurally generated crate from WebIDL
-webpki	0.21.4	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/webpki		ISC	Web PKI X.509 Certificate Verification.
+webpki	0.21.4	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ISC AND BSD-3-Clause	Web PKI X.509 Certificate Verification.
 wee_alloc	0.4.5	Nick Fitzgerald <fitzgen@gmail.com>|Sergey Pepyakin <s.pepyakin@gmail.com>|Matt Howell <mjhowell@gmail.com>|Zack Pierce <zachary.pierce@gmail.com>	https://github.com/rustwasm/wee_alloc	MPL-2.0		wee_alloc: The Wasm-Enabled, Elfin Allocator
 winapi	0.3.9	Peter Atashian <retep998@gmail.com>	https://github.com/retep998/winapi-rs	Apache-2.0 OR MIT		Raw FFI bindings for all of Windows API.
 winapi-i686-pc-windows-gnu	0.4.0	Peter Atashian <retep998@gmail.com>	https://github.com/retep998/winapi-rs	Apache-2.0 OR MIT		Import libraries for the i686-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.

@@ -58,6 +58,6 @@ Build using Makefile
 
 API server: target/build/etopa
 
-Android APK: target/build/etopa-unsigned.apk
+Android APK: target/build/extra/etopa-unsigned.apk
 
 Web archive: target/build/etopa.tar.xz
