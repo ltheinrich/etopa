@@ -1,7 +1,12 @@
 #!/bin/sh
 
-chown -R root:root /var/lib/etopa
-deluser etopa
+case "$1" in
+	purge)
+		chown -R root:root /var/lib/etopa
+        deluser etopa
+		;;
+esac
+
 systemctl stop etopa.service
 systemctl disable etopa.service
 

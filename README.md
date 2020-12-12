@@ -27,13 +27,15 @@ Samsung Galaxy Store: [Etopa](https://apps.samsung.com/gear/appDetail.as?appId=d
 Add rustup targets
 > rustup target add x86_64-unknown-linux-musl aarch64-linux-android armv7-linux-androideabi wasm32-unknown-unknown
 
-Install cross
-> cargo install cross
+Install build tools for Rust/Cargo
+> cargo install cross cargo-license cargo-deb cargo-rpm
 
 Install wasm-pack
 > curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 Download Android NDK (Side by side) and Android SDK Build-Tools using Android Studio (change ANDROID_BT variable in Makefile if necessary)
+
+![Screenshot](https://i.imgur.com/rBnF8RO.png)
 
 Create NDK toolchains (change ndk path if necessary)
 > mkdir ~/.android/ndk
@@ -46,15 +48,7 @@ Download bundletool
 > wget -O ~/.bundletool-all.jar ht<span></span>tps://github.com/google/bundletool/releases/latest/download/bundletool-all-1.3.0.jar
 
 Install [gominify](https://github.com/tdewolff/minify/releases)
-
-Debian/Ubuntu
-> sudo apt install minify
-
-Fedora/CentOS
-> sudo dnf install golang-github-tdewolff-minify
-
-Build using Makefile
-> make
+> wget -c https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz -O - | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0
 
 API server: target/build/etopa
 

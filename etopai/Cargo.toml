@@ -31,7 +31,7 @@ section = "net"
 priority = "optional"
 depends = ""
 maintainer-scripts = "etopai/.deb/"
-conf-files = ["etc/etopa.conf"]
+conf-files = ["/etc/etopa.conf"]
 assets = [
     ["target/release/etopai", "usr/bin/etopa", "755"],
     [".rpm/etopa.conf", "etc/etopa.conf", "755"],

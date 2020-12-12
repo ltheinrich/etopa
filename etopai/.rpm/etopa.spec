@@ -13,7 +13,6 @@ Source0: %{name}-%{version}.tar.gz
 URL: https://etopa.de
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: systemd
 
 Requires(post): systemd
 Requires(preun): systemd
@@ -47,6 +46,7 @@ fi
 %post
 chown -R etopa:etopa /var/lib/etopa
 %systemd_post etopa.service
+systemctl daemon-reload
 systemctl enable etopa
 systemctl start etopa
 
@@ -60,8 +60,8 @@ systemctl disable etopa
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/*
-%{_unitdir}/etopa.service
+/usr/bin/etopa
+/usr/lib/systemd/system/etopa.service
 %defattr(644,etopa,etopa)
 %dir /var/lib/etopa
 /usr/share/doc/etopa/NOTICE.txt

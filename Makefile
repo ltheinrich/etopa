@@ -1,6 +1,7 @@
 OUTPUT=${PWD}/target/build
 EXTRA=extra
 BUILDER=cross
+NOTICE=NOTICE.txt
 
 # api
 API_FILE=etopa
@@ -14,7 +15,7 @@ DEB_FILE=etopa.deb
 NDK_ARM64=$(HOME)/.android/ndk/arm64/bin
 NDK_ARM=$(HOME)/.android/ndk/arm/bin
 export PATH := ${NDK_ARM64}:${NDK_ARM}:$(PATH)
-ANDROID_BT=~/.android/sdk/build-tools/30.0.2
+ANDROID_BT=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS=etopan-app/app/src/main/jniLibs
 BUNDLETOOL=~/.bundletool-all.jar
 AAB_FILE=${EXTRA}/etopa.aab
@@ -36,7 +37,7 @@ TEMP_EWM=/tmp/etopa_ewm
 .PHONY: build signed api web android sign rpm deb
 
 build: rmtarget notice api web android rpm deb
-	\cp NOTICE.txt ${OUTPUT}/NOTICE.txt
+	\cp ${NOTICE} ${OUTPUT}/NOTICE.txt
 
 full: build sign
 
@@ -57,7 +58,7 @@ web:
 	cp -r etopaw-app ${TEMP_EWM}
 	${GOMINIFY} -r -o ${TEMP_EWM}/ etopaw-app/
 	\cp etopaw-app/config.js ${TEMP_EWM}/config.js
-	cp NOTICE.txt ${TEMP_EWM}/NOTICE.txt
+	cp ${NOTICE} ${TEMP_EWM}/NOTICE.txt
 	(cd ${TEMP_EWM} && tar cfJ ${OUTPUT}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
@@ -69,7 +70,7 @@ android:
 	rm -rf ${JNI_LIBS} && mkdir -p ${JNI_LIBS}/arm64-v8a && mkdir -p ${JNI_LIBS}/armeabi-v7a
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS}/arm64-v8a/libetopan.so
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS}/armeabi-v7a/libetopan.so
-	\cp NOTICE.txt etopan-app/app/src/main/assets/NOTICE.txt
+	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE} etopan-app/app/src/main/assets/NOTICE.txt
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
 	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${OUTPUT}/${UAPK_FILE}
 
@@ -90,12 +91,12 @@ rpm:
 
 deb:
 	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA} && rm -f ${OUTPUT}/${DEB_FILE}
-	cargo deb -p etopai --no-build --target ${API_TARGET}
+	cargo deb -p etopai --no-build --target ${API_TARGET} -v
 	cp target/${API_TARGET}/debian/etopa_*.deb ${OUTPUT}/${DEB_FILE}
 
 notice:
-	head -841 NOTICE.txt > NOTICE.txt.tmp && mv NOTICE.txt{.tmp,}
-	cargo-license -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> NOTICE.txt
+	head -841 ${NOTICE} > ${NOTICE}.tmp && mv ${NOTICE}.tmp ${NOTICE}
+	cargo-license -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE}
 
 rmtarget:
 	rm -rf target/build
