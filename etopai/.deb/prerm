@@ -1,13 +1,11 @@
 #!/bin/sh
 
-case "$1" in
-	purge)
-		chown -R root:root /var/lib/etopa
-        deluser etopa
-		;;
-esac
-
 systemctl stop etopa.service
-systemctl disable etopa.service
+
+if [ $1 = "remove" ] || [ $1 = "purge" ]; then
+  systemctl disable etopa.service
+  chown -R root:root /var/lib/etopa
+  deluser etopa
+fi
 
 exit 0
