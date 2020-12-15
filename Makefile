@@ -1,102 +1,119 @@
-OUTPUT=${PWD}/target/build
-EXTRA=extra
-BUILDER=cross
-NOTICE=NOTICE.txt
+TARGET_OUTPUT_DIR?=${PWD}/target/build
+EXTRA_DIR?=extra
+RUST_BUILDER?=cargo
+NOTICE_FILE?=NOTICE.txt
 
 # api
-API_FILE=etopa
-NATIVE_FILE=${EXTRA}/etopa-native
-API_TARGET=x86_64-unknown-linux-musl
-API_STRIP=strip
-RPM_FILE=etopa.rpm
-DEB_FILE=etopa.deb
+API_FILE_NAME?=etopa
+API_NATIVE_FILE_NAME?=${EXTRA_DIR}/etopa-native
+API_TARGET_TRIPLE?=x86_64-unknown-linux-musl
+API_STRIP?=strip
+API_RPM_FILE?=etopa.rpm
+API_DEB_FILE?=etopa.deb
+CARGO_RPM?=cargo rpm
+CARGO_DEB?=cargo deb
+CARGO_LICENSE?=cargo-license
 
 # android
-NDK_ARM64=$(HOME)/.android/ndk/arm64/bin
-NDK_ARM=$(HOME)/.android/ndk/arm/bin
-export PATH := ${NDK_ARM64}:${NDK_ARM}:$(PATH)
-ANDROID_BT=~/.android/sdk/build-tools/30.0.3
-JNI_LIBS=etopan-app/app/src/main/jniLibs
-BUNDLETOOL=~/.bundletool-all.jar
-AAB_FILE=${EXTRA}/etopa.aab
-APK_FILE=etopa.apk
-S2APK_FILE=${EXTRA}/etopa-fdroid.apk
-UAPK_FILE=${EXTRA}/etopa-unsigned.apk
-MAPPING=${EXTRA}/mapping.txt
-DEBUG_SYMBOLS=${EXTRA}/native-debug-symbols.zip
-KEYSTORE=~/.etopa.jks
-KS_PASS=$(shell cat ~/.etopa.jks.pass)
-KS_ALIAS=etopa
+NDK_BIN_PATH?=$(HOME)/.android/ndk/arm64/bin
+export PATH := ${NDK_BIN_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin:$(PATH)
+ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
+JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
+BUNDLETOOL_JAR?=~/.bundletool-all.jar
+ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
+ANDROID_APK_FILE?=etopa.apk
+ANDROID_S2APK_FILE?=${EXTRA_DIR}/etopa-fdroid.apk
+ANDROID_UAPK_FILE?=${EXTRA_DIR}/etopa-unsigned.apk
+ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
+ANDROID_DEBUG_SYMBOLS?=${EXTRA_DIR}/native-debug-symbols.zip
+ANDROID_KEYSTORE?=~/.etopa.jks
+JKS_PASS_FILE?=$(shell cat ~/.etopa.jks.pass)
+JKS_ALIAS?=etopa
+JAVA_EXEC=java
+JARSIGNER_EXEC=jarsigner
+APKSIGNER_EXEC=${ANDROID_BT_PATH}/apksigner
+ZIPALIGN_EXEC=${ANDROID_BT_PATH}/zipalign
 
 # web
-WEB_FILE=etopa.tar.xz
-WASM_PACK=wasm-pack
-GOMINIFY=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
-TEMP_EWM=/tmp/etopa_ewm
+WEB_FILE_NAME?=etopa.tar.xz
+WASM_PACK_EXEC?=wasm-pack
+GOMINIFY_EXEC?=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
+TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build signed api web android sign rpm deb
+.PHONY: build signed api web android sign rpm deb docker
 
 build: rmtarget notice api web android rpm deb
-	\cp ${NOTICE} ${OUTPUT}/NOTICE.txt
+	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
 full: build sign
 
 api:
-	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA}
-	rm -f ${OUTPUT}/${API_FILE}
-	${BUILDER} rustc -p etopai --release --target ${API_TARGET} -- -C target-cpu=native
-	${API_STRIP} target/${API_TARGET}/release/etopai
-	mv target/${API_TARGET}/release/etopai ${OUTPUT}/${NATIVE_FILE}
-	${BUILDER} build -p etopai --release --target ${API_TARGET}
-	${API_STRIP} target/${API_TARGET}/release/etopai
-	cp target/${API_TARGET}/release/etopai ${OUTPUT}/${API_FILE}
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	rm -f ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
+	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native
+	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
+	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
+	${RUST_BUILDER} build -p etopai --release --target ${API_TARGET_TRIPLE}
+	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
+	cp target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
 
 web:
-	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA}
-	rm -f ${OUTPUT}/${WEB_FILE} && rm -rf ${TEMP_EWM}
-	${WASM_PACK} build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	rm -f ${TARGET_OUTPUT_DIR}/${WEB_FILE_NAME} && rm -rf ${TEMP_EWM}
+	${WASM_PACK_EXEC} build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
 	cp -r etopaw-app ${TEMP_EWM}
-	${GOMINIFY} -r -o ${TEMP_EWM}/ etopaw-app/
+	${GOMINIFY_EXEC} -r -o ${TEMP_EWM}/ etopaw-app/
 	\cp etopaw-app/config.js ${TEMP_EWM}/config.js
-	cp ${NOTICE} ${TEMP_EWM}/NOTICE.txt
-	(cd ${TEMP_EWM} && tar cfJ ${OUTPUT}/etopa.tar.xz *)
+	cp ${NOTICE_FILE} ${TEMP_EWM}/NOTICE.txt
+	(cd ${TEMP_EWM} && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
+android: export CC_aarch64_linux-android = aarch64-linux-android-clang
+android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi30-clang
 android:
-	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA}
-	rm -f ${OUTPUT}/${AAB_FILE} && rm -f ${OUTPUT}/${APK_FILE} && rm -f ${OUTPUT}/${S2APK_FILE} && rm -f ${OUTPUT}/${UAPK_FILE}
-	${BUILDER} build -p etopan --release --target aarch64-linux-android
-	${BUILDER} build -p etopan --release --target armv7-linux-androideabi
-	rm -rf ${JNI_LIBS} && mkdir -p ${JNI_LIBS}/arm64-v8a && mkdir -p ${JNI_LIBS}/armeabi-v7a
-	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS}/arm64-v8a/libetopan.so
-	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS}/armeabi-v7a/libetopan.so
-	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE} etopan-app/app/src/main/assets/NOTICE.txt
-	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
-	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${OUTPUT}/${UAPK_FILE}
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} && \
+	  rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
+	${RUST_BUILDER} build -p etopan --release --target aarch64-linux-android
+	${RUST_BUILDER} build -p etopan --release --target armv7-linux-androideabi
+	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a
+	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/arm64-v8a/libetopan.so
+	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS_PATH}/armeabi-v7a/libetopan.so
+	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
+	(cd etopan-app && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
+	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
 
 sign:
-	java -jar ${BUNDLETOOL} build-bundle --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${OUTPUT}/${AAB_FILE}
-	jarsigner -keystore ${KEYSTORE} -storepass ${KS_PASS} -sigalg SHA256withRSA -digest-alg SHA-256 ${OUTPUT}/${AAB_FILE} etopa
-	# already aligned # ${ANDROID_BT}/zipalign -v -p 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line's file to ..unsigned-aligned.apk
-	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --v3-signing-enabled true --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
-	${ANDROID_BT}/apksigner sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${KEYSTORE} --ks-key-alias ${KS_ALIAS} --ks-pass pass:${KS_PASS} --out ${OUTPUT}/${S2APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
-	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${OUTPUT}/${MAPPING}
-	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${OUTPUT}/${DEBUG_SYMBOLS}
+	${JAVA_EXEC} -jar ${BUNDLETOOL_JAR} build-bundle \
+	  --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE}
+	${JARSIGNER_EXEC} -keystore ${ANDROID_KEYSTORE} -storepass ${JKS_PASS_FILE} -sigalg SHA256withRSA \
+	  -digest-alg SHA-256 ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} etopa
+	#${ZIPALIGN_EXEC} -v 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line
+	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} --ks-key-alias ${JKS_ALIAS} \
+	  --ks-pass pass:${JKS_PASS_FILE} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${ANDROID_KEYSTORE} \
+	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASS_FILE} --out ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} \
+	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${TARGET_OUTPUT_DIR}/${ANDROID_MAPPING}
+	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${TARGET_OUTPUT_DIR}/${ANDROID_DEBUG_SYMBOLS}
 
 rpm:
-	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA}
-	rm -f ${OUTPUT}/${RPM_FILE}
-	(cd etopai && cargo rpm build --no-cargo-build --target ${API_TARGET} -v)
-	cp target/${API_TARGET}/release/rpmbuild/RPMS/*/etopa-*.rpm ${OUTPUT}/${RPM_FILE}
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	rm -f ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
+	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} -v)
+	cp target/${API_TARGET_TRIPLE}/release/rpmbuild/RPMS/*/etopa-*.rpm ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
 
 deb:
-	mkdir -p ${OUTPUT} && mkdir -p ${OUTPUT}/${EXTRA} && rm -f ${OUTPUT}/${DEB_FILE}
-	cargo deb -p etopai --no-build --target ${API_TARGET} -v
-	cp target/${API_TARGET}/debian/etopa_*.deb ${OUTPUT}/${DEB_FILE}
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
+	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} -v
+	cp target/${API_TARGET_TRIPLE}/debian/etopa_*.deb ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
 
 notice:
-	head -841 ${NOTICE} > ${NOTICE}.tmp && mv ${NOTICE}.tmp ${NOTICE}
-	cargo-license -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE}
+	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
+	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
 
 rmtarget:
-	rm -rf target/build
+	rm -rf ${TARGET_OUTPUT_DIR}
+
+docker:
+	docker build -t etopa-builder:v1 .

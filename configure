@@ -1,0 +1,105 @@
+distro=`lsb_release -is`
+
+mkdir -p /tmp/etopa-configure
+
+if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
+  sudo dnf -y groupinstall "Development Tools"
+  sudo dnf -y install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git
+elif [ $distro == "Debian" ] || [ $distro == "Ubuntu" ]; then
+  sudo apt -y install build-essential python default-jdk rpm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git
+else
+  bold=$(tput bold)
+  italic=$(tput sitm)
+  underline=$(tput smul)
+  normal=$(tput sgr0)
+  echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"
+  echo "${bold}Fedora:${normal}"
+  echo "  ${italic}sudo dnf groupinstall \"Development Tools\""
+  echo "  sudo dnf install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git${normal}"
+  echo "${bold}Debian:${normal}"
+  echo -e "  ${italic}sudo apt install build-essential musl-tools gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf curl git${normal}\n"
+fi
+
+which rustup > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  curl --proto '=https' --tlsv1.2 -sSf -o /tmp/etopa-configure/rustup.sh https://sh.rustup.rs
+  chmod +x /tmp/etopa-configure/rustup.sh
+  /tmp/etopa-configure/rustup.sh -y
+  rm /tmp/etopa-configure/rustup.sh
+fi
+
+if ! [ "$ANDROID_NDK_ROOT" == "$HOME/.android/sdk/ndk" ]; then
+  echo 'ANDROID_NDK_ROOT="$HOME/.android/sdk/ndk"' >> $HOME/.profile
+fi
+
+if ! [ "$ANDROID_SDK_ROOT" == "$HOME/.android/sdk" ]; then
+  echo 'ANDROID_SDK_ROOT="$HOME/.android/sdk"' >> $HOME/.profile
+fi
+
+source $HOME/.profile
+
+targets=`rustup target list`
+
+if ! [[ $targets == *"x86_64-unknown-linux-musl (installed)"* ]]; then
+  rustup target add x86_64-unknown-linux-musl
+fi
+
+if ! [[ $targets == *"aarch64-linux-android (installed)"* ]]; then
+  rustup target add aarch64-linux-android
+fi
+
+if ! [[ $targets == *"armv7-linux-androideabi (installed)"* ]]; then
+  rustup target add armv7-linux-androideabi
+fi
+
+if ! [[ $targets == *"wasm32-unknown-unknown (installed)"* ]]; then
+  rustup target add wasm32-unknown-unknown
+fi
+
+which cargo-license > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  cargo install cargo-license
+fi
+
+which cargo-deb > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  cargo install cargo-deb
+fi
+
+which cargo-rpm > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  cargo install cargo-rpm
+fi
+
+if ! [ -f "$HOME/.cargo/bin/wasm-pack" ]; then
+  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+fi
+
+if ! [ -d "$HOME/.android/sdk/ndk/21.3.6528147" ]; then
+  mkdir -p $HOME/.android/sdk/ndk
+  curl -o /tmp/etopa-configure/android-ndk.zip https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
+  unzip /tmp/etopa-configure/android-ndk.zip -d $HOME/.android/sdk/ndk
+  mv $HOME/.android/sdk/ndk/android-ndk-r21d $HOME/.android/sdk/ndk/21.3.6528147
+  rm /tmp/etopa-configure/android-ndk.zip
+fi
+
+if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
+  mkdir -p $HOME/.android/sdk/cmdline-tools
+  curl -o /tmp/etopa-configure/android-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
+  unzip /tmp/etopa-configure/android-tools.zip -d /tmp/etopa-configure
+  mv /tmp/etopa-configure/cmdline-tools $HOME/.android/sdk/cmdline-tools/latest
+  rm /tmp/etopa-configure/android-tools.zip
+fi
+yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30"
+yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
+if ! [ -f "$HOME/.bundletool-all.jar" ]; then
+  curl -L -o $HOME/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
+fi
+
+if ! [ -f "/usr/local/bin/minify-v2.8.0" ]; then
+  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0)
+fi
+
+rm -rf /tmp/etopa-configure
+echo "Successfully configured"

@@ -24,34 +24,23 @@ Samsung Galaxy Store: [Etopa](https://apps.samsung.com/gear/appDetail.as?appId=d
 <hr>
 
 ### Build
-Add rustup targets
-> rustup target add x86_64-unknown-linux-musl aarch64-linux-android armv7-linux-androideabi wasm32-unknown-unknown
+Clone repo
+> git clone https://ltheinrich.de/etopa && cd etopa
 
-Install build tools for Rust/Cargo
-> cargo install cross cargo-license cargo-deb cargo-rpm
+Configure
+> ./configure
 
-Install wasm-pack
-> curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+Build
+> ANDROID_UAPK_FILE=etopa.apk make
 
-Download Android NDK (Side by side) and Android SDK Build-Tools using Android Studio (change ANDROID_BT variable in Makefile if necessary)
+API server: `target/build/etopa`
 
-![Screenshot](https://i.imgur.com/rBnF8RO.png)
+API server (Fedora package): `target/build/etopa.rpm`
 
-Create NDK toolchains (change ndk path if necessary)
-> mkdir ~/.android/ndk
+API server (Debian package): `target/build/etopa.deb`
 
-> ~/.android/sdk/ndk/21.3.6528147/build/tools/make_standalone_toolchain.py --api 30 --arch arm64 --install-dir ~/.android/ndk/arm64
+API server (native/optimized): `target/build/extra/etopa-native`
 
-> ~/.android/sdk/ndk/21.3.6528147/build/tools/make_standalone_toolchain.py --api 30 --arch arm --install-dir ~/.android/ndk/arm
+Android APK: `target/build/etopa.apk`
 
-Download bundletool
-> wget -O ~/.bundletool-all.jar ht<span></span>tps://github.com/google/bundletool/releases/latest/download/bundletool-all-1.3.0.jar
-
-Install [gominify](https://github.com/tdewolff/minify/releases)
-> wget -c https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz -O - | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0
-
-API server: target/build/etopa
-
-Android APK: target/build/extra/etopa-unsigned.apk
-
-Web archive: target/build/etopa.tar.xz
+Web archive: `target/build/etopa.tar.xz`
