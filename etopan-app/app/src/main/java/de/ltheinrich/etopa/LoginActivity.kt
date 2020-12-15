@@ -4,33 +4,40 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import de.ltheinrich.etopa.databinding.ActivityLoginBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.inputString
 
 class LoginActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
     private lateinit var preferences: SharedPreferences
-    private lateinit var instance: TextView
-    private lateinit var username: TextView
-    private lateinit var password: TextView
-    private lateinit var key: TextView
+    private lateinit var binding: ActivityLoginBinding
+
+    /*
+    TODO:
+    MOVE LOGIN COMPLETELY TO SETTINGS!
+    MOVE LOGIN COMPLETELY TO SETTINGS!
+    MOVE LOGIN COMPLETELY TO SETTINGS!
+    MOVE LOGIN COMPLETELY TO SETTINGS!
+    MOVE LOGIN COMPLETELY TO SETTINGS!
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        common.settingsVisible = true
+        setSupportActionBar(binding.toolbar.root)
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        instance = findViewById(R.id.instance)
-        username = findViewById(R.id.username)
-        password = findViewById(R.id.password)
-        key = findViewById(R.id.key)
 
-        instance.text = common.instance
-        username.text = common.username
+        binding.username.editText?.setText(common.username)
 
         if (!preferences.getString("token", "")
                 .isNullOrEmpty() && !intent.hasExtra("noAutoLogin")
@@ -78,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                 })
         }
 
-        key.setOnEditorActionListener { _, actionId, _ ->
+        binding.key.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
                 common.toast(R.string.logging_in)
                 loginClick(null)
@@ -86,33 +93,43 @@ class LoginActivity : AppCompatActivity() {
             false
         }
     }
-    
+
     fun loginClick(@SuppressWarnings("unused") view: View?) {
         common.hideKeyboard()
-        if (instance.text.isNotEmpty() && username.text.isNotEmpty() && password.text.isNotEmpty() && key.text.isNotEmpty()) {
-            common.instance = instance.text.toString()
-            common.username = username.text.toString()
-            common.passwordHash = common.hashPassword(password.text.toString())
-            common.keyHash = common.hashKey(key.text.toString())
-            common.request("user/login", { response ->
-                if (response.has("token")) {
-                    val token = response.getString("token")
-                    common.token = token
-                    val editor = preferences.edit()
-                    editor.putString("instance", common.encrypt(common.pinHash, common.instance))
-                    editor.putString("username", common.encrypt(common.pinHash, common.username))
-                    editor.putString(
-                        "passwordHash",
-                        common.encrypt(common.pinHash, common.passwordHash)
-                    )
-                    editor.putString("keyHash", common.encrypt(common.pinHash, common.keyHash))
-                    editor.putString("token", common.encrypt(common.pinHash, common.token))
-                    editor.apply()
-                    common.openActivity(AppActivity::class)
-                } else {
-                    common.toast(R.string.incorrect_login)
-                }
-            }, Pair("username", common.username), Pair("password", common.passwordHash))
+        if (inputString(binding.username).isNotEmpty() &&
+            inputString(binding.password).isNotEmpty() && inputString(binding.key).isNotEmpty()
+        ) {
+            common.username = binding.username.editText?.text.toString()
+            common.passwordHash = common.hashPassword(binding.password.editText?.text.toString())
+            common.keyHash = common.hashKey(binding.key.editText?.text.toString())
+            common.request(
+                "user/login",
+                { response ->
+                    if (response.has("token")) {
+                        val token = response.getString("token")
+                        common.token = token
+                        val editor = preferences.edit()
+                        editor.putString(
+                            "username",
+                            common.encrypt(common.pinHash, common.username)
+                        )
+                        editor.putString(
+                            "passwordHash",
+                            common.encrypt(common.pinHash, common.passwordHash)
+                        )
+                        editor.putString("keyHash", common.encrypt(common.pinHash, common.keyHash))
+                        editor.putString("token", common.encrypt(common.pinHash, common.token))
+                        editor.apply()
+                        common.openActivity(AppActivity::class)
+                    } else {
+                        common.toast(R.string.incorrect_login)
+                    }
+                },
+                Pair("username", common.username),
+                Pair("password", common.passwordHash),
+                error_handler = {
+                    common.toast(R.string.network_unreachable)
+                })
 
         } else {
             common.toast(R.string.inputs_empty)
@@ -127,4 +144,7 @@ class LoginActivity : AppCompatActivity() {
 
         return super.onKeyDown(keyCode, event)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

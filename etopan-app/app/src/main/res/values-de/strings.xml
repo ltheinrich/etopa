@@ -17,4 +17,8 @@
     <string name="network_unreachable">Netzwerk unerreichbar</string>
     <string name="offline_mode">Offline-Modus</string>
     <string name="decryption_failed">Entschlüsselung fehlgeschlagen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="licenses">Lizenzen</string>
+    <string name="save">Speichern</string>
+    <string name="settings_saved">Einstellungen gespeichert</string>
 </resources>

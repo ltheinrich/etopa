@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AppActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+    <include
+        android:id="@id/toolbar"
+        layout="@layout/layout_toolbar" />
 
-        <ProgressBar
-            android:id="@+id/time"
-            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+    <ScrollView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="100"
-            android:progress="50"
-            android:layout_marginHorizontal="50dp"
-            android:layout_marginVertical="10dp" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="20dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTokens"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <ProgressBar
+                android:id="@+id/time"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="50"
+                android:layout_marginBottom="10dp"
+                android:layout_marginHorizontal="50dp" />
 
-    </LinearLayout>
-
-</ScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTokens"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

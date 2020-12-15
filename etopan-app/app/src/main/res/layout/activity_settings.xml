@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    tools:context=".SettingsActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@id/toolbar"
         layout="@layout/layout_toolbar" />
 
     <ScrollView
@@ -23,21 +21,26 @@
             android:orientation="vertical"
             android:paddingVertical="20dp">
 
-            <EditText
-                android:id="@+id/pin"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/instance"
                 android:layout_width="330dp"
                 android:layout_height="60dp"
-                android:hint="@string/pin"
-                android:importantForAutofill="no"
-                android:inputType="numberPassword"
-                android:layout_marginBottom="10dp" />
+                android:hint="@string/etopa_instance"
+                android:inputType="textUri"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/unlock"
+                android:id="@+id/login"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="120dp"
                 android:layout_height="60dp"
-                android:text="@string/unlock" />
+                android:onClick="saveClick"
+                android:text="@string/save" />
 
         </LinearLayout>
     </ScrollView>

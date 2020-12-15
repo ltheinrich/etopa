@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ltheinrich.etopa.databinding.ActivityAppBinding
@@ -26,6 +28,7 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar.root)
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         binding.rvTokens.adapter = TokenAdapter(tokens, this)
@@ -92,4 +95,7 @@ class AppActivity : AppCompatActivity() {
 
         return super.onKeyDown(keyCode, event)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

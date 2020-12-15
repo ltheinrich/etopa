@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -17,6 +19,10 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.textfield.TextInputLayout
+import de.ltheinrich.etopa.LicensesActivity
+import de.ltheinrich.etopa.R
+import de.ltheinrich.etopa.SettingsActivity
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
@@ -25,6 +31,10 @@ typealias StringHandler = (response: String) -> Unit
 typealias ErrorHandler = (error: VolleyError) -> Unit
 
 var library: Boolean = false
+
+fun inputString(inputLayout: TextInputLayout): String {
+    return inputLayout.editText?.text.toString()
+}
 
 class Common constructor(activity: Activity) {
 
@@ -35,6 +45,30 @@ class Common constructor(activity: Activity) {
     lateinit var pinHash: String
     lateinit var token: String
     var offline: Boolean = false
+    var settingsVisible: Boolean = true
+
+    fun handleMenu(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            openActivity(SettingsActivity::class)
+            true
+        }
+        R.id.action_licenses -> {
+            openActivity(LicensesActivity::class)
+            true
+        }
+        else -> {
+            false
+        }
+    }
+
+    fun createMenu(menu: Menu?): Boolean {
+        activity.menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val item = menu?.findItem(R.id.action_settings)
+        if (item != null) {
+            item.isVisible = settingsVisible
+        }
+        return true
+    }
 
     fun decryptLogin(preferences: SharedPreferences) {
         instance = preferences.getString("instance", encrypt(pinHash, "etopa.de"))?.let {
