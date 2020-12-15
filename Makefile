@@ -15,7 +15,7 @@ CARGO_DEB?=cargo deb
 CARGO_LICENSE?=cargo-license
 
 # android
-NDK_BIN_PATH?=$(HOME)/.android/ndk/arm64/bin
+NDK_BIN_PATH?=$(HOME)/.android/sdk/ndk/21.3.6528147
 export PATH := ${NDK_BIN_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin:$(PATH)
 ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
@@ -68,7 +68,7 @@ web:
 	(cd ${TEMP_EWM} && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
-android: export CC_aarch64_linux-android = aarch64-linux-android-clang
+android: export CC_aarch64_linux-android = aarch64-linux-android30-clang
 android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi30-clang
 android:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}

@@ -8,10 +8,10 @@ import android.os.Looper
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import de.ltheinrich.etopa.databinding.ActivityAppBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.Storage
 import de.ltheinrich.etopa.utils.TokenAdapter
-import kotlinx.android.synthetic.main.activity_app.*
 
 class AppActivity : AppCompatActivity() {
 
@@ -20,14 +20,16 @@ class AppActivity : AppCompatActivity() {
     private val tokens = ArrayList<Pair<String, String>>()
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var storage: Storage
+    private lateinit var binding: ActivityAppBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app)
+        binding = ActivityAppBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        rv_tokens.adapter = TokenAdapter(tokens, this)
-        rv_tokens.layoutManager = LinearLayoutManager(this)
+        binding.rvTokens.adapter = TokenAdapter(tokens, this)
+        binding.rvTokens.layoutManager = LinearLayoutManager(this)
 
         common.requestString("data/get_secure",
             { secureStorage ->
@@ -62,7 +64,7 @@ class AppActivity : AppCompatActivity() {
                 val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble()
                 if (timeLeft < 1)
                     updateTokens()
-                time.progress = 100 - (timeLeft / 30 * 100).toInt()
+                binding.time.progress = 100 - (timeLeft / 30 * 100).toInt()
             } finally {
                 handler.postDelayed(this, 1000)
             }
@@ -79,7 +81,7 @@ class AppActivity : AppCompatActivity() {
                 )
             )
         }
-        rv_tokens.adapter?.notifyDataSetChanged()
+        binding.rvTokens.adapter?.notifyDataSetChanged()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

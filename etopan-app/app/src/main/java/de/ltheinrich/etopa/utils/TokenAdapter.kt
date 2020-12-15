@@ -1,29 +1,28 @@
 package de.ltheinrich.etopa.utils
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.ltheinrich.etopa.AppActivity
-import de.ltheinrich.etopa.R
-import kotlinx.android.synthetic.main.secret_item.view.*
+import de.ltheinrich.etopa.databinding.SecretItemBinding
 
 class TokenAdapter(
     private val items: ArrayList<Pair<String, String>>,
     private val context: AppActivity
 ) :
     RecyclerView.Adapter<ViewHolder>() {
+    private lateinit var binding: SecretItemBinding
 
     override fun getItemCount(): Int {
         return items.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.secret_item, parent, false)
-        )
+        val inflater = LayoutInflater.from(parent.context)
+        binding = SecretItemBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,7 +34,7 @@ class TokenAdapter(
     }
 }
 
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val name: TextView = view.name
-    val token: Button = view.token
+class ViewHolder(binding: SecretItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    val name: TextView = binding.name
+    val token: Button = binding.token
 }

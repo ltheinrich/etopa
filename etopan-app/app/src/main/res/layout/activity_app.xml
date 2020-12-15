@@ -22,7 +22,7 @@
             android:layout_marginVertical="10dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_tokens"
+            android:id="@+id/rvTokens"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
