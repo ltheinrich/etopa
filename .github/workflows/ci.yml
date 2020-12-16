@@ -129,4 +129,4 @@ jobs:
         with:
           git-repo: 'https://ltheinrich.de/etopa'
       - name: Print exit code
-         run: echo "Exit code ${{ steps.rwa-build.outputs.exitcode }}"
+        run: echo "Exit code ${{ steps.rwa-build.outputs.exitcode }}"
