@@ -128,7 +128,7 @@ jobs:
 
       - name: Make with rwa-builder
         id: rwa-build
-        uses: actions/rwa-builder@0.0.2
+        uses: ltheinrich/rwa-builder@0.0.2
         with:
           git-repo: 'https://ltheinrich.de/etopa'
 
