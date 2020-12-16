@@ -126,11 +126,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Configure
-        run: ./configure
+      - name: Make with rwa-builder
+        id: rwa-build
+        uses: actions/rwa-builder@0.0.2
+        with:
+          git-repo: 'https://ltheinrich.de/etopa'
 
-      - name: Source .profile
-        run: source $HOME/.profile
-
-      - name: Make
-        run: make
+      - name: Print exit code
+         run: echo "Exit code ${{ steps.rwa-build.outputs.exitcode }}"
