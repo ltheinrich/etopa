@@ -118,3 +118,18 @@ jobs:
 
       - name: Build
         run: cd etopan-app && ./gradlew :app:bundleRelease
+
+  make-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure
+        run: ./configure
+
+      - name: Source .profile
+        run: source $HOME/.profile
+
+      - name: Make Build
+        run: make build
