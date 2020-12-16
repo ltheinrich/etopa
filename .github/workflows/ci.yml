@@ -120,7 +120,7 @@ jobs:
         run: cd etopan-app && ./gradlew :app:bundleRelease
 
   make-build:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     name: Make Build
     steps:
       - name: Checkout
