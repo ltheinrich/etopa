@@ -123,8 +123,8 @@ jobs:
     runs-on: ubuntu:latest
     name: Make Build
     steps:
-    - name: Make with rwa-builder
-      id: rwa-build
-      uses: actions/rwa-builder@0.0.1
-      with:
-        git-repo: 'https://ltheinrich.de/etopa'
+      - name: Make with rwa-builder
+        id: rwa-build
+        uses: actions/rwa-builder@0.0.1
+        with:
+          git-repo: 'https://ltheinrich.de/etopa'
