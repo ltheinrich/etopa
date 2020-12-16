@@ -1,6 +1,12 @@
+#!/bin/bash
+
 distro=`lsb_release -is`
 
 mkdir -p /tmp/etopa-configure
+bold=$(tput bold)
+italic=$(tput sitm)
+underline=$(tput smul)
+normal=$(tput sgr0)
 
 if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
   sudo dnf -y groupinstall "Development Tools"
@@ -8,10 +14,6 @@ if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
 elif [ $distro == "Debian" ] || [ $distro == "Ubuntu" ]; then
   sudo apt -y install build-essential python default-jdk rpm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git
 else
-  bold=$(tput bold)
-  italic=$(tput sitm)
-  underline=$(tput smul)
-  normal=$(tput sgr0)
   echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"
   echo "${bold}Fedora:${normal}"
   echo "  ${italic}sudo dnf groupinstall \"Development Tools\""
@@ -29,11 +31,11 @@ if ! [ $? -eq 0 ]; then
 fi
 
 if ! [ "$ANDROID_NDK_ROOT" == "$HOME/.android/sdk/ndk" ]; then
-  echo 'ANDROID_NDK_ROOT="$HOME/.android/sdk/ndk"' >> $HOME/.profile
+  echo -e '\nexport ANDROID_NDK_ROOT="$HOME/.android/sdk/ndk"' >> $HOME/.profile
 fi
 
 if ! [ "$ANDROID_SDK_ROOT" == "$HOME/.android/sdk" ]; then
-  echo 'ANDROID_SDK_ROOT="$HOME/.android/sdk"' >> $HOME/.profile
+  echo -e '\nexport ANDROID_SDK_ROOT="$HOME/.android/sdk"' >> $HOME/.profile
 fi
 
 source $HOME/.profile
@@ -102,4 +104,6 @@ if ! [ -f "/usr/local/bin/minify-v2.8.0" ]; then
 fi
 
 rm -rf /tmp/etopa-configure
-echo "Successfully configured"
+echo -e "Successfully configured\n"
+echo "${bold}${underline}Please execute the following command to complete the configuration:"
+echo "${normal}${bold}source $HOME/.profile${normal}"
