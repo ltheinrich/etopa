@@ -120,16 +120,11 @@ jobs:
         run: cd etopan-app && ./gradlew :app:bundleRelease
 
   make-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu:latest
+    name: Make Build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure
-        run: ./configure
-
-      - name: Source .profile
-        run: source $HOME/.profile
-
-      - name: Make Build
-        run: make build
+    - name: Make with rwa-builder
+      id: rwa-build
+      uses: actions/rwa-builder@0.0.1
+      with:
+        git-repo: 'https://ltheinrich.de/etopa'
