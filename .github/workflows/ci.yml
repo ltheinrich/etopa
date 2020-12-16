@@ -128,9 +128,4 @@ jobs:
 
       - name: Make with rwa-builder
         id: rwa-build
-        uses: ltheinrich/rwa-builder@0.0.2
-        with:
-          git-repo: 'https://ltheinrich.de/etopa'
-
-      - name: Print exit code
-        run: echo "Exit code ${{ steps.rwa-build.outputs.exitcode }}"
+        uses: ltheinrich/rwa-builder@0.0.4
