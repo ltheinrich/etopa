@@ -41,22 +41,12 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Cargo Cache
+      - name: NDK Cache
+        id: ndk-cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Binary Cache
-        id: bin-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}
+          path: /usr/local/lib/android/sdk/ndk
+          key: ${{ runner.os }}-ndk-cache-21.3.6528147
 
       - name: Android Cache
         uses: actions/cache@v2
@@ -70,12 +60,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-android-caches-
 
-      - name: NDK Cache
-        id: ndk-cache
+      - name: Binary Cache
+        id: bin-cache
         uses: actions/cache@v2
         with:
-          path: /usr/local/lib/android/sdk/ndk
-          key: ${{ runner.os }}-ndk-cache-21.3.6528147
+          path: |
+            /usr/share/rust/.cargo/bin
+          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}
+
+      - name: Cargo Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Android NDK
         if: steps.ndk-cache.outputs.cache-hit != 'true'
