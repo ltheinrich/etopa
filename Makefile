@@ -49,14 +49,14 @@ full: build deb rpm api-native sign
 
 api:
 	mkdir -p ${TARGET_OUTPUT_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
-	${RUST_BUILDER} build -p etopai --release --target ${API_TARGET_TRIPLE}
+	${RUST_BUILDER} build -p etopai --release --target ${API_TARGET_TRIPLE} -v
 	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
 	cp target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
 
 api-native:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
-	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native
+	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native -v
 	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
 	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
 
@@ -77,8 +77,8 @@ android:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} && \
 	  rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
-	${RUST_BUILDER} build -p etopan --release --target aarch64-linux-android
-	${RUST_BUILDER} build -p etopan --release --target armv7-linux-androideabi
+	${RUST_BUILDER} build -p etopan --release --target aarch64-linux-android -v
+	${RUST_BUILDER} build -p etopan --release --target armv7-linux-androideabi -v
 	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/arm64-v8a/libetopan.so
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS_PATH}/armeabi-v7a/libetopan.so
