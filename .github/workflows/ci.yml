@@ -2,130 +2,96 @@ name: CI
 on: push
 
 jobs:
-  rust-lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache cargo build
-        uses: actions/cache@v1
+      - name: Cargo Cache
+        uses: actions/cache@v2
         with:
-          path: target
-          key: ${{ runner.os }}-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Setup toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Format
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
 
       - name: Lint
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
+        run: cargo clippy -- -D warnings
 
-  rust-build:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [etopa, etopai, etopaw, etopan]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache cargo build
-        uses: actions/cache@v1
-        with:
-          path: target
-          key: ${{ runner.os }}-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+      - name: Dependencies
+        run: sudo apt update && sudo apt -y install musl-tools
 
-      - name: Setup toolchain
+      - name: Rust Toolchain
+        id: rust-toolchain
         uses: actions-rs/toolchain@v1
         with:
-          profile: minimal
           toolchain: stable
-          override: true
-          components: rustfmt, clippy
 
-      - name: WebAssembly target
-        if: ${{ matrix.project == 'etopaw' }}
-        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable wasm32-unknown-unknown
-
-      - name: Android target
-        if: ${{ matrix.project == 'etopan' }}
-        run: /usr/share/rust/.cargo/bin/rustup target add --toolchain stable aarch64-linux-android
-
-      - name: Build
-        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
-        uses: actions-rs/cargo@v1
+      - name: Cargo Cache
+        uses: actions/cache@v2
         with:
-          command: build
-          args: -p ${{ matrix.project }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Test
-        if: ${{ matrix.project == 'etopa' || matrix.project == 'etopai' }}
-        uses: actions-rs/cargo@v1
+      - name: Binary Cache
+        id: bin-cache
+        uses: actions/cache@v2
         with:
-          command: test
-          args: -p ${{ matrix.project }}
+          path: |
+            /usr/share/rust/.cargo/bin
+          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}
 
-      - name: Install wasm-pack
-        if: ${{ matrix.project == 'etopaw' }}
-        uses: jetli/wasm-pack-action@v0.3.0
+      - name: Android Cache
+        uses: actions/cache@v2
         with:
-          version: 'latest'
+          path: |
+            etopan-app/build
+            etopan-app/.gradle
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-android-caches-${{ hashFiles('etopan-app/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-android-caches-
 
-      - name: Build WebAssembly
-        if: ${{ matrix.project == 'etopaw' }}
-        run: wasm-pack build -t web ${{ matrix.project }}
-
-      - name: Build Android
-        if: ${{ matrix.project == 'etopan' }}
-        uses: actions-rs/cargo@v1
+      - name: NDK Cache
+        id: ndk-cache
+        uses: actions/cache@v2
         with:
-          use-cross: true
-          command: build
-          args: -p ${{ matrix.project }} --target aarch64-linux-android
+          path: /usr/local/lib/android/sdk/ndk
+          key: ${{ runner.os }}-ndk-cache-21.3.6528147
 
-      - name: Test Android
-        if: ${{ matrix.project == 'etopan' }}
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: test
-          args: -p ${{ matrix.project }} --target aarch64-linux-android
+      - name: Android NDK
+        if: steps.ndk-cache.outputs.cache-hit != 'true'
+        run: yes | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.3.6528147"
 
-  android-app:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Cargo Tools
+        if: steps.bin-cache.outputs.cache-hit != 'true'
+        run: |
+          cargo install cargo-license cargo-deb cargo-rpm
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-      - name: Build
-        run: cd etopan-app && ./gradlew :app:bundleRelease
+      - name: Build Tools
+        run: |
+          curl -L -o ~/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
+          curl -L https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0
 
-  make-build:
-    runs-on: ubuntu-latest
-    name: Make Build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Make with rwa-builder
-        id: rwa-build
-        uses: ltheinrich/rwa-builder@0.0.4
+      - name: Make
+        env:
+          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/21.3.6528147
+        run: |
+          make notice &
+          make android & make web api deb rpm && fg || true

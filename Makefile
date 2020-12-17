@@ -40,22 +40,25 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
 TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build signed api web android sign rpm deb
+.PHONY: build signed api web android sign deb rpm api-native
 
-build: rmtarget notice api web android rpm deb
+build: rmtarget notice api web android
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
-full: build sign
+full: build deb rpm api-native sign
 
 api:
-	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
-	rm -f ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
-	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native
-	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
-	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
+	mkdir -p ${TARGET_OUTPUT_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
 	${RUST_BUILDER} build -p etopai --release --target ${API_TARGET_TRIPLE}
 	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
 	cp target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
+
+api-native:
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	rm -f ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
+	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native
+	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
+	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
 
 web:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
@@ -97,16 +100,16 @@ sign:
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${TARGET_OUTPUT_DIR}/${ANDROID_MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${TARGET_OUTPUT_DIR}/${ANDROID_DEBUG_SYMBOLS}
 
+deb:
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
+	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} -v
+	cp target/${API_TARGET_TRIPLE}/debian/etopa_*.deb ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
+
 rpm:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
 	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} -v)
 	cp target/${API_TARGET_TRIPLE}/release/rpmbuild/RPMS/*/etopa-*.rpm ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
-
-deb:
-	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
-	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} -v
-	cp target/${API_TARGET_TRIPLE}/debian/etopa_*.deb ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
 
 notice:
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
