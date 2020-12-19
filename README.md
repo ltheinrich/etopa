@@ -35,12 +35,6 @@ Build
 
 API server: `target/build/etopa`
 
-API server (Fedora package): `target/build/etopa.rpm`
-
-API server (Debian package): `target/build/etopa.deb`
-
-API server (native/optimized): `target/build/extra/etopa-native`
-
 Android APK: `target/build/etopa.apk`
 
 Web archive: `target/build/etopa.tar.xz`
