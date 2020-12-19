@@ -20,15 +20,24 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
+import de.ltheinrich.etopa.AppActivity
 import de.ltheinrich.etopa.LicensesActivity
 import de.ltheinrich.etopa.R
 import de.ltheinrich.etopa.SettingsActivity
 import org.json.JSONObject
+import java.util.*
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
 typealias StringHandler = (response: String) -> Unit
 typealias ErrorHandler = (error: VolleyError) -> Unit
+
+const val emptyPin = "******"
+const val emptyPinHash = "8326de6693e2dc5e15d9d2031d26844c"
+
+const val emptyPassword = "************"
+const val emptyPasswordHash = "08d299150597a36973bf282c1ce59602eaa12c3607d3034d7ea29bb64710d65c"
+const val emptyKeyHash = "c353cdd4c437c0dc01d6378525e25c1d"
 
 var library: Boolean = false
 
@@ -45,7 +54,7 @@ class Common constructor(activity: Activity) {
     lateinit var pinHash: String
     lateinit var token: String
     var offline: Boolean = false
-    var settingsVisible: Boolean = true
+    var settingsVisible: Boolean = false
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
@@ -93,6 +102,88 @@ class Common constructor(activity: Activity) {
             pinHash,
             preferences.getString("token", encrypt(pinHash, "")).orEmpty()
         )
+    }
+
+    fun encryptLogin(preferences: SharedPreferences, pinHash: String) {
+        val editor = preferences.edit()
+        val defaultInstance = activity.getString(R.string.default_instance)
+
+        if (instance.isEmpty() || instance == defaultInstance) {
+            editor.remove("instance")
+            instance = defaultInstance
+        } else {
+            editor.putString("instance", encrypt(pinHash, instance))
+        }
+
+        if (passwordHash == emptyPasswordHash) {
+            passwordHash = decrypt(
+                this.pinHash,
+                preferences.getString("passwordHash", encrypt(this.pinHash, "")).orEmpty()
+            )
+        }
+
+        if (keyHash == emptyKeyHash) {
+            keyHash = decrypt(
+                this.pinHash,
+                preferences.getString("keyHash", encrypt(this.pinHash, "")).orEmpty()
+            )
+        }
+
+        editor.putString("username", encrypt(pinHash, username))
+        editor.putString("passwordHash", encrypt(pinHash, passwordHash))
+        editor.putString("keyHash", encrypt(pinHash, keyHash))
+        val secretStorage = preferences.getString("secretStorage", null)
+        if (secretStorage != null) {
+            editor.putString(
+                "secretStorage",
+                encrypt(pinHash, decrypt(this.pinHash, secretStorage))
+            )
+        }
+
+        editor.remove(token)
+        setPin(editor, pinHash)
+    }
+
+    fun setPin(editor: SharedPreferences.Editor, pinHash: String) {
+        val splitAt = Random().nextInt(30)
+        val uuid = UUID.randomUUID().toString()
+        val pinSetEncrypted =
+            encrypt(
+                pinHash,
+                uuid.substring(0, splitAt) + "etopan_pin_set" + uuid.substring(splitAt)
+            )
+
+        editor.putString("pin_set", pinSetEncrypted)
+        editor.apply()
+
+        this.pinHash = pinHash
+        toast(R.string.pin_set)
+    }
+
+    fun newLogin(preferences: SharedPreferences) {
+        request("user/login",
+            { response ->
+                if (response.has("token")) {
+                    token = response.getString("token")
+                    val editor = preferences.edit()
+                    editor.putString("token", encrypt(pinHash, token))
+                    editor.apply()
+                    openActivity(AppActivity::class)
+                } else {
+                    toast(R.string.incorrect_login)
+                    openActivity(SettingsActivity::class, Pair("incorrectLogin", "incorrectLogin"))
+                }
+            },
+            Pair("username", username),
+            Pair("password", passwordHash),
+            error_handler = { offlineLogin(preferences) })
+    }
+
+    fun offlineLogin(preferences: SharedPreferences) {
+        toast(R.string.network_unreachable)
+        if (preferences.contains("secretStorage")) {
+            openActivity(AppActivity::class)
+        }
     }
 
     fun request(

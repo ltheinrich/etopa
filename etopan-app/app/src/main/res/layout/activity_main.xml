@@ -23,14 +23,19 @@
             android:orientation="vertical"
             android:paddingVertical="20dp">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pin"
                 android:layout_width="330dp"
                 android:layout_height="60dp"
                 android:hint="@string/pin"
-                android:importantForAutofill="no"
-                android:inputType="numberPassword"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberPassword"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/unlock"

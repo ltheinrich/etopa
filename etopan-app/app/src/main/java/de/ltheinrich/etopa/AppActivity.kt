@@ -89,10 +89,9 @@ class AppActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common.openActivity(LoginActivity::class, Pair("noAutoLogin", "false"))
+            common.openActivity(MainActivity::class)
             return true
         }
-
         return super.onKeyDown(keyCode, event)
     }
 

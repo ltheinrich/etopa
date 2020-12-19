@@ -22,4 +22,5 @@
     <string name="licenses">Licenses</string>
     <string name="save">Save</string>
     <string name="settings_saved">Settings saved</string>
+    <string name="verifying_settings">Verifying settings...</string>
 </resources>
