@@ -20,10 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
-import de.ltheinrich.etopa.AppActivity
-import de.ltheinrich.etopa.LicensesActivity
-import de.ltheinrich.etopa.R
-import de.ltheinrich.etopa.SettingsActivity
+import de.ltheinrich.etopa.*
 import org.json.JSONObject
 import java.util.*
 import kotlin.reflect.KClass
@@ -53,10 +50,15 @@ class Common constructor(activity: Activity) {
     lateinit var keyHash: String
     lateinit var pinHash: String
     lateinit var token: String
+    lateinit var storage: Storage
     var offline: Boolean = false
-    var settingsVisible: Boolean = false
+    var extendedMenu: Boolean = false
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
+        R.id.action_add -> {
+            openActivity(AddActivity::class)
+            true
+        }
         R.id.action_settings -> {
             openActivity(SettingsActivity::class)
             true
@@ -72,9 +74,12 @@ class Common constructor(activity: Activity) {
 
     fun createMenu(menu: Menu?): Boolean {
         activity.menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val item = menu?.findItem(R.id.action_settings)
-        if (item != null) {
-            item.isVisible = settingsVisible
+        val itemIds = arrayOf(R.id.action_add, R.id.action_settings)
+        itemIds.forEach { itemId ->
+            val item = menu?.findItem(itemId)
+            if (item != null) {
+                item.isVisible = extendedMenu
+            }
         }
         return true
     }
@@ -262,7 +267,7 @@ class Common constructor(activity: Activity) {
         toast.show()
     }
 
-    fun hideKeyboard() {
+    fun hideKeyboard(activity: Activity) {
         val imm: InputMethodManager =
             activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         var view: View? = activity.currentFocus
@@ -312,6 +317,8 @@ class Common constructor(activity: Activity) {
     external fun hashPassword(password: String): String
 
     external fun hashPin(pin: String): String
+
+    external fun hashName(name: String): String
 
     external fun encrypt(key: String, data: String): String
 

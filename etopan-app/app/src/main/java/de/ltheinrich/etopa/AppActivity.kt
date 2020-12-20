@@ -5,9 +5,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ltheinrich.etopa.databinding.ActivityAppBinding
@@ -18,19 +17,20 @@ import de.ltheinrich.etopa.utils.TokenAdapter
 class AppActivity : AppCompatActivity() {
 
     val common: Common = Common.getInstance(this)
-    private lateinit var preferences: SharedPreferences
     private val tokens = ArrayList<Pair<String, String>>()
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var storage: Storage
+    private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivityAppBinding
+    private lateinit var selectedSecretName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.toolbar.root.title = getString(R.string.app_name)
         setSupportActionBar(binding.toolbar.root)
-
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+        
         binding.rvTokens.adapter = TokenAdapter(tokens, this)
         binding.rvTokens.layoutManager = LinearLayoutManager(this)
 
@@ -51,8 +51,8 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun handleStorage(secureStorage: String, update: Boolean = true) {
-        storage = Storage(common, secureStorage)
-        if (storage.map.containsValue(""))
+        common.storage = Storage(common, secureStorage)
+        if (common.storage.map.containsValue(""))
             common.toast(R.string.decryption_failed)
         else if (update)
             preferences.edit()
@@ -76,7 +76,7 @@ class AppActivity : AppCompatActivity() {
 
     private fun updateTokens() {
         tokens.clear()
-        for (secret in storage.map) {
+        for (secret in common.storage.map) {
             tokens.add(
                 Pair(
                     secret.key,
@@ -85,6 +85,26 @@ class AppActivity : AppCompatActivity() {
             )
         }
         binding.rvTokens.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        selectedSecretName = ((v as ViewGroup).getChildAt(0) as TextView).text.toString()
+        v?.id?.let { menu?.add(it, Menu.FIRST, Menu.NONE, R.string.edit_secret) }
+    }
+
+    override fun onContextItemSelected(item: MenuItem) = when (item.itemId) {
+        Menu.FIRST -> {
+            common.openActivity(EditActivity::class, Pair("secretName", selectedSecretName))
+            true
+        }
+        else -> {
+            false
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

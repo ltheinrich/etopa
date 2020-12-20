@@ -23,4 +23,21 @@
     <string name="save">Save</string>
     <string name="settings_saved">Settings saved</string>
     <string name="verifying_settings">Verifying settings...</string>
+    <string name="token_format" translatable="false">%1$s %2$s</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="edit_secret">Edit secret</string>
+    <string name="name">Name</string>
+    <string name="delete_secret">Delete secret</string>
+    <string name="type_secret_name">Type secret name ...</string>
+    <string name="edit_var">Edit %1$s</string>
+    <string name="confirm_deletion">Confirm deletion</string>
+    <string name="failed_error">Failed (unknown error)</string>
+    <string name="secret_deleted">Secret deleted</string>
+    <string name="sending_request">Sending request...</string>
+    <string name="success">Success</string>
+    <string name="name_exists">Name already exists</string>
+    <string name="add">Add</string>
+    <string name="secret">Secret</string>
+    <string name="secret_added">Secret added</string>
 </resources>

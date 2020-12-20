@@ -21,11 +21,14 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.toolbar.root.title =
+            getString(R.string.app_name) + ": " + getString(R.string.settings)
         setSupportActionBar(binding.toolbar.root)
-
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+
         binding.pin.editText?.setText(emptyPin)
         binding.instance.editText?.setText(common.instance)
+
         if (common.username.isNotEmpty())
             binding.username.editText?.setText(common.username)
         if (common.passwordHash.isNotEmpty())
@@ -44,7 +47,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        common.hideKeyboard()
+        common.hideKeyboard(this)
 
         val pin = inputString(binding.pin)
         val instance = inputString(binding.instance)

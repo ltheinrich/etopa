@@ -23,11 +23,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.extendedMenu = false
+        binding.toolbar.root.title =
+            getString(R.string.app_name) + ": " + getString(R.string.unlock)
         setSupportActionBar(binding.toolbar.root)
-
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        binding.pin.editText?.requestFocus()
 
+        binding.pin.editText?.requestFocus()
         pinSet = preferences.getString("pin_set", null)
         if (pinSet == null) {
             binding.unlock.text = getString(R.string.set_pin)
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("CommitPrefEdits")
     private fun unlock() {
-        common.hideKeyboard()
+        common.hideKeyboard(this)
         val pinHash = common.hashPin(inputString(binding.pin))
         binding.pin.editText?.text?.clear()
 
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             common.pinHash = pinHash
         }
 
-        common.settingsVisible = true
+        common.extendedMenu = true
         common.decryptLogin(preferences)
         login()
     }

@@ -21,6 +21,8 @@
         <activity android:name=".AppActivity" />
         <activity android:name=".LicensesActivity" />
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".EditActivity" />
+        <activity android:name=".AddActivity" />
     </application>
 
 </manifest>

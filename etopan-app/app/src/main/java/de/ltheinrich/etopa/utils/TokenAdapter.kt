@@ -2,10 +2,11 @@ package de.ltheinrich.etopa.utils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.ltheinrich.etopa.AppActivity
+import de.ltheinrich.etopa.R
 import de.ltheinrich.etopa.databinding.SecretItemBinding
 
 class TokenAdapter(
@@ -27,14 +28,18 @@ class TokenAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = items[position].first
-        holder.token.text = items[position].second
-        holder.token.setOnClickListener {
-            context.common.copyToClipboard(items[position].second)
+        val token = items[position].second
+        holder.token.text =
+            context.getString(R.string.token_format, token.take(3), token.takeLast(3))
+        holder.tokenLayout.setOnClickListener {
+            context.common.copyToClipboard(token)
         }
+        context.registerForContextMenu(holder.tokenLayout)
     }
 }
 
 class ViewHolder(binding: SecretItemBinding) : RecyclerView.ViewHolder(binding.root) {
     val name: TextView = binding.name
-    val token: Button = binding.token
+    val token: TextView = binding.token
+    val tokenLayout: LinearLayout = binding.tokenLayout
 }

@@ -5,6 +5,7 @@
 
 use etopa::crypto::encrypt;
 use etopa::crypto::hash_key;
+use etopa::crypto::hash_name;
 use etopa::crypto::hash_password;
 use etopa::crypto::hash_pin;
 use etopa::crypto::hex_decode;
@@ -65,6 +66,18 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPin(
     // receive and hash pin
     let pin = recv_string(&env, jpin);
     make_string(&env, hash_pin(pin))
+}
+
+/// Hash name
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashName(
+    env: JNIEnv,
+    _: JObject,
+    jname: JString,
+) -> jstring {
+    // receive and hash secret name
+    let name = recv_string(&env, jname);
+    make_string(&env, hash_name(name))
 }
 
 /// Encrypt

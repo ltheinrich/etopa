@@ -22,4 +22,20 @@
     <string name="save">Speichern</string>
     <string name="settings_saved">Einstellungen gespeichert</string>
     <string name="verifying_settings">Überprüfe Einstellungen...</string>
+    <string name="rename">Umbenennen</string>
+    <string name="delete">Löschen</string>
+    <string name="edit_secret">Geheimnis bearbeiten</string>
+    <string name="name">Name</string>
+    <string name="delete_secret">Geheimnis löschen</string>
+    <string name="type_secret_name">Geheimnis-Name eingeben</string>
+    <string name="edit_var">%1$s bearbeiten</string>
+    <string name="confirm_deletion">Löschen bestätigen</string>
+    <string name="failed_error">Fehlgeschlagen (unbekannter Fehler)</string>
+    <string name="secret_deleted">Geheimnis gelöscht</string>
+    <string name="sending_request">Sende Anfrage...</string>
+    <string name="success">Erfolgreich</string>
+    <string name="name_exists">Name existiert bereits</string>
+    <string name="add">Hinzufügen</string>
+    <string name="secret">Geheimnis</string>
+    <string name="secret_added">Geheimnis hinzugefügt</string>
 </resources>

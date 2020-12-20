@@ -9,7 +9,7 @@
         android:id="@id/toolbar"
         layout="@layout/layout_toolbar" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -99,5 +99,5 @@
                 android:text="@string/save" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
