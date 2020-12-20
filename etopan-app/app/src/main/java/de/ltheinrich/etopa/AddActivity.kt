@@ -56,7 +56,8 @@ class AddActivity : AppCompatActivity() {
                 Pair("secretvalue", common.encrypt(common.keyHash, secretValue)),
                 Pair("secretnameencrypted", common.encrypt(common.keyHash, secretName)),
                 Pair("username", common.username),
-                Pair("token", common.token)
+                Pair("token", common.token),
+                error_handler = { common.toast(R.string.network_unreachable) }
             )
         }
     }

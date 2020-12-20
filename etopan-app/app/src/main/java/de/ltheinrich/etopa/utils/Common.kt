@@ -320,6 +320,8 @@ class Common constructor(activity: Activity) {
 
     external fun hashName(name: String): String
 
+    external fun hashArgon2Hashed(passwordHash: String): String
+
     external fun encrypt(key: String, data: String): String
 
     external fun decrypt(key: String, data: String): String

@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="numberPassword"
-                    android:imeOptions="actionDone" />
+                    android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -90,6 +90,14 @@
                     android:inputType="textPassword"
                     android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_registration"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/save"

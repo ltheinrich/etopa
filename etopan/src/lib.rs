@@ -3,6 +3,7 @@
 //#![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
+use etopa::crypto::argon2_hash;
 use etopa::crypto::encrypt;
 use etopa::crypto::hash_key;
 use etopa::crypto::hash_name;
@@ -10,6 +11,7 @@ use etopa::crypto::hash_password;
 use etopa::crypto::hash_pin;
 use etopa::crypto::hex_decode;
 use etopa::crypto::hex_encode;
+use etopa::crypto::random;
 use etopa::{crypto::decrypt, totp::Generator};
 use jni::objects::{JObject, JString};
 use jni::strings::JNIString;
@@ -78,6 +80,23 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashName(
     // receive and hash secret name
     let name = recv_string(&env, jname);
     make_string(&env, hash_name(name))
+}
+
+/// Hash hashed password using Argon2
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashArgon2Hashed(
+    env: JNIEnv,
+    _: JObject,
+    jpassword_hash: JString,
+) -> jstring {
+    // receive password
+    let password_hash = recv_string(&env, jpassword_hash);
+
+    // generate salt and hash password
+    let salt = random(16);
+
+    // generate and return argon2 hash
+    make_string(&env, argon2_hash(password_hash, salt).unwrap())
 }
 
 /// Encrypt

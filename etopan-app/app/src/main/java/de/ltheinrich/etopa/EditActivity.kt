@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -65,6 +66,8 @@ class EditActivity : AppCompatActivity() {
 
         binding.deleteSecret.setOnClickListener {
             common.toast(R.string.sending_request)
+            common.hideKeyboard(this)
+
             common.request(
                 "data/delete",
                 {
@@ -79,7 +82,8 @@ class EditActivity : AppCompatActivity() {
                 },
                 Pair("secretname", common.hashName(secretName)),
                 Pair("username", common.username),
-                Pair("token", common.token)
+                Pair("token", common.token),
+                error_handler = { common.toast(R.string.network_unreachable) }
             )
         }
 
@@ -88,8 +92,10 @@ class EditActivity : AppCompatActivity() {
             if (secretNewName.isEmpty()) {
                 common.toast(R.string.inputs_empty)
                 return@setOnClickListener
-            } else if (common.storage.map.containsKey(secretNewName)) {
-                common.hideKeyboard(this)
+            }
+
+            common.hideKeyboard(this)
+            if (common.storage.map.containsKey(secretNewName)) {
                 common.toast(R.string.name_exists)
                 return@setOnClickListener
             }
@@ -111,9 +117,18 @@ class EditActivity : AppCompatActivity() {
                 Pair("newsecretname", common.hashName(secretNewName)),
                 Pair("secretnameencrypted", common.encrypt(common.keyHash, secretNewName)),
                 Pair("username", common.username),
-                Pair("token", common.token)
+                Pair("token", common.token),
+                error_handler = { common.toast(R.string.network_unreachable) }
             )
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            common.openActivity(AppActivity::class)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)

@@ -38,4 +38,7 @@
     <string name="add">Hinzufügen</string>
     <string name="secret">Geheimnis</string>
     <string name="secret_added">Geheimnis hinzugefügt</string>
+    <string name="account_registration">Account-Registrierung</string>
+    <string name="unlocking">Entsperren...</string>
+    <string name="saving_settings">Speichere Einstellungen...</string>
 </resources>

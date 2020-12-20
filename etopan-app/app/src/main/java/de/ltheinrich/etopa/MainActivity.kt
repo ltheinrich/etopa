@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityMainBinding
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
 
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         binding.pin.editText?.requestFocus()
         pinSet = preferences.getString("pin_set", null)
         if (pinSet == null) {
@@ -47,15 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("CommitPrefEdits")
     private fun unlock() {
+        common.toast(R.string.unlocking)
         common.hideKeyboard(this)
         val pinHash = common.hashPin(inputString(binding.pin))
         binding.pin.editText?.text?.clear()
 
         if (pinSet == null) {
             common.setPin(preferences.edit(), pinHash)
-            binding.unlock.text = getString(R.string.unlock)
         } else if (!common.decrypt(pinHash, pinSet!!).contains("etopan_pin_set")) {
-            binding.pin.editText?.requestFocus()
             return common.toast(R.string.incorrect_pin, 500)
         } else {
             common.pinHash = pinHash
@@ -63,7 +64,13 @@ class MainActivity : AppCompatActivity() {
 
         common.extendedMenu = true
         common.decryptLogin(preferences)
-        login()
+
+        if (pinSet == null) {
+            // binding.unlock.text = getString(R.string.unlock)
+            common.openActivity(SettingsActivity::class, Pair("incorrectLogin", "incorrectLogin"))
+        } else {
+            login()
+        }
     }
 
     private fun login() {

@@ -3,9 +3,11 @@ package de.ltheinrich.etopa
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivitySettingsBinding
@@ -36,6 +38,10 @@ class SettingsActivity : AppCompatActivity() {
         if (common.keyHash.isNotEmpty())
             binding.key.editText?.setText(emptyPassword)
 
+        if (intent.hasExtra("incorrectLogin")) {
+            binding.register.visibility = View.VISIBLE
+        }
+
         binding.save.setOnClickListener {
             save()
         }
@@ -47,6 +53,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun save() {
+        common.toast(R.string.saving_settings)
         common.hideKeyboard(this)
 
         val pin = inputString(binding.pin)
@@ -71,8 +78,32 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 })
 
-        common.toast(R.string.settings_saved)
-        common.newLogin(preferences)
+        if (binding.register.isChecked) {
+            register()
+        } else {
+            common.toast(R.string.settings_saved)
+            common.newLogin(preferences)
+        }
+    }
+
+    private fun register() {
+        common.request("user/register",
+            { response ->
+                if (response.has("token")) {
+                    common.token = response.getString("token")
+                    val editor = preferences.edit()
+                    editor.putString("token", common.encrypt(common.pinHash, common.token))
+                    editor.apply()
+                    common.toast(R.string.settings_saved)
+                    common.newLogin(preferences)
+                } else {
+                    common.toast(R.string.name_exists)
+                    Log.d("API error", response.getString("error"))
+                }
+            },
+            Pair("username", common.username),
+            Pair("password", common.hashArgon2Hashed(common.passwordHash)),
+            error_handler = { common.toast(R.string.failed_error) })
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
