@@ -280,8 +280,8 @@ class Common constructor(activity: Activity) {
         activity.startActivity(app)
     }
 
-    fun toast(stringId: Int, height: Int = 0) {
-        val toast = Toast.makeText(activity, stringId, Toast.LENGTH_LONG)
+    fun toast(stringId: Int, height: Int = 0, length: Int = Toast.LENGTH_LONG) {
+        val toast = Toast.makeText(activity, stringId, length)
         if (height != 0)
             toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, height)
         toast.show()

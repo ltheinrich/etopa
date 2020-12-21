@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityEditBinding
 import de.ltheinrich.etopa.utils.Common
@@ -67,7 +68,7 @@ class EditActivity : AppCompatActivity() {
         }
 
         binding.deleteSecret.setOnClickListener {
-            common.toast(R.string.sending_request)
+            common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
             common.hideKeyboard(this)
 
             common.request(
@@ -102,7 +103,7 @@ class EditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            common.toast(R.string.sending_request)
+            common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
             common.request(
                 "data/rename",
                 {

@@ -20,11 +20,11 @@ Options:
   --key        S       Path to TLS certificate key (DATA_DIR/key.pem)
   --licenses           List licenses of project and libraries";
 
-/// Cargo.toml
-pub const CARGO_TOML: &str = include_str!("../Cargo.toml");
-
 /// licenses
 pub const LICENSES: &str = include_str!("../../NOTICE.txt");
+
+/// Android build.gradle (get version string)
+pub const BUILD_GRADLE: &str = include_str!("../../etopan-app/app/build.gradle");
 
 /// Data shared between handlers
 #[derive(Debug)]

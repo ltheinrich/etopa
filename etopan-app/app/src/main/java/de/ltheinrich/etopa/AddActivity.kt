@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
 import de.ltheinrich.etopa.utils.Common
@@ -42,7 +43,7 @@ class AddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            common.toast(R.string.sending_request)
+            common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
             common.request(
                 "data/update",
                 {

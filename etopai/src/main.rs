@@ -9,12 +9,9 @@ mod utils;
 
 mod api;
 
-use common::{json_error, SharedData, CARGO_TOML, HELP, LICENSES};
+use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
 use data::StorageFile;
-use etopa::{
-    meta::{init_name, init_version},
-    Command, Config, Fail,
-};
+use etopa::{meta::search, Command, Config, Fail};
 use kern::http::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;
@@ -25,9 +22,8 @@ fn main() {
     // init
     println!(
         "Etopa {} (c) 2020 Lennart Heinrich\n",
-        init_version(CARGO_TOML)
+        search(BUILD_GRADLE, "versionName").unwrap_or("0.0.0")
     );
-    init_name(CARGO_TOML);
 
     // parse arguments
     let args: Vec<String> = args().collect();

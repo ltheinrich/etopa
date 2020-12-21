@@ -98,7 +98,7 @@ class AppActivity : AppCompatActivity() {
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
         selectedSecretName = ((v as ViewGroup).getChildAt(0) as TextView).text.toString()
-        v?.id?.let { menu?.add(it, Menu.FIRST, Menu.NONE, R.string.edit_secret) }
+        v.id.let { menu?.add(it, Menu.FIRST, Menu.NONE, R.string.edit_secret) }
     }
 
     override fun onContextItemSelected(item: MenuItem) = when (item.itemId) {

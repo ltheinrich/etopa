@@ -196,5 +196,6 @@ pub fn random(size: usize) -> Vec<u8> {
 
 /// Generate random alphanumeric string
 pub fn random_an(len: usize) -> String {
-    thread_rng().sample_iter(&Alphanumeric).take(len).collect()
+    let rand_an = thread_rng().sample_iter(&Alphanumeric).take(len).collect();
+    String::from_utf8(rand_an).unwrap()
 }

@@ -1,6 +1,6 @@
 [package]
 name = "etopai"
-version = "0.0.5"
+version = "0.0.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2018"
 license = "ISC"
