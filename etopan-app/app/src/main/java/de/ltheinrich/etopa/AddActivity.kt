@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
@@ -31,39 +32,49 @@ class AddActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        binding.addSecret.setOnClickListener {
-            val secretName = inputString(binding.secretName)
-            val secretValue = inputString(binding.secretValue)
-            if (secretName.isEmpty() || secretValue.isEmpty()) {
-                common.toast(R.string.inputs_empty)
-                return@setOnClickListener
-            } else if (common.storage.map.containsKey(secretName)) {
-                common.hideKeyboard(this)
-                common.toast(R.string.name_exists)
-                return@setOnClickListener
-            }
-
-            common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
-            common.request(
-                "data/update",
-                {
-                    val error = it.getString("error")
-                    if (error == "false") {
-                        common.toast(R.string.secret_added)
-                        common.openActivity(AppActivity::class)
-                    } else {
-                        common.toast(R.string.failed_error)
-                        Log.d("API error", error)
-                    }
-                },
-                Pair("secretname", common.hashName(secretName)),
-                Pair("secretvalue", common.encrypt(common.keyHash, secretValue)),
-                Pair("secretnameencrypted", common.encrypt(common.keyHash, secretName)),
-                Pair("username", common.username),
-                Pair("token", common.token),
-                error_handler = { common.toast(R.string.network_unreachable) }
-            )
+        binding.secretValue.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO)
+                addSecret()
+            true
         }
+
+        binding.addSecret.setOnClickListener {
+            addSecret()
+        }
+    }
+
+    private fun addSecret() {
+        val secretName = inputString(binding.secretName)
+        val secretValue = inputString(binding.secretValue)
+        if (secretName.isEmpty() || secretValue.isEmpty()) {
+            return common.toast(R.string.inputs_empty)
+        } else if (common.storage.map.containsKey(secretName)) {
+            common.hideKeyboard(this)
+            return common.toast(R.string.name_exists)
+        }
+
+        common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
+        common.request(
+            "data/update",
+            {
+                val error = it.getString("error")
+                if (error == "false") {
+                    common.toast(R.string.secret_added)
+                    common.openActivity(AppActivity::class)
+                } else {
+                    common.toast(R.string.failed_error)
+                    Log.d("API error", error)
+                }
+            },
+            Pair("secretname", common.hashName(secretName)),
+            Pair("secretvalue", common.encrypt(common.keyHash, secretValue)),
+            Pair("secretnameencrypted", common.encrypt(common.keyHash, secretName)),
+            Pair("username", common.username),
+            Pair("token", common.token),
+            error_handler = {
+                common.toast(R.string.network_unreachable)
+            }
+        )
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)

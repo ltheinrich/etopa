@@ -23,8 +23,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pin"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/pin"
                 android:layout_marginBottom="10dp">
 
@@ -37,8 +37,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/instance"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/etopa_instance"
                 android:layout_marginBottom="10dp">
 
@@ -46,13 +46,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textUri"
-                    android:imeOptions="actionNone" />
+                    android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/username"
                 android:layout_marginBottom="10dp">
 
@@ -65,8 +65,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/password"
                 android:layout_marginBottom="10dp">
 
@@ -79,8 +79,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/key"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/key"
                 android:layout_marginBottom="10dp">
 
@@ -102,8 +102,8 @@
             <Button
                 android:id="@+id/save"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/save" />
 
         </LinearLayout>

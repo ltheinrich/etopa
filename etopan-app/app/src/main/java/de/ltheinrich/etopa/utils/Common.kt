@@ -219,6 +219,7 @@ class Common constructor(activity: Activity) {
             },
             Response.ErrorListener { error ->
                 offline = true
+                Log.d("Network error", error.toString())
                 error_handler(error)
             }
         ) {

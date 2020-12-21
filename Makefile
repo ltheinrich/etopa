@@ -15,8 +15,8 @@ CARGO_DEB?=cargo deb
 CARGO_LICENSE?=cargo-license
 
 # android
-NDK_BIN_PATH?=$(HOME)/.android/sdk/ndk/21.3.6528147
-export PATH := ${NDK_BIN_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin:$(PATH)
+NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin
+export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
 ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
 BUNDLETOOL_JAR?=~/.bundletool-all.jar
@@ -71,16 +71,17 @@ web:
 	(cd ${TEMP_EWM} && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
-android: export CC_aarch64_linux-android = aarch64-linux-android30-clang
-android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi30-clang
-android: export CC_i686-linux-android = i686-linux-android30-clang
+#android: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
+android: export CC_aarch64_linux-android = aarch64-linux-android21-clang
+android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi21-clang
+android: export CC_i686-linux-android = i686-linux-android21-clang
 android:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} && \
 	  rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
-	${RUST_BUILDER} build -p etopan --release --target aarch64-linux-android -v
-	${RUST_BUILDER} build -p etopan --release --target armv7-linux-androideabi -v
-	${RUST_BUILDER} build -p etopan --release --target i686-linux-android -v
+	${RUST_BUILDER} rustc -p etopan --release --target aarch64-linux-android -v -- -C linker=$(CC_aarch64_linux-android)
+	${RUST_BUILDER} rustc -p etopan --release --target armv7-linux-androideabi -v -- -C linker=$(CC_armv7_linux-androideabi)
+	${RUST_BUILDER} rustc -p etopan --release --target i686-linux-android -v -- -C linker=$(CC_i686-linux-android)
 	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && \
 	  mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a && mkdir -p ${JNI_LIBS_PATH}/x86
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/arm64-v8a/libetopan.so

@@ -1,19 +1,33 @@
 #!/bin/bash
 
 if [ "$#" -lt 1 ]; then
-  echo "./run api|web|android|docker"
+  echo "./run api|web|android|androidall"
 elif [ $1 == "api" ]; then
   cargo run -p etopai -- $@
 elif [ $1 == "web" ]; then
   wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
-elif [ $1 == "android" ]; then
+  elif [ $1 == "android" ]; then
   JNI_LIBS=etopan-app/app/src/main/jniLibs
   if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
     export PATH="$PATH:$HOME/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin"
   fi
-  cargo build -p etopan --target aarch64-linux-android
+  LINKER_AARCH64=aarch64-linux-android21-clang
+  env CC_aarch64_linux-android=$LINKER_AARCH64 cargo rustc -p etopan --target aarch64-linux-android -- -C linker=$LINKER_AARCH64
+  rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/arm64-v8a
+  cp target/aarch64-linux-android/debug/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
+elif [ $1 == "androidall" ]; then
+  JNI_LIBS=etopan-app/app/src/main/jniLibs
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin"
+  fi
+  LINKER_AARCH64=aarch64-linux-android21-clang
+  LINKER_ARMV7=armv7a-linux-androideabi21-clang
+  LINKER_I686=i686-linux-android21-clang
+  env CC_aarch64_linux-android=$LINKER_AARCH64 cargo rustc -p etopan --target aarch64-linux-android -- -C linker=$LINKER_AARCH64
+  env CC_armv7_linux-androideabi=$LINKER_ARMV7 cargo rustc -p etopan --target armv7-linux-androideabi -- -C linker=$LINKER_ARMV7
+  env CC_i686_linux-android=$LINKER_I686 cargo rustc -p etopan --target i686-linux-android -- -C linker=$LINKER_I686
   rm -rf $JNI_LIBS && mkdir -p $JNI_LIBS/arm64-v8a
   cp target/aarch64-linux-android/debug/libetopan.so $JNI_LIBS/arm64-v8a/libetopan.so
 else
-  echo "./run api|web|android"
+  echo "./run api|web|android|androidall"
 fi

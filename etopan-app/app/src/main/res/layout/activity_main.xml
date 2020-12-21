@@ -24,8 +24,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pin"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/pin"
                 android:layout_marginBottom="10dp">
 
@@ -39,8 +39,8 @@
             <Button
                 android:id="@+id/unlock"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/unlock" />
 
         </LinearLayout>

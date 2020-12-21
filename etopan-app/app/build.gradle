@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "de.ltheinrich.etopa"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 7
         versionName "0.0.5"
@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.3.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0-beta01' // TODO: update to stable
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

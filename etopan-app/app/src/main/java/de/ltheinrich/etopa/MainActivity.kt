@@ -14,6 +14,7 @@ import de.ltheinrich.etopa.databinding.ActivityMainBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.inputString
 
+
 class MainActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
@@ -95,7 +96,9 @@ class MainActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = { common.offlineLogin(preferences) })
+            error_handler = {
+                common.offlineLogin(preferences)
+            })
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)

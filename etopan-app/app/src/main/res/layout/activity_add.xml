@@ -23,37 +23,37 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/secret_name"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/name"
                 android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textShortMessage"
-                    android:imeOptions="actionNone" />
+                    android:inputType="text"
+                    android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/secret_value"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/secret"
                 android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textShortMessage"
-                    android:imeOptions="actionNone" />
+                    android:inputType="text"
+                    android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/add_secret"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/add"
                 android:layout_marginBottom="10dp" />
 

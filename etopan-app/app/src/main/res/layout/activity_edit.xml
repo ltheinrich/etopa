@@ -23,23 +23,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/secret_new_name"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/name"
                 android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textShortMessage"
+                    android:inputType="text"
                     android:imeOptions="actionNone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/rename_secret"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/rename"
                 android:layout_marginBottom="10dp" />
 
@@ -49,14 +49,14 @@
 
             <CheckBox
                 android:id="@+id/delete_secret_check"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/delete_secret" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/delete_secret_name"
-                android:layout_width="330dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:hint="@string/type_secret_name"
                 android:layout_marginBottom="10dp"
                 android:visibility="gone">
@@ -64,14 +64,14 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textUri"
+                    android:inputType="text"
                     android:imeOptions="actionNone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
                 android:id="@+id/delete_secret_confirm"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/confirm_deletion"
                 android:visibility="gone"
                 android:layout_marginBottom="10dp" />
@@ -80,8 +80,8 @@
                 android:id="@+id/delete_secret"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
                 android:text="@string/delete_secret"
                 android:visibility="gone" />
 

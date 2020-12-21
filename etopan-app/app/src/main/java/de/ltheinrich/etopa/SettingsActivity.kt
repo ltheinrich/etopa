@@ -109,7 +109,9 @@ class SettingsActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("password", common.hashArgon2Hashed(common.passwordHash)),
-            error_handler = { common.toast(R.string.failed_error) })
+            error_handler = {
+                common.toast(R.string.network_unreachable)
+            })
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
