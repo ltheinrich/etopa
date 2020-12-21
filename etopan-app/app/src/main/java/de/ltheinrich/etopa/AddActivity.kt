@@ -12,7 +12,6 @@ import de.ltheinrich.etopa.databinding.ActivityAddBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.inputString
 
-
 class AddActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
@@ -26,6 +25,10 @@ class AddActivity : AppCompatActivity() {
         binding.toolbar.root.title = getString(R.string.app_name) + ": " + getString(R.string.add)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+        common.backActivity = AppActivity::class.java
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         binding.addSecret.setOnClickListener {
             val secretName = inputString(binding.secretName)
@@ -62,14 +65,7 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common.openActivity(AppActivity::class)
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

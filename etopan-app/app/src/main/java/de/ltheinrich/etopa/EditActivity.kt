@@ -15,7 +15,6 @@ import de.ltheinrich.etopa.databinding.ActivityEditBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.inputString
 
-
 class EditActivity : AppCompatActivity() {
 
     private val common: Common = Common.getInstance(this)
@@ -27,10 +26,13 @@ class EditActivity : AppCompatActivity() {
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val secretName = intent.getStringExtra("secretName").orEmpty()
-        binding.toolbar.root.title =
-            getString(R.string.app_name) + ": " + getString(R.string.edit_var, secretName)
+        binding.toolbar.root.title = getString(R.string.edit_var, secretName)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+        common.backActivity = AppActivity::class.java
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         binding.deleteSecretCheck.setOnCheckedChangeListener { _, checked ->
             if (checked) {
@@ -123,14 +125,7 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common.openActivity(AppActivity::class)
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

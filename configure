@@ -54,6 +54,10 @@ if ! [[ $targets == *"armv7-linux-androideabi (installed)"* ]]; then
   rustup target add armv7-linux-androideabi
 fi
 
+if ! [[ $targets == *"i686-linux-android (installed)"* ]]; then
+  rustup target add i686-linux-android
+fi
+
 if ! [[ $targets == *"wasm32-unknown-unknown (installed)"* ]]; then
   rustup target add wasm32-unknown-unknown
 fi

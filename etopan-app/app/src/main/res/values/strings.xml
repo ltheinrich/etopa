@@ -14,7 +14,6 @@
     <string name="incorrect_pin">Incorrect PIN</string>
     <string name="valid_pin">Valid PIN</string>
     <string name="incorrect_login">Incorrect login data</string>
-    <string name="logging_in">Logging in…</string>
     <string name="network_unreachable">Network unreachable</string>
     <string name="offline_mode">Offline mode</string>
     <string name="decryption_failed">Decryption failed</string>
@@ -22,7 +21,6 @@
     <string name="licenses">Licenses</string>
     <string name="save">Save</string>
     <string name="settings_saved">Settings saved</string>
-    <string name="verifying_settings">Verifying settings...</string>
     <string name="token_format" translatable="false">%1$s %2$s</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
@@ -30,7 +28,7 @@
     <string name="name">Name</string>
     <string name="delete_secret">Delete secret</string>
     <string name="type_secret_name">Type secret name ...</string>
-    <string name="edit_var">Edit %1$s</string>
+    <string name="edit_var">\'%1$s\' edit</string>
     <string name="confirm_deletion">Confirm deletion</string>
     <string name="failed_error">Failed (unknown error)</string>
     <string name="secret_deleted">Secret deleted</string>
@@ -41,6 +39,4 @@
     <string name="secret">Secret</string>
     <string name="secret_added">Secret added</string>
     <string name="account_registration">Account registration</string>
-    <string name="unlocking">Unlocking...</string>
-    <string name="saving_settings">Saving settings...</string>
 </resources>

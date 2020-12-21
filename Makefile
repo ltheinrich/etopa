@@ -73,15 +73,19 @@ web:
 
 android: export CC_aarch64_linux-android = aarch64-linux-android30-clang
 android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi30-clang
+android: export CC_i686-linux-android = i686-linux-android30-clang
 android:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} && \
 	  rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
 	${RUST_BUILDER} build -p etopan --release --target aarch64-linux-android -v
 	${RUST_BUILDER} build -p etopan --release --target armv7-linux-androideabi -v
-	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a
+	${RUST_BUILDER} build -p etopan --release --target i686-linux-android -v
+	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && \
+	  mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a && mkdir -p ${JNI_LIBS_PATH}/x86
 	cp target/aarch64-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/arm64-v8a/libetopan.so
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS_PATH}/armeabi-v7a/libetopan.so
+	cp target/i686-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/x86/libetopan.so
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
 	(cd etopan-app && ./gradlew :app:bundleRelease && ./gradlew assembleRelease)
 	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}

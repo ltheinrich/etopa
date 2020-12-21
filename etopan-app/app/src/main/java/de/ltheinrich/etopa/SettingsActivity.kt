@@ -27,6 +27,14 @@ class SettingsActivity : AppCompatActivity() {
             getString(R.string.app_name) + ": " + getString(R.string.settings)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+        if (intent.hasExtra("incorrectLogin")) {
+            common.backActivity = MainActivity::class.java
+        } else {
+            common.backActivity = AppActivity::class.java
+        }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         binding.pin.editText?.setText(emptyPin)
         binding.instance.editText?.setText(common.instance)
@@ -53,7 +61,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        common.toast(R.string.saving_settings)
         common.hideKeyboard(this)
 
         val pin = inputString(binding.pin)
@@ -81,7 +88,6 @@ class SettingsActivity : AppCompatActivity() {
         if (binding.register.isChecked) {
             register()
         } else {
-            common.toast(R.string.settings_saved)
             common.newLogin(preferences)
         }
     }
@@ -106,18 +112,7 @@ class SettingsActivity : AppCompatActivity() {
             error_handler = { common.toast(R.string.failed_error) })
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (intent.hasExtra("incorrectLogin")) {
-                common.openActivity(MainActivity::class)
-            } else {
-                common.openActivity(AppActivity::class)
-            }
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

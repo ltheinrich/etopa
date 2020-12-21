@@ -6,10 +6,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -51,6 +48,7 @@ class Common constructor(activity: Activity) {
     lateinit var pinHash: String
     lateinit var token: String
     lateinit var storage: Storage
+    lateinit var backActivity: Class<*>
     var offline: Boolean = false
     var extendedMenu: Boolean = false
 
@@ -67,9 +65,21 @@ class Common constructor(activity: Activity) {
             openActivity(LicensesActivity::class)
             true
         }
+        android.R.id.home -> {
+            openActivity(backActivity)
+            true
+        }
         else -> {
             false
         }
+    }
+
+    fun backKey(keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            openActivity(backActivity)
+            return true
+        }
+        return false
     }
 
     fun createMenu(menu: Menu?): Boolean {
@@ -162,7 +172,6 @@ class Common constructor(activity: Activity) {
         editor.apply()
 
         this.pinHash = pinHash
-        toast(R.string.pin_set)
     }
 
     fun newLogin(preferences: SharedPreferences) {
@@ -200,7 +209,7 @@ class Common constructor(activity: Activity) {
                 "HTTP Request",
                 error.toString()
             )
-        }
+        },
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST, "https://$instance/$url", null,
@@ -229,7 +238,7 @@ class Common constructor(activity: Activity) {
                 "HTTP Request",
                 error.toString()
             )
-        }
+        },
     ) {
         val stringRequest = object : StringRequest(
             Method.POST, "https://$instance/$url",
@@ -251,9 +260,20 @@ class Common constructor(activity: Activity) {
 
     fun <T : Activity> openActivity(
         cls: KClass<T>,
-        vararg extras: Pair<String, String>
+        vararg extras: Pair<String, String>,
     ) {
         val app = Intent(activity, cls.java)
+        for ((key, value) in extras) {
+            app.putExtra(key, value)
+        }
+        activity.startActivity(app)
+    }
+
+    private fun openActivity(
+        cls: Class<*>,
+        vararg extras: Pair<String, String>,
+    ) {
+        val app = Intent(activity, cls)
         for ((key, value) in extras) {
             app.putExtra(key, value)
         }

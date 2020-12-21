@@ -30,7 +30,11 @@ class AppActivity : AppCompatActivity() {
         binding.toolbar.root.title = getString(R.string.app_name)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
-        
+        common.backActivity = MainActivity::class.java
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         binding.rvTokens.adapter = TokenAdapter(tokens, this)
         binding.rvTokens.layoutManager = LinearLayoutManager(this)
 
@@ -90,7 +94,7 @@ class AppActivity : AppCompatActivity() {
     override fun onCreateContextMenu(
         menu: ContextMenu?,
         v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
+        menuInfo: ContextMenu.ContextMenuInfo?,
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
         selectedSecretName = ((v as ViewGroup).getChildAt(0) as TextView).text.toString()
@@ -107,14 +111,7 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common.openActivity(MainActivity::class)
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }

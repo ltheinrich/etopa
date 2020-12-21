@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.app_name) + ": " + getString(R.string.unlock)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
+        common.backActivity = MainActivity::class.java
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         binding.pin.editText?.requestFocus()
@@ -49,13 +51,13 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("CommitPrefEdits")
     private fun unlock() {
-        common.toast(R.string.unlocking)
         common.hideKeyboard(this)
         val pinHash = common.hashPin(inputString(binding.pin))
         binding.pin.editText?.text?.clear()
 
         if (pinSet == null) {
             common.setPin(preferences.edit(), pinHash)
+            common.toast(R.string.pin_set)
         } else if (!common.decrypt(pinHash, pinSet!!).contains("etopan_pin_set")) {
             return common.toast(R.string.incorrect_pin, 500)
         } else {
@@ -82,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun tokenLogin() {
-        common.toast(R.string.logging_in)
         common.request(
             "user/valid",
             { responseValid ->
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             error_handler = { common.offlineLogin(preferences) })
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
 }
