@@ -39,4 +39,12 @@
     <string name="secret">Secret</string>
     <string name="secret_added">Secret added</string>
     <string name="account_registration">Account registration</string>
+    <string name="invalid_secret">Invalid secret</string>
+    <string name="cancel">Cancel</string>
+    <string name="biometric_unlock">Biometric unlock</string>
+    <string name="biometric_setup">Setup for biometric unlock</string>
+    <string name="biometric_verify">Unlock using biometric authentication</string>
+    <string name="biometric_error">Biometric unlock: %1$s</string>
+    <string name="biometric_setup_success">Biometric setup successful</string>
+    <string name="disable_biometric">Disable biometric login</string>
 </resources>

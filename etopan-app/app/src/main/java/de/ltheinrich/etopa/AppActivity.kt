@@ -8,6 +8,7 @@ import android.os.Looper
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ltheinrich.etopa.databinding.ActivityAppBinding
 import de.ltheinrich.etopa.utils.Common
@@ -67,13 +68,16 @@ class AppActivity : AppCompatActivity() {
     private fun handleTokens() {
         updateTokens()
         object : Runnable {
-            override fun run() = try {
-                val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble()
-                if (timeLeft < 1)
-                    updateTokens()
-                binding.time.progress = 100 - (timeLeft / 30 * 100).toInt()
-            } finally {
-                handler.postDelayed(this, 1000)
+            override fun run() {
+                try {
+                    val timeLeft = (System.currentTimeMillis() / 1000 % 30).toDouble()
+                    if (timeLeft < 1)
+                        updateTokens()
+                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED))
+                        binding.time.progress = 100 - (timeLeft / 30 * 100).toInt()
+                } finally {
+                    handler.postDelayed(this, 1000)
+                }
             }
         }.run()
     }

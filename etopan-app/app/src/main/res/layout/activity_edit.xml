@@ -51,7 +51,8 @@
                 android:id="@+id/delete_secret_check"
                 android:layout_width="@dimen/inputWidth"
                 android:layout_height="@dimen/elemHeight"
-                android:text="@string/delete_secret" />
+                android:text="@string/delete_secret"
+                android:layout_marginBottom="10dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/delete_secret_name"
@@ -73,8 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/elemHeight"
                 android:text="@string/confirm_deletion"
-                android:visibility="gone"
-                android:layout_marginBottom="10dp" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/delete_secret"

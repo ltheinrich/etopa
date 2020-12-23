@@ -25,8 +25,7 @@
                 android:id="@+id/pin"
                 android:layout_width="@dimen/inputWidth"
                 android:layout_height="@dimen/elemHeight"
-                android:hint="@string/pin"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/pin">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -34,6 +33,13 @@
                     android:inputType="numberPassword"
                     android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/disable_biometric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/disable_biometric"
+                android:layout_marginBottom="10dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/instance"

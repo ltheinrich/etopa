@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import de.ltheinrich.etopa.*
 import org.json.JSONObject
 import java.util.*
+import javax.crypto.Cipher
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
@@ -51,6 +52,7 @@ class Common constructor(activity: Activity) {
     lateinit var backActivity: Class<*>
     var offline: Boolean = false
     var extendedMenu: Boolean = false
+    var biometricCipher: Cipher? = null
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
         R.id.action_add -> {
@@ -286,6 +288,10 @@ class Common constructor(activity: Activity) {
         if (height != 0)
             toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, height)
         toast.show()
+    }
+
+    fun toast(text: String, length: Int = Toast.LENGTH_LONG) {
+        Toast.makeText(activity, text, length).show()
     }
 
     fun hideKeyboard(activity: Activity) {

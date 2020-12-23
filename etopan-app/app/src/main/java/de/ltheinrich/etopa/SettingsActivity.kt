@@ -2,6 +2,7 @@ package de.ltheinrich.etopa
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -18,6 +19,7 @@ class SettingsActivity : AppCompatActivity() {
     private val common: Common = Common.getInstance(this)
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivitySettingsBinding
+    private var biometricDisabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,8 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        biometricDisabled = preferences.getBoolean("biometricDisabled", false)
+        binding.disableBiometric.isChecked = biometricDisabled
         binding.pin.editText?.setText(emptyPin)
         binding.instance.editText?.setText(common.instance)
 
@@ -62,29 +66,37 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun save() {
         common.hideKeyboard(this)
-
-        val pin = inputString(binding.pin)
         val instance = inputString(binding.instance)
         val username = inputString(binding.username)
         val password = inputString(binding.password)
         val key = inputString(binding.key)
+        val pinHash = common.hashPin(inputString(binding.pin))
+            .let {
+                if (it == emptyPinHash) {
+                    common.pinHash
+                } else {
+                    it
+                }
+            }
+
+        if (binding.disableBiometric.isChecked && !biometricDisabled) {
+            preferences.edit().putBoolean("biometricDisabled", true).remove("encryptedPin").apply()
+        } else if (!binding.disableBiometric.isChecked && biometricDisabled) {
+            preferences.edit().remove("biometricDisabled").apply()
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && pinHash != common.pinHash &&
+            !preferences.getBoolean("biometricDisabled", false)
+        ) {
+            preferences.edit().remove("encryptedPin").apply()
+        }
 
         common.instance = instance
         common.username = username
         common.passwordHash = common.hashPassword(password)
         common.keyHash = common.hashKey(key)
 
-        common.encryptLogin(
-            preferences,
-            common.hashPin(pin)
-                .let {
-                    if (it == emptyPinHash) {
-                        common.pinHash
-                    } else {
-                        it
-                    }
-                })
-
+        common.encryptLogin(preferences, pinHash)
         if (binding.register.isChecked) {
             register()
         } else {

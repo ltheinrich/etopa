@@ -3,16 +3,30 @@ package de.ltheinrich.etopa
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.util.Base64
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import de.ltheinrich.etopa.databinding.ActivityMainBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.inputString
+import java.nio.charset.Charset
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivityMainBinding
     private var pinSet: String? = null
+    private var biometricCipher: Cipher? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         common.backActivity = MainActivity::class.java
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        binding.pin.editText?.requestFocus()
         pinSet = preferences.getString("pin_set", null)
         if (pinSet == null) {
             binding.unlock.text = getString(R.string.set_pin)
@@ -47,6 +61,14 @@ class MainActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO)
                 unlock()
             true
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && common.biometricCipher == null &&
+            !preferences.getBoolean("biometricDisabled", false)
+        ) {
+            biometricLogin()
+        } else {
+            binding.pin.editText?.requestFocus()
         }
     }
 
@@ -65,6 +87,16 @@ class MainActivity : AppCompatActivity() {
             common.pinHash = pinHash
         }
 
+        if (preferences.getString("encryptedPin", null) == null && biometricCipher != null) {
+            val encryptedPin = encryptBiometric(biometricCipher!!, pinHash)
+            preferences.edit().putString("encryptedPin", encryptedPin).apply()
+            common.toast(R.string.biometric_setup_success, length = Toast.LENGTH_SHORT)
+        }
+
+        doUnlock()
+    }
+
+    private fun doUnlock() {
         common.extendedMenu = true
         common.decryptLogin(preferences)
 
@@ -99,6 +131,122 @@ class MainActivity : AppCompatActivity() {
             error_handler = {
                 common.offlineLogin(preferences)
             })
+    }
+
+    private fun encryptBiometric(cipher: Cipher, plain: String): String? {
+        return try {
+            val enc = cipher.doFinal(plain.toByteArray(Charset.defaultCharset()))
+            Base64.encodeToString(enc, Base64.DEFAULT) + Base64.encodeToString(cipher.iv,
+                Base64.DEFAULT)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
+    }
+
+    private fun decryptBiometric(cipher: Cipher, encrypted: String): String? {
+        return try {
+            val dec = Base64.decode(encrypted.split('\n')[0], Base64.DEFAULT)
+            cipher.doFinal(dec)?.toString(Charsets.UTF_8)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun biometricLogin() {
+        val biometricPrompt =
+            BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence,
+                    ) {
+                        super.onAuthenticationError(errorCode, errString)
+                        binding.pin.editText?.requestFocus()
+                        if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
+                            common.toast(getString(R.string.biometric_error, errString),
+                                length = Toast.LENGTH_SHORT)
+                    }
+
+                    override fun onAuthenticationSucceeded(
+                        result: BiometricPrompt.AuthenticationResult,
+                    ) {
+                        super.onAuthenticationSucceeded(result)
+                        biometricCipher = result.cryptoObject?.cipher
+
+                        val encryptedPin = preferences.getString("encryptedPin", null)
+                        if (encryptedPin != null) {
+                            common.hideKeyboard(this@MainActivity)
+                            common.pinHash =
+                                biometricCipher?.let { cipher ->
+                                    decryptBiometric(cipher, encryptedPin)
+                                }!!
+                            doUnlock()
+                        }
+                    }
+                })
+
+        val encryptedPin = preferences.getString("encryptedPin", null)
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.biometric_unlock))
+            .setSubtitle(if (encryptedPin == null) {
+                getString(R.string.biometric_setup)
+            } else {
+                getString(R.string.biometric_verify)
+            })
+            .setNegativeButtonText(getString(R.string.cancel))
+            .build()
+
+        val keyStore = getKeyStore()
+        if (!keyStore.containsAlias("etopan_pin"))
+            generateSecretKey(KeyGenParameterSpec.Builder(
+                "etopan_pin",
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                .setUserAuthenticationRequired(true)
+                .build())
+
+        val secretKey = getSecretKey(keyStore)
+        val cipher = getCipher()
+        if (encryptedPin == null) {
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+        } else {
+            cipher.init(Cipher.DECRYPT_MODE,
+                secretKey,
+                IvParameterSpec(Base64.decode(encryptedPin.split('\n')[1], Base64.DEFAULT)))
+        }
+        biometricPrompt.authenticate(promptInfo,
+            BiometricPrompt.CryptoObject(cipher))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun generateSecretKey(keyGenParameterSpec: KeyGenParameterSpec) {
+        val keyGenerator = KeyGenerator.getInstance(
+            KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+        keyGenerator.init(keyGenParameterSpec)
+        keyGenerator.generateKey()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun getSecretKey(keyStore: KeyStore): SecretKey {
+        return keyStore.getKey("etopan_pin", null) as SecretKey
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun getKeyStore(): KeyStore {
+        val keyStore = KeyStore.getInstance("AndroidKeyStore")
+        keyStore?.load(null)
+        return keyStore
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun getCipher(): Cipher {
+        return Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                + KeyProperties.BLOCK_MODE_CBC + "/"
+                + KeyProperties.ENCRYPTION_PADDING_PKCS7)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
