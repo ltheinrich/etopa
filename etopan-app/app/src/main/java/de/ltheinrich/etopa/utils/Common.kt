@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -20,7 +21,6 @@ import com.google.android.material.textfield.TextInputLayout
 import de.ltheinrich.etopa.*
 import org.json.JSONObject
 import java.util.*
-import javax.crypto.Cipher
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
@@ -52,7 +52,6 @@ class Common constructor(activity: Activity) {
     lateinit var backActivity: Class<*>
     var offline: Boolean = false
     var extendedMenu: Boolean = false
-    var biometricCipher: Cipher? = null
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
         R.id.action_add -> {
@@ -292,6 +291,10 @@ class Common constructor(activity: Activity) {
 
     fun toast(text: String, length: Int = Toast.LENGTH_LONG) {
         Toast.makeText(activity, text, length).show()
+    }
+
+    fun checkSdk(minSdk: Int): Boolean {
+        return Build.VERSION.SDK_INT >= minSdk
     }
 
     fun hideKeyboard(activity: Activity) {

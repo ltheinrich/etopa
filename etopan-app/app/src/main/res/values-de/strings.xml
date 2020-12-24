@@ -41,8 +41,7 @@
     <string name="cancel">Abbrechen</string>
     <string name="biometric_unlock">Biometrische Anmeldung</string>
     <string name="biometric_setup">Einrichten der biometrischen Anmeldung</string>
-    <string name="biometric_verify">Mit biometrischer Authentifizierung entsperren</string>
+    <string name="biometric_verify">Mit Biometrie entsperren</string>
     <string name="biometric_error">Biometrische Anmeldung: %1$s</string>
-    <string name="biometric_setup_success">Biometrische Anmeldung erfolgreich eingerichtet</string>
     <string name="disable_biometric">Biometrische Anmeldung deaktivieren</string>
 </resources>

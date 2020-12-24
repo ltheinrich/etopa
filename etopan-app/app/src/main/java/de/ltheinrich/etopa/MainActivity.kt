@@ -23,11 +23,11 @@ import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.inputString
 import java.nio.charset.Charset
 import java.security.KeyStore
+import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivityMainBinding
     private var pinSet: String? = null
-    private var biometricCipher: Cipher? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +62,20 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && common.biometricCipher == null &&
-            !preferences.getBoolean("biometricDisabled", false)
+        if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
+            preferences.getString("encryptedPin", null) != null
         ) {
-            biometricLogin()
+            biometricLogin { result ->
+                val encryptedPin = preferences.getString("encryptedPin", null)
+                if (encryptedPin != null) {
+                    common.hideKeyboard(this@MainActivity)
+                    common.pinHash =
+                        result.cryptoObject?.cipher?.let { cipher ->
+                            decryptBiometric(cipher, encryptedPin)
+                        }!!
+                    doUnlock()
+                }
+            }
         } else {
             binding.pin.editText?.requestFocus()
         }
@@ -87,13 +96,17 @@ class MainActivity : AppCompatActivity() {
             common.pinHash = pinHash
         }
 
-        if (preferences.getString("encryptedPin", null) == null && biometricCipher != null) {
-            val encryptedPin = encryptBiometric(biometricCipher!!, pinHash)
-            preferences.edit().putString("encryptedPin", encryptedPin).apply()
-            common.toast(R.string.biometric_setup_success, length = Toast.LENGTH_SHORT)
+        if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
+            preferences.getString("encryptedPin", null) == null
+        ) {
+            biometricLogin({ doUnlock() }) { result ->
+                val encryptedPin =
+                    result.cryptoObject?.cipher?.let { encryptBiometric(it, pinHash) }
+                preferences.edit().putString("encryptedPin", encryptedPin).apply()
+            }
+        } else {
+            doUnlock()
         }
-
-        doUnlock()
     }
 
     private fun doUnlock() {
@@ -102,7 +115,8 @@ class MainActivity : AppCompatActivity() {
 
         if (pinSet == null) {
             // binding.unlock.text = getString(R.string.unlock)
-            common.openActivity(SettingsActivity::class, Pair("incorrectLogin", "incorrectLogin"))
+            common.openActivity(SettingsActivity::class,
+                Pair("incorrectLogin", "incorrectLogin"))
         } else {
             login()
         }
@@ -133,6 +147,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun encryptBiometric(cipher: Cipher, plain: String): String? {
         return try {
             val enc = cipher.doFinal(plain.toByteArray(Charset.defaultCharset()))
@@ -155,7 +170,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun biometricLogin() {
+    private fun biometricLogin(
+        always: () -> Unit = {},
+        onSuccess: (result: BiometricPrompt.AuthenticationResult) -> Unit,
+    ) {
         val biometricPrompt =
             BiometricPrompt(this, ContextCompat.getMainExecutor(this),
                 object : BiometricPrompt.AuthenticationCallback() {
@@ -168,23 +186,15 @@ class MainActivity : AppCompatActivity() {
                         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
                             common.toast(getString(R.string.biometric_error, errString),
                                 length = Toast.LENGTH_SHORT)
+                        always()
                     }
 
                     override fun onAuthenticationSucceeded(
                         result: BiometricPrompt.AuthenticationResult,
                     ) {
                         super.onAuthenticationSucceeded(result)
-                        biometricCipher = result.cryptoObject?.cipher
-
-                        val encryptedPin = preferences.getString("encryptedPin", null)
-                        if (encryptedPin != null) {
-                            common.hideKeyboard(this@MainActivity)
-                            common.pinHash =
-                                biometricCipher?.let { cipher ->
-                                    decryptBiometric(cipher, encryptedPin)
-                                }!!
-                            doUnlock()
-                        }
+                        onSuccess(result)
+                        always()
                     }
                 })
 
@@ -200,14 +210,22 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val keyStore = getKeyStore()
-        if (!keyStore.containsAlias("etopan_pin"))
-            generateSecretKey(KeyGenParameterSpec.Builder(
+        if (!keyStore.containsAlias("etopan_pin")) {
+            var keySpec = KeyGenParameterSpec.Builder(
                 "etopan_pin",
                 KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 .setUserAuthenticationRequired(true)
-                .build())
+            keySpec = if (common.checkSdk(30)) {
+                keySpec.setUserAuthenticationParameters(60000,
+                    KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG)
+            } else {
+                @Suppress("DEPRECATION")
+                keySpec.setUserAuthenticationValidityDurationSeconds(60000)
+            }
+            generateSecretKey(keySpec.build())
+        }
 
         val secretKey = getSecretKey(keyStore)
         val cipher = getCipher()

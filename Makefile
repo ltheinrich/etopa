@@ -88,7 +88,7 @@ android:
 	cp target/armv7-linux-androideabi/release/libetopan.so ${JNI_LIBS_PATH}/armeabi-v7a/libetopan.so
 	cp target/i686-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/x86/libetopan.so
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
-	(cd etopan-app && ./gradlew :app:bundleRelease && ./gradlew assembleRelease && ./gradlew --stop)
+	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease && ./gradlew --stop)
 	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
 
 sign:
