@@ -13,6 +13,7 @@ API_DEB_FILE?=etopa.deb
 CARGO_RPM?=cargo rpm
 CARGO_DEB?=cargo deb
 CARGO_LICENSE?=cargo-license
+NATIVE_TARGET_CPU?=native
 
 # android
 NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin
@@ -55,7 +56,7 @@ api:
 api-native:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
-	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=native -v
+	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=${NATIVE_TARGET_CPU} -v
 	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
 	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
 
