@@ -71,14 +71,14 @@ web:
 	rm -rf ${TEMP_EWM}
 
 #android: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
-android-build: export CC_aarch64_linux-android = aarch64-linux-android21-clang
-android-build: export CC_armv7_linux-androideabi = armv7a-linux-androideabi21-clang
+android-build: export CC_aarch64-linux-android = aarch64-linux-android21-clang
+android-build: export CC_armv7-linux-androideabi = armv7a-linux-androideabi21-clang
 android-build: export CC_i686-linux-android = i686-linux-android21-clang
 android-build:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE}
-	${RUST_BUILDER} rustc -p etopan --release --target aarch64-linux-android -v -- -C linker=$(CC_aarch64_linux-android)
-	${RUST_BUILDER} rustc -p etopan --release --target armv7-linux-androideabi -v -- -C linker=$(CC_armv7_linux-androideabi)
+	${RUST_BUILDER} rustc -p etopan --release --target aarch64-linux-android -v -- -C linker=$(CC_aarch64-linux-android)
+	${RUST_BUILDER} rustc -p etopan --release --target armv7-linux-androideabi -v -- -C linker=$(CC_armv7-linux-androideabi)
 	${RUST_BUILDER} rustc -p etopan --release --target i686-linux-android -v -- -C linker=$(CC_i686-linux-android)
 	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && \
 	  mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a && mkdir -p ${JNI_LIBS_PATH}/x86
@@ -87,7 +87,6 @@ android-build:
 	cp target/i686-linux-android/release/libetopan.so ${JNI_LIBS_PATH}/x86/libetopan.so
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease && ./gradlew --stop)
-	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
 
 android: android-build
 	#${ZIPALIGN_EXEC} -v 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line

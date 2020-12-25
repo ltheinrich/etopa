@@ -48,18 +48,6 @@ jobs:
           path: /usr/local/lib/android/sdk/ndk
           key: ${{ runner.os }}-ndk-cache-21.3.6528147
 
-      - name: Android Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            etopan-app/build
-            etopan-app/.gradle
-            ~/.gradle/wrapper
-            ~/.gradle/caches
-          key: ${{ runner.os }}-android-caches-${{ hashFiles('etopan-app/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-android-caches-
-
       - name: Binary Cache
         id: bin-cache
         uses: actions/cache@v2
