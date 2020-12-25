@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -295,6 +296,11 @@ class Common constructor(activity: Activity) {
 
     fun checkSdk(minSdk: Int): Boolean {
         return Build.VERSION.SDK_INT >= minSdk
+    }
+
+    fun biometricAvailable(): Boolean {
+        return BiometricManager.from(activity)
+            .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     fun hideKeyboard(activity: Activity) {

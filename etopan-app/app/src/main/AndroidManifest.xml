@@ -8,10 +8,6 @@
     <uses-permission-sdk-23 android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission-sdk-23 android:name="android.permission.USE_BIOMETRIC" />
 
-    <uses-feature
-        android:name="android.hardware.fingerprint"
-        android:required="true" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
-            preferences.getString("encryptedPin", null) != null
+            preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
         ) {
             biometricLogin { result ->
                 val encryptedPin = preferences.getString("encryptedPin", null)
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
-            preferences.getString("encryptedPin", null) == null
+            preferences.getString("encryptedPin", null) == null && common.biometricAvailable()
         ) {
             biometricLogin({ doUnlock() }) { result ->
                 val encryptedPin =
