@@ -22,17 +22,18 @@ JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
 BUNDLETOOL_JAR?=~/.bundletool-all.jar
 ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_APK_FILE?=etopa.apk
-ANDROID_S2APK_FILE?=${EXTRA_DIR}/etopa-fdroid.apk
-ANDROID_UAPK_FILE?=${EXTRA_DIR}/etopa-unsigned.apk
 ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
 ANDROID_DEBUG_SYMBOLS?=${EXTRA_DIR}/native-debug-symbols.zip
 ANDROID_KEYSTORE?=~/.etopa.jks
-JKS_PASS_FILE?=$(shell cat ~/.etopa.jks.pass)
+JKS_PASSWORD=$(shell cat ~/.etopa.jks.pass)
 JKS_ALIAS?=etopa
-JAVA_EXEC=java
-JARSIGNER_EXEC=jarsigner
+JAVA_EXEC?=java
+JARSIGNER_EXEC?=jarsigner
 APKSIGNER_EXEC=${ANDROID_BT_PATH}/apksigner
 ZIPALIGN_EXEC=${ANDROID_BT_PATH}/zipalign
+DEBUG_ANDROID_KEYSTORE?=$(HOME)/.android/debug.keystore
+DEBUG_JKS_PASSWORD=android
+DEBUG_JKS_ALIAS?=androiddebugkey
 
 # web
 WEB_FILE_NAME?=etopa.tar.xz
@@ -40,12 +41,10 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
 TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build signed api web android sign deb rpm api-native
+.PHONY: build update api web android deb rpm api-native
 
-build: rmtarget notice api web android
+build: rmtarget update api web android deb rpm api-native
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
-
-full: build deb rpm api-native sign
 
 api:
 	mkdir -p ${TARGET_OUTPUT_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
@@ -72,13 +71,12 @@ web:
 	rm -rf ${TEMP_EWM}
 
 #android: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
-android: export CC_aarch64_linux-android = aarch64-linux-android21-clang
-android: export CC_armv7_linux-androideabi = armv7a-linux-androideabi21-clang
-android: export CC_i686-linux-android = i686-linux-android21-clang
-android:
+android-build: export CC_aarch64_linux-android = aarch64-linux-android21-clang
+android-build: export CC_armv7_linux-androideabi = armv7a-linux-androideabi21-clang
+android-build: export CC_i686-linux-android = i686-linux-android21-clang
+android-build:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
-	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} && \
-	  rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
+	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE}
 	${RUST_BUILDER} rustc -p etopan --release --target aarch64-linux-android -v -- -C linker=$(CC_aarch64_linux-android)
 	${RUST_BUILDER} rustc -p etopan --release --target armv7-linux-androideabi -v -- -C linker=$(CC_armv7_linux-androideabi)
 	${RUST_BUILDER} rustc -p etopan --release --target i686-linux-android -v -- -C linker=$(CC_i686-linux-android)
@@ -91,17 +89,23 @@ android:
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease && ./gradlew --stop)
 	cp etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk ${TARGET_OUTPUT_DIR}/${ANDROID_UAPK_FILE}
 
-sign:
+android: android-build
+	#${ZIPALIGN_EXEC} -v 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line
+	#${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} --ks-key-alias ${JKS_ALIAS} \ # v4 signing
+	#  --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+ifndef DEBUG_SIGN
+	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${ANDROID_KEYSTORE} \
+	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \
+	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 	${JAVA_EXEC} -jar ${BUNDLETOOL_JAR} build-bundle \
 	  --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE}
-	${JARSIGNER_EXEC} -keystore ${ANDROID_KEYSTORE} -storepass ${JKS_PASS_FILE} -sigalg SHA256withRSA \
+	${JARSIGNER_EXEC} -keystore ${ANDROID_KEYSTORE} -storepass ${JKS_PASSWORD} -sigalg SHA256withRSA \
 	  -digest-alg SHA-256 ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} etopa
-	#${ZIPALIGN_EXEC} -v 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line
-	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} --ks-key-alias ${JKS_ALIAS} \
-	  --ks-pass pass:${JKS_PASS_FILE} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
-	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${ANDROID_KEYSTORE} \
-	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASS_FILE} --out ${TARGET_OUTPUT_DIR}/${ANDROID_S2APK_FILE} \
+else
+	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${DEBUG_ANDROID_KEYSTORE} \
+	  --ks-key-alias ${DEBUG_JKS_ALIAS} --ks-pass pass:${DEBUG_JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \
 	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
+endif
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${TARGET_OUTPUT_DIR}/${ANDROID_MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${TARGET_OUTPUT_DIR}/${ANDROID_DEBUG_SYMBOLS}
 
@@ -116,9 +120,11 @@ rpm:
 	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} -v)
 	cp target/${API_TARGET_TRIPLE}/release/rpmbuild/RPMS/*/etopa-*.rpm ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
 
-notice:
+update:
+	cargo update
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
 	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
+	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
 
 rmtarget:
 	rm -rf ${TARGET_OUTPUT_DIR}

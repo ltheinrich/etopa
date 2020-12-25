@@ -96,5 +96,5 @@ jobs:
         env:
           NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/21.3.6528147
         run: |
-          make notice &
-          make android & make web api deb rpm && fg || true
+          make update &
+          DEBUG_SIGN=y make android & make web api deb rpm && fg || true

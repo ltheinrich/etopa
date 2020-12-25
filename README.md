@@ -31,7 +31,7 @@ Configure
 > ./configure
 
 Build
-> ANDROID_UAPK_FILE=etopa.apk make
+> DEBUG_SIGN=y make
 
 API server: `target/build/etopa`
 

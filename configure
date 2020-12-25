@@ -99,6 +99,11 @@ fi
 yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30"
 yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
+echo android | keytool -list -keystore ~/.android/debug.keystore > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  keytool -genkey -v -keystore $HOME/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+fi
+
 if ! [ -f "$HOME/.bundletool-all.jar" ]; then
   curl -L -o $HOME/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
 fi
