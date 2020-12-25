@@ -85,4 +85,4 @@ jobs:
           NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/21.3.6528147
         run: |
           make update &
-          DEBUG_SIGN=y make android & make web api deb rpm && fg || true
+          DEBUG_SIGN=y NDK_TOOLCHAIN_BIN=/usr/local/lib/android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin make android & make web api deb rpm && fg || true
