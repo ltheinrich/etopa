@@ -73,7 +73,7 @@ impl Generator {
             | (u32::from(hash[3]) & 0xff);
         let mut token = (code % 10u32.pow(self.digits as u32)).to_string();
         while token.len() < self.digits {
-            token.insert_str(0, "0")
+            token.insert(0, '0');
         }
         Ok(token)
     }

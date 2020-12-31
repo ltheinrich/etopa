@@ -178,8 +178,10 @@ pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<
 
 /// Generate Argon2 password hash
 pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<String, Fail> {
-    let mut config = Config::default();
-    config.variant = Variant::Argon2id;
+    let config = Config {
+        variant: Variant::Argon2id,
+        ..Config::default()
+    };
     hash_encoded(pwd.as_ref(), salt.as_ref(), &config).or_else(Fail::from)
 }
 

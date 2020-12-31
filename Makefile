@@ -42,9 +42,9 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-v2.8.0 # use v2.8.0 (-> v2.9.0 breaks code)
 TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build update api web android deb rpm api-native clean
+.PHONY: build check update api web android deb rpm api-native clean
 
-build: rmtarget update api web android deb rpm api-native
+build: rmtarget check update api web android deb rpm api-native
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
 api:
@@ -137,3 +137,8 @@ rmtarget:
 clean:
 	cargo clean
 	(cd etopan-app && ./gradlew clean)
+
+check:
+	cargo fmt --all --verbose -- --check
+	cargo clippy --workspace --all-features --verbose -- -D warnings
+	cargo test --workspace --all-features --verbose
