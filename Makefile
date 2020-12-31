@@ -114,14 +114,16 @@ endif
 
 deb:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
-	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} -v
-	cp target/${API_TARGET_TRIPLE}/debian/etopa_*.deb ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
+	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} \
+	  --deb-version $$(cd etopan-app && ./gradlew -q pV) --output ${TARGET_OUTPUT_DIR}/${API_DEB_FILE} -v
 
 rpm:
-	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
-	rm -f ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
-	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} -v)
-	cp target/${API_TARGET_TRIPLE}/release/rpmbuild/RPMS/*/etopa-*.rpm ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
+	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
+	\cp etopai/Cargo.toml etopai/Cargo.toml.orig
+	sed -i -e "0,/0.0.0/{s/0.0.0/$$(cd etopan-app && ./gradlew -q pV)/}" etopai/Cargo.toml
+	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} --output ${TARGET_OUTPUT_DIR}/${API_RPM_FILE} -v) \
+	  || (mv etopai/Cargo.toml.orig etopai/Cargo.toml && false)
+	mv etopai/Cargo.toml.orig etopai/Cargo.toml
 
 update:
 	cargo update
