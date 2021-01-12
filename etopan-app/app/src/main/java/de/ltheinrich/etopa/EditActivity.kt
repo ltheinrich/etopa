@@ -53,6 +53,7 @@ class EditActivity : AppCompatActivity() {
             override fun afterTextChanged(name: Editable) {
                 if (name.toString() == secretName) {
                     binding.deleteSecretConfirm.visibility = View.VISIBLE
+                    common.hideKeyboard(this@EditActivity)
                 } else {
                     binding.deleteSecretConfirm.visibility = View.GONE
                     binding.deleteSecretConfirm.isChecked = false

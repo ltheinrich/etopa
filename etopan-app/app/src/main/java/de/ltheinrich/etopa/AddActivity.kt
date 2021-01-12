@@ -49,11 +49,12 @@ class AddActivity : AppCompatActivity() {
         val secretValue = inputString(binding.secretValue).replace(" ", "")
         if (secretName.isEmpty() || secretValue.isEmpty()) {
             return common.toast(R.string.inputs_empty)
-        } else if (common.storage.map.containsKey(secretName)) {
-            common.hideKeyboard(this)
+        }
+        
+        common.hideKeyboard(this)
+        if (common.storage.map.containsKey(secretName)) {
             return common.toast(R.string.name_exists)
         } else if (common.generateToken(secretValue) == "invalid") {
-            common.hideKeyboard(this)
             return common.toast(R.string.invalid_secret)
         }
 
