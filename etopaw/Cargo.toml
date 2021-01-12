@@ -12,7 +12,7 @@ homepage = "https://etopa.de"
 etopa = { path = "../etopa" }
 console_error_panic_hook = "0.1.6"
 wee_alloc = "0.4.5"
-serde = "1.0.118"
+serde = "1.0.119"
 serde_derive = "1.0.119"
 
 [lib]
