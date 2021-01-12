@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.extendedMenu = false
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.settings)
         setSupportActionBar(binding.toolbar.root)

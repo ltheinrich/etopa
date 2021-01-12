@@ -24,6 +24,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.extendedMenu = false
         binding.toolbar.root.title = getString(R.string.app_name) + ": " + getString(R.string.add)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)

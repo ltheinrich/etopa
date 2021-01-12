@@ -17,10 +17,10 @@ class LicensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLicensesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.licenses.text = assets.open("NOTICE.txt").bufferedReader().use { it.readText() }
-        common.backActivity = MainActivity::class.java
-
         common.extendedMenu = false
+        binding.licenses.text = assets.open("NOTICE.txt").bufferedReader().use { it.readText() }
+        common.backActivity = AppActivity::class.java
+
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.licenses)
         setSupportActionBar(binding.toolbar.root)

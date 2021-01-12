@@ -68,7 +68,7 @@ class Common constructor(activity: Activity) {
             true
         }
         android.R.id.home -> {
-            openActivity(backActivity)
+            backKey(KeyEvent.KEYCODE_BACK)
             true
         }
         else -> {
@@ -78,7 +78,15 @@ class Common constructor(activity: Activity) {
 
     fun backKey(keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            openActivity(backActivity)
+            if (backActivity == AppActivity::class.java && pinHash.isEmpty())
+                openActivity(MainActivity::class)
+            else if (backActivity == MainActivity::class.java) {
+                val intent = Intent(activity.applicationContext, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.putExtra("exitApp", true)
+                activity.startActivity(intent)
+            } else
+                openActivity(backActivity)
             return true
         }
         return false

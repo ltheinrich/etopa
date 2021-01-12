@@ -26,6 +26,7 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.extendedMenu = false
         val secretName = intent.getStringExtra("secretName").orEmpty()
         binding.toolbar.root.title = getString(R.string.edit_var, secretName)
         setSupportActionBar(binding.toolbar.root)

@@ -28,6 +28,7 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,7 +63,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean("biometricDisabled",
+                false) &&
             preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
         ) {
             biometricLogin { result ->
@@ -78,6 +80,13 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             binding.pin.editText?.requestFocus()
+        }
+
+        if (intent.getBooleanExtra("exitApp", false)) {
+            finishAffinity()
+            if (common.checkSdk(Build.VERSION_CODES.LOLLIPOP))
+                finishAndRemoveTask()
+            exitProcess(0)
         }
     }
 
@@ -96,7 +105,8 @@ class MainActivity : AppCompatActivity() {
             common.pinHash = pinHash
         }
 
-        if (common.checkSdk(23) && !preferences.getBoolean("biometricDisabled", false) &&
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean("biometricDisabled",
+                false) &&
             preferences.getString("encryptedPin", null) == null && common.biometricAvailable()
         ) {
             biometricLogin({ doUnlock() }) { result ->
@@ -217,7 +227,7 @@ class MainActivity : AppCompatActivity() {
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 .setUserAuthenticationRequired(true)
-            keySpec = if (common.checkSdk(30)) {
+            keySpec = if (common.checkSdk(Build.VERSION_CODES.R)) {
                 keySpec.setUserAuthenticationParameters(60000,
                     KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG)
             } else {
