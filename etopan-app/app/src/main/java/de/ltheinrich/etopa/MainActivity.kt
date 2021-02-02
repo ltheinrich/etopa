@@ -82,22 +82,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        if (!common.checkBackground()) {
-            if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
-                    "biometricDisabled",
-                    false
-                ) &&
-                preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
-            ) {
-                requestBiometric()
-            } else {
-                binding.pin.editText?.requestFocus()
-            }
-        }
-        super.onResume()
-    }
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun requestBiometric() {
         biometricLogin { result ->
