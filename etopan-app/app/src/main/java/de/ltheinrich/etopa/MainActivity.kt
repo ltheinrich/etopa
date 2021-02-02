@@ -60,6 +60,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        val exitApp = intent.getBooleanExtra("exitApp", false)
+        if (exitApp) {
+            finish()
+            finishAffinity()
+            if (common.checkSdk(Build.VERSION_CODES.LOLLIPOP))
+                finishAndRemoveTask()
+            exitProcess(0)
+        }
+
         if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
                 "biometricDisabled",
                 false
@@ -72,14 +81,22 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.pin.editText?.requestFocus()
         }
+    }
 
-        if (intent.getBooleanExtra("exitApp", false)) {
-            finish()
-            finishAffinity()
-            if (common.checkSdk(Build.VERSION_CODES.LOLLIPOP))
-                finishAndRemoveTask()
-            exitProcess(0)
+    override fun onResume() {
+        if (!common.checkBackground()) {
+            if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                    "biometricDisabled",
+                    false
+                ) &&
+                preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
+            ) {
+                requestBiometric()
+            } else {
+                binding.pin.editText?.requestFocus()
+            }
         }
+        super.onResume()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
