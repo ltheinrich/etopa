@@ -6,9 +6,11 @@ import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
 import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context.POWER_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
@@ -323,7 +325,10 @@ class Common constructor(activity: Activity) {
     fun checkBackground(): Boolean {
         val appProcessInfo = ActivityManager.RunningAppProcessInfo()
         ActivityManager.getMyMemoryState(appProcessInfo)
-        return !(appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE)
+        val powerManager = activity.getSystemService(POWER_SERVICE) as PowerManager
+        @Suppress("DEPRECATION")
+        return !(if (checkSdk(Build.VERSION_CODES.KITKAT_WATCH)) powerManager.isInteractive else powerManager.isScreenOn) ||
+                !(appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE)
     }
 
     fun biometricAvailable(): Boolean {

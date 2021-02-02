@@ -84,17 +84,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        if (!common.checkBackground()) {
-            if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
-                    "biometricDisabled",
-                    false
-                ) &&
-                preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
-            ) {
-                requestBiometric()
-            } else {
-                binding.pin.editText?.requestFocus()
-            }
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                "biometricDisabled",
+                false
+            ) && !common.checkBackground() &&
+            preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
+        ) {
+            requestBiometric()
+        } else {
+            binding.pin.editText?.requestFocus()
         }
         super.onResume()
     }
@@ -223,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         super.onAuthenticationError(errorCode, errString)
                         binding.pin.editText?.requestFocus()
-                        if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
+                        if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON && errorCode != BiometricPrompt.ERROR_CANCELED)
                             common.toast(
                                 getString(R.string.biometric_error, errString),
                                 length = Toast.LENGTH_SHORT
