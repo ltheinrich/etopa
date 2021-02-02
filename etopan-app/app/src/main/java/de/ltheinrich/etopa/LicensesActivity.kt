@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityLicensesBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
 
 class LicensesActivity : AppCompatActivity() {
 
@@ -17,7 +18,7 @@ class LicensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLicensesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = false
+        common.menuType = MenuType.DISABLED
         binding.licenses.text = assets.open("NOTICE.txt").bufferedReader().use { it.readText() }
         common.backActivity = AppActivity::class.java
 
@@ -32,4 +33,8 @@ class LicensesActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onPause() {
+        common.lockOnPause()
+        super.onPause()
+    }
 }

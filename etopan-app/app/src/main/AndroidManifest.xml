@@ -27,19 +27,29 @@
         </activity>
         <activity
             android:name=".AppActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true" />
         <activity
             android:name=".LicensesActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true" />
         <activity
             android:name=".SettingsActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true" />
         <activity
             android:name=".EditActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true" />
         <activity
             android:name=".AddActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true" />
     </application>
 
 </manifest>

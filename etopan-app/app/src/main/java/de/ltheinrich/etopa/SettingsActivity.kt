@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = false
+        common.menuType = MenuType.DISABLED
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.settings)
         setSupportActionBar(binding.toolbar.root)
@@ -66,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        common.hideKeyboard(this)
+        common.hideKeyboard(currentFocus)
         val instance = inputString(binding.instance)
         val username = inputString(binding.username)
         val password = inputString(binding.password)
@@ -130,4 +130,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onPause() {
+        common.lockOnPause()
+        super.onPause()
+    }
 }

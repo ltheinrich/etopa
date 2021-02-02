@@ -16,7 +16,7 @@ CARGO_LICENSE?=cargo-license
 NATIVE_TARGET_CPU?=native
 
 # android
-NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin
+NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
 export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
 ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
@@ -93,9 +93,6 @@ android-build:
 	(cd etopan-app && ./gradlew clean && ./gradlew :app:bundleRelease && ./gradlew assembleRelease && ./gradlew --stop)
 
 android: android-build
-	#${ZIPALIGN_EXEC} -v 4 etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk etopan-app/app/build/outputs/apk/release/app-release-unsigned-aligned.apk # change next line
-	#${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} --ks-key-alias ${JKS_ALIAS} \ # v4 signing
-	#  --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 ifndef DEBUG_SIGN
 	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${ANDROID_KEYSTORE} \
 	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \

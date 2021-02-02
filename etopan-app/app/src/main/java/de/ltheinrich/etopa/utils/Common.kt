@@ -1,17 +1,24 @@
 package de.ltheinrich.etopa.utils
 
 import android.app.Activity
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
-import android.view.*
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
+import androidx.core.view.iterator
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -41,18 +48,22 @@ fun inputString(inputLayout: TextInputLayout): String {
     return inputLayout.editText?.text.toString()
 }
 
+enum class MenuType {
+    DISABLED, SIMPLE, FULL
+}
+
 class Common constructor(activity: Activity) {
 
     lateinit var instance: String
     lateinit var username: String
     lateinit var passwordHash: String
     lateinit var keyHash: String
-    lateinit var pinHash: String
     lateinit var token: String
     lateinit var storage: Storage
-    lateinit var backActivity: Class<*>
+    var pinHash: String = ""
+    var backActivity: Class<*> = MainActivity::class.java
     var offline: Boolean = false
-    var extendedMenu: Boolean = false
+    var menuType: MenuType = MenuType.SIMPLE
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
         R.id.action_add -> {
@@ -94,14 +105,20 @@ class Common constructor(activity: Activity) {
 
     fun createMenu(menu: Menu?): Boolean {
         activity.menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val itemIds = arrayOf(R.id.action_add, R.id.action_settings)
-        itemIds.forEach { itemId ->
-            val item = menu?.findItem(itemId)
-            if (item != null) {
-                item.isVisible = extendedMenu
+        val simpleItems = arrayOf(R.id.action_licenses)
+        when (menuType) {
+            MenuType.DISABLED -> menu?.iterator()?.forEach { item -> item.isVisible = false }
+            MenuType.SIMPLE -> simpleItems.forEach { itemId ->
+                menu?.findItem(itemId)?.isVisible = true
             }
+            MenuType.FULL -> menu?.iterator()?.forEach { item -> item.isVisible = true }
         }
         return true
+    }
+
+    fun lockOnPause() {
+        if (checkBackground())
+            openActivity(MainActivity::class)
     }
 
     fun decryptLogin(preferences: SharedPreferences) {
@@ -229,7 +246,7 @@ class Common constructor(activity: Activity) {
             },
             Response.ErrorListener { error ->
                 offline = true
-                Log.d("Network error", error.toString())
+                Log.e("Network error", error.toString())
                 error_handler(error)
             }
         ) {
@@ -291,11 +308,8 @@ class Common constructor(activity: Activity) {
         activity.startActivity(app)
     }
 
-    fun toast(stringId: Int, height: Int = 0, length: Int = Toast.LENGTH_LONG) {
-        val toast = Toast.makeText(activity, stringId, length)
-        if (height != 0)
-            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, height)
-        toast.show()
+    fun toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
+        Toast.makeText(activity, stringId, length).show()
     }
 
     fun toast(text: String, length: Int = Toast.LENGTH_LONG) {
@@ -306,19 +320,22 @@ class Common constructor(activity: Activity) {
         return Build.VERSION.SDK_INT >= minSdk
     }
 
-    fun biometricAvailable(): Boolean {
-        return BiometricManager.from(activity)
-            .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+    fun checkBackground(): Boolean {
+        val appProcessInfo = ActivityManager.RunningAppProcessInfo()
+        ActivityManager.getMyMemoryState(appProcessInfo)
+        return !(appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE)
     }
 
-    fun hideKeyboard(activity: Activity) {
+    fun biometricAvailable(): Boolean {
+        return BiometricManager.from(activity)
+            .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+    fun hideKeyboard(currentFocus: View?) {
         val imm: InputMethodManager =
             activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = activity.currentFocus
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        if (currentFocus != null)
+            imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
     }
 
     fun copyToClipboard(toCopy: String) {

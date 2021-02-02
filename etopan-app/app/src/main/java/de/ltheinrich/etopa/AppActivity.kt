@@ -12,8 +12,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ltheinrich.etopa.databinding.ActivityAppBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
 import de.ltheinrich.etopa.utils.Storage
 import de.ltheinrich.etopa.utils.TokenAdapter
+
 
 class AppActivity : AppCompatActivity() {
 
@@ -28,7 +30,7 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = true
+        common.menuType = MenuType.FULL
         binding.toolbar.root.title = getString(R.string.app_name)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
@@ -116,7 +118,23 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    private var focused: Boolean = false
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        focused = hasFocus
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!focused)
+            finish()
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onPause() {
+        common.lockOnPause()
+        super.onPause()
+    }
 }

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityEditBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
 import de.ltheinrich.etopa.utils.inputString
 
 class EditActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = false
+        common.menuType = MenuType.DISABLED
         val secretName = intent.getStringExtra("secretName").orEmpty()
         binding.toolbar.root.title = getString(R.string.edit_var, secretName)
         setSupportActionBar(binding.toolbar.root)
@@ -53,7 +54,7 @@ class EditActivity : AppCompatActivity() {
             override fun afterTextChanged(name: Editable) {
                 if (name.toString() == secretName) {
                     binding.deleteSecretConfirm.visibility = View.VISIBLE
-                    common.hideKeyboard(this@EditActivity)
+                    common.hideKeyboard(currentFocus)
                 } else {
                     binding.deleteSecretConfirm.visibility = View.GONE
                     binding.deleteSecretConfirm.isChecked = false
@@ -71,7 +72,7 @@ class EditActivity : AppCompatActivity() {
 
         binding.deleteSecret.setOnClickListener {
             common.toast(R.string.sending_request, length = Toast.LENGTH_SHORT)
-            common.hideKeyboard(this)
+            common.hideKeyboard(currentFocus)
 
             common.request(
                 "data/delete",
@@ -99,7 +100,7 @@ class EditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            common.hideKeyboard(this)
+            common.hideKeyboard(currentFocus)
             if (common.storage.map.containsKey(secretNewName)) {
                 common.toast(R.string.name_exists)
                 return@setOnClickListener
@@ -131,4 +132,8 @@ class EditActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onPause() {
+        common.lockOnPause()
+        super.onPause()
+    }
 }

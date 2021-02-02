@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/local/lib/android/sdk/ndk
-          key: ${{ runner.os }}-ndk-cache-21.3.6528147
+          key: ${{ runner.os }}-ndk-cache-22.0.7026061
 
       - name: Binary Cache
         id: bin-cache
@@ -67,7 +67,7 @@ jobs:
 
       - name: Android NDK
         if: steps.ndk-cache.outputs.cache-hit != 'true'
-        run: yes | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.3.6528147"
+        run: yes | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061"
 
       - name: Cargo Tools
         if: steps.bin-cache.outputs.cache-hit != 'true'
@@ -82,7 +82,9 @@ jobs:
 
       - name: Make
         env:
-          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/21.3.6528147
+          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/22.0.7026061
+          DEBUG_SIGN: y
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
           make update &
-          DEBUG_SIGN=y NDK_TOOLCHAIN_BIN=/usr/local/lib/android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin make android & make web api deb rpm && fg || true
+          make android & make web api deb rpm && fg || true

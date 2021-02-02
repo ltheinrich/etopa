@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -20,10 +17,10 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import de.ltheinrich.etopa.databinding.ActivityMainBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
 import de.ltheinrich.etopa.utils.inputString
 import java.nio.charset.Charset
 import java.security.KeyStore
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -41,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = false
+        common.menuType = MenuType.SIMPLE
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.unlock)
         setSupportActionBar(binding.toolbar.root)
@@ -63,26 +60,21 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean("biometricDisabled",
-                false) &&
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                "biometricDisabled",
+                false
+            ) &&
             preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
         ) {
-            biometricLogin { result ->
-                val encryptedPin = preferences.getString("encryptedPin", null)
-                if (encryptedPin != null) {
-                    common.hideKeyboard(this@MainActivity)
-                    common.pinHash =
-                        result.cryptoObject?.cipher?.let { cipher ->
-                            decryptBiometric(cipher, encryptedPin)
-                        }!!
-                    doUnlock()
-                }
-            }
+            requestBiometric()
+            binding.fingerprint.visibility = View.VISIBLE
+            binding.fingerprint.setOnClickListener { requestBiometric() }
         } else {
             binding.pin.editText?.requestFocus()
         }
 
         if (intent.getBooleanExtra("exitApp", false)) {
+            finish()
             finishAffinity()
             if (common.checkSdk(Build.VERSION_CODES.LOLLIPOP))
                 finishAndRemoveTask()
@@ -90,9 +82,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        if (!common.checkBackground()) {
+            if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                    "biometricDisabled",
+                    false
+                ) &&
+                preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
+            ) {
+                requestBiometric()
+            } else {
+                binding.pin.editText?.requestFocus()
+            }
+        }
+        super.onResume()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun requestBiometric() {
+        biometricLogin { result ->
+            val encryptedPin = preferences.getString("encryptedPin", null)
+            if (encryptedPin != null) {
+                common.hideKeyboard(currentFocus)
+                common.pinHash =
+                    result.cryptoObject?.cipher?.let { cipher ->
+                        decryptBiometric(cipher, encryptedPin)
+                    }!!
+                doUnlock()
+            }
+        }
+    }
+
     @SuppressLint("CommitPrefEdits")
     private fun unlock() {
-        common.hideKeyboard(this)
+        common.hideKeyboard(currentFocus)
         val pinHash = common.hashPin(inputString(binding.pin))
         binding.pin.editText?.text?.clear()
 
@@ -105,8 +128,10 @@ class MainActivity : AppCompatActivity() {
             common.pinHash = pinHash
         }
 
-        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean("biometricDisabled",
-                false) &&
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                "biometricDisabled",
+                false
+            ) &&
             preferences.getString("encryptedPin", null) == null && common.biometricAvailable()
         ) {
             biometricLogin({ doUnlock() }) { result ->
@@ -120,13 +145,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doUnlock() {
-        common.extendedMenu = true
+        common.menuType = MenuType.FULL
         common.decryptLogin(preferences)
 
         if (pinSet == null) {
             // binding.unlock.text = getString(R.string.unlock)
-            common.openActivity(SettingsActivity::class,
-                Pair("incorrectLogin", "incorrectLogin"))
+            common.openActivity(
+                SettingsActivity::class,
+                Pair("incorrectLogin", "incorrectLogin")
+            )
         } else {
             login()
         }
@@ -161,8 +188,10 @@ class MainActivity : AppCompatActivity() {
     private fun encryptBiometric(cipher: Cipher, plain: String): String? {
         return try {
             val enc = cipher.doFinal(plain.toByteArray(Charset.defaultCharset()))
-            Base64.encodeToString(enc, Base64.DEFAULT) + Base64.encodeToString(cipher.iv,
-                Base64.DEFAULT)
+            Base64.encodeToString(enc, Base64.DEFAULT) + Base64.encodeToString(
+                cipher.iv,
+                Base64.DEFAULT
+            )
         } catch (ex: Exception) {
             ex.printStackTrace()
             null
@@ -194,8 +223,10 @@ class MainActivity : AppCompatActivity() {
                         super.onAuthenticationError(errorCode, errString)
                         binding.pin.editText?.requestFocus()
                         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON)
-                            common.toast(getString(R.string.biometric_error, errString),
-                                length = Toast.LENGTH_SHORT)
+                            common.toast(
+                                getString(R.string.biometric_error, errString),
+                                length = Toast.LENGTH_SHORT
+                            )
                         always()
                     }
 
@@ -211,11 +242,13 @@ class MainActivity : AppCompatActivity() {
         val encryptedPin = preferences.getString("encryptedPin", null)
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.biometric_unlock))
-            .setSubtitle(if (encryptedPin == null) {
-                getString(R.string.biometric_setup)
-            } else {
-                getString(R.string.biometric_verify)
-            })
+            .setSubtitle(
+                if (encryptedPin == null) {
+                    getString(R.string.biometric_setup)
+                } else {
+                    getString(R.string.biometric_verify)
+                }
+            )
             .setNegativeButtonText(getString(R.string.cancel))
             .build()
 
@@ -223,13 +256,16 @@ class MainActivity : AppCompatActivity() {
         if (!keyStore.containsAlias("etopan_pin")) {
             var keySpec = KeyGenParameterSpec.Builder(
                 "etopan_pin",
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            )
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 .setUserAuthenticationRequired(true)
             keySpec = if (common.checkSdk(Build.VERSION_CODES.R)) {
-                keySpec.setUserAuthenticationParameters(60000,
-                    KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG)
+                keySpec.setUserAuthenticationParameters(
+                    60000,
+                    KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG
+                )
             } else {
                 @Suppress("DEPRECATION")
                 keySpec.setUserAuthenticationValidityDurationSeconds(60000)
@@ -242,18 +278,23 @@ class MainActivity : AppCompatActivity() {
         if (encryptedPin == null) {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         } else {
-            cipher.init(Cipher.DECRYPT_MODE,
+            cipher.init(
+                Cipher.DECRYPT_MODE,
                 secretKey,
-                IvParameterSpec(Base64.decode(encryptedPin.split('\n')[1], Base64.DEFAULT)))
+                IvParameterSpec(Base64.decode(encryptedPin.split('\n')[1], Base64.DEFAULT))
+            )
         }
-        biometricPrompt.authenticate(promptInfo,
-            BiometricPrompt.CryptoObject(cipher))
+        biometricPrompt.authenticate(
+            promptInfo,
+            BiometricPrompt.CryptoObject(cipher)
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun generateSecretKey(keyGenParameterSpec: KeyGenParameterSpec) {
         val keyGenerator = KeyGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore"
+        )
         keyGenerator.init(keyGenParameterSpec)
         keyGenerator.generateKey()
     }
@@ -272,9 +313,11 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getCipher(): Cipher {
-        return Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                + KeyProperties.BLOCK_MODE_CBC + "/"
-                + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+        return Cipher.getInstance(
+            KeyProperties.KEY_ALGORITHM_AES + "/"
+                    + KeyProperties.BLOCK_MODE_CBC + "/"
+                    + KeyProperties.ENCRYPTION_PADDING_PKCS7
+        )
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)

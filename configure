@@ -92,7 +92,7 @@ if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
   mv /tmp/etopa-configure/cmdline-tools $HOME/.android/sdk/cmdline-tools/latest
   rm /tmp/etopa-configure/android-tools.zip
 fi
-yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30" "ndk;21.3.6528147"
+yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30" "ndk;22.0.7026061"
 yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
 echo android | keytool -list -keystore ~/.android/debug.keystore > /dev/null 2>&1

@@ -853,7 +853,7 @@ base64	0.13.0	Alice Maz <alice@alicemaz.com>|Marshall Pierce <marshall@mpierce.o
 blake2b_simd	0.5.11	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
 block-buffer	0.9.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Fixed size buffer for block processing of data
 block-padding	0.2.1	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Padding and unpadding of messages divided into blocks.
-bumpalo	3.5.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
+bumpalo	3.6.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.0.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
 cc	1.0.66	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
 cesu8	1.1.0	Eric Kidd <git@randomhacks.net>	https://github.com/emk/cesu8-rs	Apache-2.0 OR MIT		Convert to and from CESU-8 encoding (similar to UTF-8)
@@ -883,7 +883,7 @@ json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/jso
 keccak	0.1.0	RustCrypto Developers	https://github.com/RustCrypto/sponges	CC0-1.0		Keccak-f sponge function
 kern	1.2.3	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
 lazy_static	1.4.0	Marvin Löbel <loebel.marvin@gmail.com>	https://github.com/rust-lang-nursery/lazy-static.rs	Apache-2.0 OR MIT		A macro for declaring lazily evaluated statics in Rust.
-libc	0.2.83	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
+libc	0.2.85	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 log	0.4.14	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
 memchr	2.3.4	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/rust-memchr	MIT OR Unlicense		Safe interface to memchr.
 memory_units	0.4.0	Nick Fitzgerald <fitzgen@gmail.com>|Sergey Pepyakin <s.pepyakin@gmail.com>	https://github.com/pepyakin/memory_units	MPL-2.0		Safe conversions between units of memory
@@ -897,7 +897,7 @@ rand	0.8.3	The Rand Project Developers|The Rust Project Developers	https://githu
 rand_chacha	0.3.0	The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors	https://github.com/rust-random/rand	Apache-2.0 OR MIT		ChaCha random number generator
 rand_core	0.6.1	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
 rand_hc	0.3.0	The Rand Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		HC128 random number generator
-ring	0.16.19	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ring's license	Safe, fast, small crypto using Rust.
+ring	0.16.20	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ring's license	Safe, fast, small crypto using Rust.
 rust-argon2	0.8.3	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustls	0.19.0	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
 ryu	1.0.5	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion

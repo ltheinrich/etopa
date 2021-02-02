@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
 import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
 import de.ltheinrich.etopa.utils.inputString
 
 class AddActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        common.extendedMenu = false
+        common.menuType = MenuType.DISABLED
         binding.toolbar.root.title = getString(R.string.app_name) + ": " + getString(R.string.add)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
@@ -50,8 +51,8 @@ class AddActivity : AppCompatActivity() {
         if (secretName.isEmpty() || secretValue.isEmpty()) {
             return common.toast(R.string.inputs_empty)
         }
-        
-        common.hideKeyboard(this)
+
+        common.hideKeyboard(currentFocus)
         if (common.storage.map.containsKey(secretName)) {
             return common.toast(R.string.name_exists)
         } else if (common.generateToken(secretValue) == "invalid") {
@@ -85,4 +86,8 @@ class AddActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onPause() {
+        common.lockOnPause()
+        super.onPause()
+    }
 }

@@ -5,16 +5,19 @@
     <item
         android:id="@+id/action_add"
         android:title="@string/add"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_settings"
         android:title="@string/settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_licenses"
         android:title="@string/licenses"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 
 </menu>
