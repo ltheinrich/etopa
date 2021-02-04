@@ -17,7 +17,7 @@ F-Droid: Add repository https://fdroid.ltheinrich.de and search for Etopa (finge
 
 Google Play Store: [Etopa 2FA](https://play.google.com/store/apps/details?id=de.ltheinrich.etopa)
 
-Amazon Appstore: [Etopa](http://www.amazon.com/gp/mas/dl/android?p=de.ltheinrich.etopa)
+Amazon Appstore: [Etopa](https://www.amazon.com/gp/mas/dl/android?p=de.ltheinrich.etopa)
 
 Samsung Galaxy Store: [Etopa](https://apps.samsung.com/gear/appDetail.as?appId=de.ltheinrich.etopa)
 
