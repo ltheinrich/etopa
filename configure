@@ -17,9 +17,9 @@ else
   echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"
   echo "${bold}Fedora:${normal}"
   echo "  ${italic}sudo dnf groupinstall \"Development Tools\""
-  echo "  sudo dnf install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git${normal}"
+  echo "  sudo dnf install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel${normal}"
   echo "${bold}Debian:${normal}"
-  echo -e "  ${italic}sudo apt install build-essential musl-tools gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf curl git${normal}\n"
+  echo -e "  ${italic}sudo apt install build-essential musl-tools gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf curl git libssl-dev${normal}\n"
 fi
 
 which rustup > /dev/null 2>&1
