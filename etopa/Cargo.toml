@@ -16,7 +16,7 @@ sha3 = "0.9.1"
 hex = "0.4.2"
 rust-argon2 = "0.8.3"
 base32 = "0.4.0"
-rand = { version = "0.8.2", features = ["getrandom"] }
+rand = { version = "0.8.3", features = ["getrandom"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = { version = "0.2.70", features = ["serde-serialize"] }
