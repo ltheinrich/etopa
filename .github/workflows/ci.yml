@@ -26,6 +26,9 @@ jobs:
       - name: Test
         run: cargo test --workspace --all-features --verbose
 
+      - name: Notice
+        run: if ! [ $(wc -l < NOTICE.txt) -gt 860 ]; then exit 1; fi
+
   build:
     runs-on: ubuntu-latest
     steps:
