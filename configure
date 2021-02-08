@@ -68,10 +68,11 @@ if ! [[ $targets == *"wasm32-unknown-unknown (installed)"* ]]; then
   rustup target add wasm32-unknown-unknown
 fi
 
-cargo install cargo-license cargo-edit cargo-deb cargo-rpm wasm-pack
+cargo install cargo-license cargo-edit cargo-deb cargo-rpm
+cargo install wasm-pack
 if ! [ $? -eq 0 ]; then
   rm $HOME/.cargo/bin/wasm-pack
-  cargo install cargo-license cargo-edit cargo-deb cargo-rpm wasm-pack
+  cargo install wasm-pack
 fi
 
 if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
