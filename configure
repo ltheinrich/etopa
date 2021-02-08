@@ -68,28 +68,10 @@ if ! [[ $targets == *"wasm32-unknown-unknown (installed)"* ]]; then
   rustup target add wasm32-unknown-unknown
 fi
 
-which cargo-license > /dev/null 2>&1
+cargo install cargo-license cargo-edit cargo-deb cargo-rpm wasm-pack
 if ! [ $? -eq 0 ]; then
-  cargo install cargo-license
-fi
-
-which cargo-deb > /dev/null 2>&1
-if ! [ $? -eq 0 ]; then
-  cargo install cargo-deb
-fi
-
-which cargo-rpm > /dev/null 2>&1
-if ! [ $? -eq 0 ]; then
-  cargo install cargo-rpm
-fi
-
-which cargo-upgrade > /dev/null 2>&1
-if ! [ $? -eq 0 ]; then
-  cargo install cargo-edit
-fi
-
-if ! [ -f "$HOME/.cargo/bin/wasm-pack" ]; then
-  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+  rm $HOME/.cargo/bin/wasm-pack
+  cargo install cargo-license cargo-edit cargo-deb cargo-rpm wasm-pack
 fi
 
 if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then

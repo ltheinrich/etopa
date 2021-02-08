@@ -57,7 +57,7 @@ jobs:
         with:
           path: |
             /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-1
+          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-2
 
       - name: Cargo Cache
         uses: actions/cache@v2
@@ -75,8 +75,7 @@ jobs:
       - name: Cargo Tools
         if: steps.bin-cache.outputs.cache-hit != 'true'
         run: |
-          cargo install cargo-license cargo-deb cargo-rpm cargo-edit
-          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          cargo install cargo-license cargo-deb cargo-rpm cargo-edit wasm-pack
 
       - name: Build Tools
         run: |
