@@ -85,7 +85,7 @@ fi
 
 which cargo-upgrade > /dev/null 2>&1
 if ! [ $? -eq 0 ]; then
-  cargo install cargo-upgrade
+  cargo install cargo-edit
 fi
 
 if ! [ -f "$HOME/.cargo/bin/wasm-pack" ]; then
