@@ -13,6 +13,7 @@ API_DEB_FILE?=etopa.deb
 CARGO_RPM?=cargo rpm
 CARGO_DEB?=cargo deb
 CARGO_LICENSE?=cargo-license
+CARGO_UPGRADE?=cargo upgrade
 NATIVE_TARGET_CPU?=native
 
 # android
@@ -122,8 +123,9 @@ rpm:
 	  || (mv etopai/Cargo.toml.orig etopai/Cargo.toml && false)
 	mv etopai/Cargo.toml.orig etopai/Cargo.toml
 
-update:
-	cargo update
+upgrade:
+	${CARGO_UPGRADE} --workspace
+	${RUST_BUILDER} update
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
 	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
@@ -132,10 +134,10 @@ rmtarget:
 	rm -rf ${TARGET_OUTPUT_DIR}
 
 clean:
-	cargo clean
+	${RUST_BUILDER} clean
 	(cd etopan-app && ./gradlew clean)
 
 check:
-	cargo fmt --all --verbose -- --check
-	cargo clippy --workspace --all-features --verbose -- -D warnings
-	cargo test --workspace --all-features --verbose
+	${RUST_BUILDER} fmt --all --verbose -- --check
+	${RUST_BUILDER} clippy --workspace --all-features --verbose -- -D warnings
+	${RUST_BUILDER} test --workspace --all-features --verbose

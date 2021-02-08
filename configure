@@ -83,6 +83,11 @@ if ! [ $? -eq 0 ]; then
   cargo install cargo-rpm
 fi
 
+which cargo-upgrade > /dev/null 2>&1
+if ! [ $? -eq 0 ]; then
+  cargo install cargo-upgrade
+fi
+
 if ! [ -f "$HOME/.cargo/bin/wasm-pack" ]; then
   curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 fi
