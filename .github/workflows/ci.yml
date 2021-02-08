@@ -89,5 +89,4 @@ jobs:
           DEBUG_SIGN: y
           NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
-          make upgrade &
           make android & make web api deb rpm && fg || true
