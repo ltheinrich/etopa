@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/.profile
+
 distro=`lsb_release -is`
 
 mkdir -p /tmp/etopa-configure
