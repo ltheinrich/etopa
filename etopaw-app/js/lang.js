@@ -65,11 +65,11 @@ export const lang = {
             },
             usage: {
                 q: "How does it work?",
-                a: "First you need to create an account (registration) with an unique username, a password and key that will be used for encrypting your data.<br>Second you enable 2FA for the service or website you want to use Etopa with.<br>Copy the given secret (e.g. JBSWY3DPEHPK3PXP) in combination with a chosen name into the add secret section on the bottom.<br>Once you've added the secret, you'll be shown a different token every 30 seconds in the list.<br>Now you can use that token to login or verify your 2FA on the other website or service."
+                a: "First you need to create an account (registration) with an unique username, a password and key that will be used for encrypting your data.<br>Second you enable 2FA for the service or website you want to use Etopa with.<br>Copy the given secret (e.g. JBSWY3DPEHPK3PXP) in combination with a chosen name into the add secret section on the bottom.<br>Once you have added the secret, you will be shown a different token every 30 seconds in the list.<br>Now you can use that token to login or verify your 2FA on the other website or service."
             },
             questions: {
                 q: "Any questions?",
-                a: "If you still have any questions or you've found a bug, please contact the developer via email <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> or create an <a href=\"https://ltheinrich.de/etopa/issues\">Issue on GitHub</a>."
+                a: "If you still have any questions or you have found a bug, please contact the developer via email <a href=\"mailto:lennart@ltheinrich.de\">lennart@ltheinrich.de</a> or create an <a href=\"https://ltheinrich.de/etopa/issues\">Issue on GitHub</a>."
             }
         },
         rename: "Rename",

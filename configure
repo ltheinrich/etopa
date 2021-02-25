@@ -94,8 +94,8 @@ if ! [ -f "$HOME/.bundletool-all.jar" ]; then
   curl -L -o $HOME/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
 fi
 
-if ! [ -f "/usr/local/bin/minify-v2.8.0" ]; then
-  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0)
+if ! [ -f "/usr/local/bin/minify-v2.9.13" ]; then
+  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v2.9.13/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.9.13)
 fi
 
 rm -rf /tmp/etopa-configure

@@ -40,7 +40,7 @@ DEBUG_JKS_ALIAS?=androiddebugkey
 # web
 WEB_FILE_NAME?=etopa.tar.xz
 WASM_PACK_EXEC?=wasm-pack
-GOMINIFY_EXEC?=minify-v2.8.0 # TODO: upgrade to 2.9.13 when available
+GOMINIFY_EXEC?=minify-v2.9.13
 TEMP_EWM?=/tmp/etopa_ewm
 
 .PHONY: build check update api web android deb rpm api-native clean
