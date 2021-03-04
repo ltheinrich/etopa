@@ -874,7 +874,7 @@ etopaw	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etop
 generic-array	0.14.4	Bartłomiej Kamiński <fizyk20@gmail.com>|Aaron Trent <novacrazy@gmail.com>	https://github.com/fizyk20/generic-array.git	MIT		Generic types implementing functionality of arrays
 getrandom	0.2.2	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
 ghash	0.3.1	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		Universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC), as in the AES-GCM authenticated encryption cipher.
-hex	0.4.2	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
+hex	0.4.3	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
 itoa	0.4.7	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/itoa	Apache-2.0 OR MIT		Fast functions for printing integer primitives to an io::Write
 jni	0.19.0	Josh Chase <josh@prevoty.com>	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bindings to the JNI
 jni-sys	0.3.0	Steven Fackler <sfackler@gmail.com>	https://github.com/sfackler/rust-jni-sys	Apache-2.0 OR MIT		Rust definitions corresponding to jni.h
