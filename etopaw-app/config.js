@@ -1,3 +1,3 @@
-export const API_URL = "https://localhost:4490";
+export const API_URL = "/";
 export const TITLE = "Etopa";
 export const LANG = "en";

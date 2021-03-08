@@ -122,7 +122,8 @@ export async function raw_fetch(exec = async function (data = new Uint8Array(0))
         body
     };
     try {
-        const resp = await fetch(`${config.API_URL}/${url}`, req);
+        const apiUrl = config.API_URL == "/" ? window.location.protocol + "//" + window.location.hostname + window.location.port : config.API_URL;
+        const resp = await fetch(`${apiUrl}/${url}`, req);
         const data = new Uint8Array(await resp.arrayBuffer());
         online = valid_login;
         return await exec(data);

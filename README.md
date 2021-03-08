@@ -10,7 +10,7 @@ I would consider it stable to use, but there are still many functions to yet be 
 <hr>
 
 ### Etopa<span></span>.de instance
-You can use the [Etopa.de instance](https://etopa.de/) or host your own.
+You can use the [Etopa.de instance](https://etopa.de/) or [host your own](https://github.com/ltheinrich/etopa/wiki/Install-server).
 
 ### Download Android app
 F-Droid: Add repository https://fdroid.ltheinrich.de and search for Etopa (fingerprint B90FC7691EC5BE977DCBBCB18C3984C794CCAFA5BB8712ED2D64F9FD8703B636)
