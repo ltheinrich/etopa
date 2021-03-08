@@ -215,7 +215,7 @@ function gen_tokens() {
         const edit = document.createElement("a");
         const a = document.createElement("a");
         const token = wasm.gen_token(secrets[name], BigInt(Date.now()));
-        a.innerHTML = "<div><strong>" + name + "</strong>&nbsp;" + token + "</div>";
+        a.innerHTML = "<div><strong>" + name + "</strong>&nbsp;" + token.substr(0, 3) + " " + token.substr(3) + "</div>";
         a.addEventListener("click", function (ev) {
             if (ev.target != edit) {
                 const el = document.createElement("textarea");
