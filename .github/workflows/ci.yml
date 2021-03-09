@@ -49,7 +49,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/local/lib/android/sdk/ndk
-          key: ${{ runner.os }}-ndk-cache-22.0.7026061
+          key: ${{ runner.os }}-ndk-cache-22.0.7026061-1
 
       - name: Binary Cache
         id: bin-cache
@@ -57,7 +57,7 @@ jobs:
         with:
           path: |
             /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-2
+          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-3
 
       - name: Cargo Cache
         uses: actions/cache@v2
@@ -66,7 +66,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-1
 
       - name: Android NDK
         if: steps.ndk-cache.outputs.cache-hit != 'true'
@@ -75,7 +75,7 @@ jobs:
       - name: Cargo Tools
         if: steps.bin-cache.outputs.cache-hit != 'true'
         run: |
-          cargo install cargo-license cargo-deb cargo-rpm cargo-edit wasm-pack
+          cargo install cargo-license cargo-edit wasm-pack
 
       - name: Build Tools
         run: |
@@ -88,4 +88,4 @@ jobs:
           DEBUG_SIGN: y
           NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
-          make android & make web api deb rpm && fg || true
+          make android & make web api && fg || true

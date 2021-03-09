@@ -5,13 +5,8 @@ NOTICE_FILE?=NOTICE.txt
 
 # api
 API_FILE_NAME?=etopa
-API_NATIVE_FILE_NAME?=${EXTRA_DIR}/etopa-native
 API_TARGET_TRIPLE?=x86_64-unknown-linux-musl
 API_STRIP?=strip
-API_RPM_FILE?=etopa.rpm
-API_DEB_FILE?=etopa.deb
-CARGO_RPM?=cargo rpm
-CARGO_DEB?=cargo deb
 CARGO_LICENSE?=cargo-license
 CARGO_UPGRADE?=cargo upgrade
 NATIVE_TARGET_CPU?=native
@@ -22,8 +17,8 @@ export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
 ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
 BUNDLETOOL_JAR?=~/.bundletool-all.jar
-ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_APK_FILE?=etopa.apk
+ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
 ANDROID_DEBUG_SYMBOLS?=${EXTRA_DIR}/native-debug-symbols.zip
 ANDROID_KEYSTORE?=~/.etopa.jks
@@ -43,9 +38,9 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-v2.9.13
 TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build check update api web android deb rpm api-native clean
+.PHONY: build upgrade check api web android clean
 
-build: rmtarget check update api web android deb rpm api-native
+build: upgrade rmtarget check api web android
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
 api:
@@ -53,13 +48,6 @@ api:
 	${RUST_BUILDER} build -p etopai --release --target ${API_TARGET_TRIPLE} -v
 	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
 	cp target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
-
-api-native:
-	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
-	rm -f ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
-	${RUST_BUILDER} rustc -p etopai --release --target ${API_TARGET_TRIPLE} -- -C target-cpu=${NATIVE_TARGET_CPU} -v
-	${API_STRIP} target/${API_TARGET_TRIPLE}/release/etopai
-	mv target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_NATIVE_FILE_NAME}
 
 web:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
@@ -109,19 +97,6 @@ else
 endif
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${TARGET_OUTPUT_DIR}/${ANDROID_MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${TARGET_OUTPUT_DIR}/${ANDROID_DEBUG_SYMBOLS}
-
-deb:
-	mkdir -p ${TARGET_OUTPUT_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_DEB_FILE}
-	${CARGO_DEB} -p etopai --no-build --target ${API_TARGET_TRIPLE} \
-	  --deb-version $$(cd etopan-app && ./gradlew -q printVersionName) --output ${TARGET_OUTPUT_DIR}/${API_DEB_FILE} -v
-
-rpm:
-	mkdir -p ${TARGET_OUTPUT_DIR} && rm -f ${TARGET_OUTPUT_DIR}/${API_RPM_FILE}
-	\cp etopai/Cargo.toml etopai/Cargo.toml.orig
-	sed -i -e "0,/0.0.0/{s/0.0.0/$$(cd etopan-app && ./gradlew -q printVersionName)/}" etopai/Cargo.toml
-	(cd etopai && ${CARGO_RPM} build --no-cargo-build --target ${API_TARGET_TRIPLE} --output ${TARGET_OUTPUT_DIR}/${API_RPM_FILE} -v) \
-	  || (mv etopai/Cargo.toml.orig etopai/Cargo.toml && false)
-	mv etopai/Cargo.toml.orig etopai/Cargo.toml
 
 upgrade:
 	${CARGO_UPGRADE} --workspace

@@ -12,16 +12,16 @@ normal=$(tput sgr0)
 
 if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
   sudo dnf -y groupinstall "Development Tools"
-  sudo dnf -y install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config
+  sudo dnf -y install python java-latest-openjdk-devel gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config
 elif [ $distro == "Debian" ] || [ $distro == "Ubuntu" ]; then
-  sudo apt -y install build-essential python default-jdk rpm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config
+  sudo apt -y install build-essential python default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config
 else
   echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"
   echo "${bold}Fedora:${normal}"
   echo "  ${italic}sudo dnf groupinstall \"Development Tools\""
-  echo "  sudo dnf install python java-latest-openjdk-devel fedora-packager rpmdevtools dpkg gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config${normal}"
+  echo "  sudo dnf install python java-latest-openjdk-devel gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config${normal}"
   echo "${bold}Debian:${normal}"
-  echo -e "  ${italic}sudo apt install build-essential musl-tools gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf curl git libssl-dev pkg-config${normal}\n"
+  echo -e "  ${italic}sudo apt install build-essential python default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config${normal}\n"
 fi
 
 which rustup > /dev/null 2>&1
@@ -68,7 +68,7 @@ if ! [[ $targets == *"wasm32-unknown-unknown (installed)"* ]]; then
   rustup target add wasm32-unknown-unknown
 fi
 
-cargo install cargo-license cargo-edit cargo-deb cargo-rpm
+cargo install cargo-license cargo-edit
 cargo install wasm-pack
 if ! [ $? -eq 0 ]; then
   rm $HOME/.cargo/bin/wasm-pack

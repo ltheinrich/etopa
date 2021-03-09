@@ -12,32 +12,3 @@ homepage = "https://etopa.de"
 etopa = { path = "../etopa" }
 kern = { version = "1.2.3", features = ["http"] }
 json = "0.12.4"
-
-[package.metadata.rpm]
-package = "etopa"
-
-[package.metadata.rpm.cargo]
-buildflags = ["--release"]
-
-[package.metadata.rpm.targets]
-etopai = { path = "/usr/bin/etopa" }
-
-[package.metadata.rpm.files]
-"etopa.service" = { path = "/usr/lib/systemd/system/etopa.service" }
-
-[package.metadata.deb]
-name = "etopa"
-section = "net"
-priority = "optional"
-depends = ""
-maintainer-scripts = "etopai/.deb/"
-conf-files = ["/etc/etopa.conf"]
-assets = [
-    ["target/release/etopai", "usr/bin/etopa", "755"],
-    [".rpm/etopa.conf", "etc/etopa.conf", "755"],
-    [".rpm/etopa.service", "usr/lib/systemd/system/etopa.service", "644"],
-    ["../data/cert.pem", "var/lib/etopa/data/cert.pem", "644"],
-    ["../data/key.pem", "var/lib/etopa/data/key.pem", "644"],
-    ["../README.md", "usr/share/doc/etopa/README.md", "644"],
-    ["../NOTICE.txt", "usr/share/doc/etopa/NOTICE.txt", "644"],
-]

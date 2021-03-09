@@ -1,5 +1,0 @@
-#!/bin/sh
-
-adduser --disabled-login --no-create-home --gecos "" etopa
-
-exit 0
