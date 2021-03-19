@@ -19,5 +19,5 @@ base32 = "0.4.0"
 rand = { version = "0.8.3", features = ["getrandom"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = { version = "0.2.71", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.72", features = ["serde-serialize"] }
 getrandom = { version = "0.2.2", features = ["js"] }
