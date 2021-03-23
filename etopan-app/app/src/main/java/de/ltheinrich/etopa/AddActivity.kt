@@ -1,7 +1,11 @@
 package de.ltheinrich.etopa
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -10,6 +14,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.integration.android.IntentIntegrator
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.MenuType
@@ -42,6 +47,47 @@ class AddActivity : AppCompatActivity() {
 
         binding.addSecret.setOnClickListener {
             addSecret()
+        }
+
+        binding.qrCode.setOnClickListener {
+            scanQRCode()
+        }
+    }
+
+    private fun scanQRCode() {
+        if (common.checkSdk(Build.VERSION_CODES.M) && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1540)
+        else {
+            val integrator = IntentIntegrator(this).apply {
+                setOrientationLocked(false)
+                setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                setBeepEnabled(false)
+            }
+            integrator.initiateScan()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1540)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                scanQRCode()
+            else
+                common.toast(R.string.permission_denied)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null && result.contents != null) {
+            val secret = common.parseSecretUri(result.contents)
+            binding.secretValue.editText?.setText(secret.first)
+            binding.secretName.editText?.setText(secret.second)
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

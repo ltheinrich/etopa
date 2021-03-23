@@ -3,6 +3,7 @@
     package="de.ltheinrich.etopa">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!--suppress DeprecatedClassUsageInspection -->
     <uses-permission-sdk-23 android:name="android.permission.USE_FINGERPRINT" />
@@ -28,27 +29,27 @@
         <activity
             android:name=".AppActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:noHistory="true"
+            android:noHistory="false"
             android:clearTaskOnLaunch="true" />
         <activity
             android:name=".LicensesActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:noHistory="true"
+            android:noHistory="false"
             android:clearTaskOnLaunch="true" />
         <activity
             android:name=".SettingsActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="true"
+            android:noHistory="false"
             android:clearTaskOnLaunch="true" />
         <activity
             android:name=".EditActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="true"
+            android:noHistory="false"
             android:clearTaskOnLaunch="true" />
         <activity
             android:name=".AddActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="true"
+            android:noHistory="false"
             android:clearTaskOnLaunch="true" />
     </application>
 

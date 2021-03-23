@@ -50,6 +50,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/qr_code"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="@dimen/elemHeight"
+                android:layout_height="@dimen/elemHeight"
+                android:background="@drawable/ic_baseline_qr_code_scanner_24"
+                android:layout_marginBottom="10dp" />
+
+            <Button
                 android:id="@+id/add_secret"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="@dimen/buttonWidth"

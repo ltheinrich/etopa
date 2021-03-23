@@ -123,6 +123,38 @@ class Common constructor(activity: Activity) {
             openActivity(MainActivity::class)
     }
 
+    fun parseSecretUri(uri: String): Pair<String, String?> {
+        val otpAuth = uri.removePrefix("otpauth://")
+        if (otpAuth != uri) {
+            val totp = otpAuth.removePrefix("totp/")
+            if (totp != otpAuth) {
+                val name = totp.split('?', limit = 2)
+                if (name.size == 2) {
+                    val data = name[1].split('&')
+                    for (d in data) {
+                        if (d.startsWith("secret=")) {
+                            val secret = d.split('=', limit = 2)
+                            if (secret.size == 2)
+                                return Pair(secret[1], urlDecode(name[0]))
+                        }
+                    }
+                }
+            }
+        }
+        return Pair(uri, null)
+    }
+
+    private fun urlDecode(url: String): String {
+        return url.replace("%20", " ").replace("%21", "!").replace("%22", "\"").replace("%23", "#")
+            .replace("%24", "$").replace("%25", "%").replace("%26", "&").replace("%27", "'")
+            .replace("%28", "(").replace("%29", ")").replace("%2A", "*").replace("%2B", "+")
+            .replace("%2C", ",").replace("%2D", "-").replace("%2E", ".").replace("%2F", "/")
+            .replace("%3A", ":").replace("%3B", ";").replace("%3C", "<").replace("%3D", "=")
+            .replace("%3E", ">").replace("%3F", "?").replace("%40", "@").replace("%5B", "[")
+            .replace("%5C", "\\").replace("%5D", "]").replace("%7B", "{").replace("%7C", "|")
+            .replace("%7D", "}")
+    }
+
     fun decryptLogin(preferences: SharedPreferences) {
         instance = preferences.getString("instance", encrypt(pinHash, "etopa.de"))?.let {
             decrypt(

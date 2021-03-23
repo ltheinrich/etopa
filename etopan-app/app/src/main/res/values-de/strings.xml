@@ -44,4 +44,6 @@
     <string name="biometric_verify">Mit Biometrie entsperren</string>
     <string name="biometric_error">Biometrische Anmeldung: %1$s</string>
     <string name="disable_biometric">Biometrische Anmeldung deaktivieren</string>
+    <string name="unlocking">Entsperren...</string>
+    <string name="permission_denied">Zugriff abgelehnt</string>
 </resources>
