@@ -38,7 +38,7 @@ export async function reload_storage_data(wasm) {
             return false;
         } catch (err) {
             const old_storage_data = localStorage.getItem("storage_data");
-            if (old_storage_data != null && old_storage_data != undefined && old_storage_data.length > dec.length) {
+            if (old_storage_data != null && old_storage_data.length > dec.length) {
                 localStorage.setItem("bo_storage_data", old_storage_data);
             }
             localStorage.setItem("storage_data", dec);
