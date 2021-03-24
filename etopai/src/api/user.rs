@@ -126,7 +126,8 @@ pub fn change_username(
     // verify login
     if shared.logins().valid(username, token) {
         // check if user already exists
-        if shared.users().cache().contains_key(new_username) {
+        if shared.users().cache().contains_key(new_username) || shared.files().exists(new_username)
+        {
             return Fail::from("new username already exists");
         }
 
@@ -144,7 +145,7 @@ pub fn change_username(
                 .insert(new_username.to_string(), password_hash),
             None => {
                 // revert storage file move
-                shared.files_mut().rename(username, new_username)?;
+                shared.files_mut().rename(new_username, username)?;
                 return Fail::from("internal error: user entry does not exist in cache");
             }
         };
@@ -152,7 +153,7 @@ pub fn change_username(
         // change users file
         if let Err(err) = users.write() {
             // revert storage file move
-            shared.files_mut().rename(username, new_username)?;
+            shared.files_mut().rename(new_username, username)?;
             return Err(err);
         }
 

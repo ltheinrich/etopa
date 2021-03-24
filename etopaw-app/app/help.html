@@ -19,39 +19,46 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./help.js"></script>
-    <div id="vue" class="card container">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-            <a class="navbar-brand" href="../"> <img src="../favicon.png" alt="Etopa" width="22" height="22"
-                    class="d-inline-block align-top"> Etopa</a>
-            <div class="navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-item nav-link active" href="./help.html">{{ lang.help }}</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
-                        <div class="dropdown-menu" id="lang_menu">
-                            <a class="dropdown-item change-lang" href="#" lang="en">English</a>
-                            <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
-                        </div>
-                    </li>
-                </ul>
+    <div id="vue">
+        <div class="card container">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+                <a class="navbar-brand" href="../"> <img src="../favicon.png" alt="Etopa" width="22" height="22"
+                        class="d-inline-block align-top"> Etopa</a>
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-item nav-link active" href="./help.html">{{ lang.help }}</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
+                            <div class="dropdown-menu" id="lang_menu">
+                                <a class="dropdown-item change-lang" href="#" lang="en">English</a>
+                                <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="card-body">
+                <h5>{{ lang.help_qa.download.q }}</h5>
+                <p v-html="lang.help_qa.download.a"></p>
+                <br>
+                <h5>{{ lang.help_qa.what_is.q }}</h5>
+                <p v-html="lang.help_qa.what_is.a"></p>
+                <br>
+                <h5>{{ lang.help_qa.usage.q }}</h5>
+                <p v-html="lang.help_qa.usage.a"></p>
+                <br>
+                <h5>{{ lang.help_qa.questions.q }}</h5>
+                <p v-html="lang.help_qa.questions.a"></p>
             </div>
-        </nav>
-        <div class="card-body">
-            <h5>{{ lang.help_qa.download.q }}</h5>
-            <p v-html="lang.help_qa.download.a"></p>
-            <br>
-            <h5>{{ lang.help_qa.what_is.q }}</h5>
-            <p v-html="lang.help_qa.what_is.a"></p>
-            <br>
-            <h5>{{ lang.help_qa.usage.q }}</h5>
-            <p v-html="lang.help_qa.usage.a"></p>
-            <br>
-            <h5>{{ lang.help_qa.questions.q }}</h5>
-            <p v-html="lang.help_qa.questions.a"></p>
+        </div>
+        <div class="cr container">
+            <a v-bind:href="config.PRIVACY_POLICY">{{ lang.privacy_policy }}</a>
+            &nbsp;/&nbsp;
+            <a href="https://ltheinrich.de/etopa">{{ lang.source_code }}</a>
         </div>
     </div>
     <div class="modal" tabindex="-1" role="dialog" hidden>

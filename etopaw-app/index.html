@@ -19,57 +19,64 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./index.js"></script>
-    <div id="vue" class="card container">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-            <a class="navbar-brand" href="./"> <img src="./favicon.png" alt="Etopa" width="22" height="22"
-                    class="d-inline-block align-top"> Etopa</a>
-            <div class="navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="./app/help.html">{{ lang.help }}</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
-                        <div class="dropdown-menu" id="lang_menu">
-                            <a class="dropdown-item change-lang" href="#" lang="en">English</a>
-                            <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <form id="login" class="card-body" autocomplete="off">
-            <div class="form-group row justify-content-md-center">
-                <label for="username" class="col-12 col-lg-2 col-form-label">{{ lang.username }}</label>
-                <div class="col-12 col-lg-10">
-                    <input type="text" autocomplete="off" class="form-control" id="username"
-                        v-bind:placeholder="lang.username">
+    <div id="vue">
+        <div class="card container">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+                <a class="navbar-brand" href="./"> <img src="./favicon.png" alt="Etopa" width="22" height="22"
+                        class="d-inline-block align-top"> Etopa</a>
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" href="./app/help.html">{{ lang.help }}</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
+                            <div class="dropdown-menu" id="lang_menu">
+                                <a class="dropdown-item change-lang" href="#" lang="en">English</a>
+                                <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div class="form-group row justify-content-md-center">
-                <label for="password" class="col-12 col-lg-2 col-form-label">{{ lang.password }}</label>
-                <div class="col-12 col-lg-10">
-                    <input type="password" autocomplete="off" class="form-control" id="password"
-                        v-bind:placeholder="lang.password">
+            </nav>
+            <form id="login" class="card-body" autocomplete="off">
+                <div class="form-group row justify-content-md-center">
+                    <label for="username" class="col-12 col-lg-2 col-form-label">{{ lang.username }}</label>
+                    <div class="col-12 col-lg-10">
+                        <input type="text" autocomplete="off" class="form-control" id="username"
+                            v-bind:placeholder="lang.username">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row justify-content-md-center">
-                <label for="key" class="col-12 col-lg-2 col-form-label">{{ lang.key }}</label>
-                <div class="col-12 col-lg-10">
-                    <input type="password" autocomplete="new-password" class="form-control" id="key"
-                        v-bind:placeholder="lang.key">
+                <div class="form-group row justify-content-md-center">
+                    <label for="password" class="col-12 col-lg-2 col-form-label">{{ lang.password }}</label>
+                    <div class="col-12 col-lg-10">
+                        <input type="password" autocomplete="off" class="form-control" id="password"
+                            v-bind:placeholder="lang.password">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row justify-content-md-center">
-                <div class="col text-center">
-                    <button type="submit" class="btn btn-primary"
-                        id="login_btn">{{ lang.login }}</button>&nbsp;&nbsp;&nbsp;
-                    <button type="button" class="btn btn-outline-info" id="register">{{ lang.register }}</button>
+                <div class="form-group row justify-content-md-center">
+                    <label for="key" class="col-12 col-lg-2 col-form-label">{{ lang.key }}</label>
+                    <div class="col-12 col-lg-10">
+                        <input type="password" autocomplete="new-password" class="form-control" id="key"
+                            v-bind:placeholder="lang.key">
+                    </div>
                 </div>
-            </div>
-        </form>
+                <div class="form-group row justify-content-md-center">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary" id="login_btn">{{ lang.login
+                            }}</button>&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-outline-info" id="register">{{ lang.register }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="cr container">
+            <a v-bind:href="config.PRIVACY_POLICY">{{ lang.privacy_policy }}</a>
+            &nbsp;/&nbsp;
+            <a href="https://ltheinrich.de/etopa">{{ lang.source_code }}</a>
+        </div>
     </div>
     <div class="modal" tabindex="-1" role="dialog" hidden>
         <div class="modal-dialog" role="document">

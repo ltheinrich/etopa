@@ -37,6 +37,10 @@ export async function reload_storage_data(wasm) {
             vue.username = lang.offline_mode;
             return false;
         } catch (err) {
+            const old_storage_data = localStorage.getItem("storage_data");
+            if (old_storage_data.length > dec.length) {
+                localStorage.setItem("bo_storage_data", old_storage_data);
+            }
             localStorage.setItem("storage_data", dec);
             return true;
         }

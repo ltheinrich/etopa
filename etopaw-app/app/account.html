@@ -19,92 +19,100 @@
     <noscript>Etopa uses <strong>WebAssembly (Rust)</strong> and <strong>JavaScript</strong>
         to provide encryption safely, please consider enabling these in your browser.</noscript>
     <script type="module" src="./account.js"></script>
-    <div id="vue" class="card container">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-            <a class="navbar-brand" href="./"> <img src="../favicon.png" alt="Etopa" width="22" height="22"
-                    class="d-inline-block align-top"> Etopa</a>
-            <div class="navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-item nav-link active" href="./account.html" id="userbtn">{{ lang.account }}</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="#" id="logout">{{ lang.logout }} ({{ username }})</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
-                        <div class="dropdown-menu" id="lang_menu">
-                            <a class="dropdown-item change-lang" href="#" lang="en">English</a>
-                            <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="card-body">
-            <div class="form-row">
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="password" autocomplete="off" class="form-control" id="key"
-                        v-bind:placeholder="lang.key">
+    <div id="vue">
+        <div class="card container">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+                <a class="navbar-brand" href="./"> <img src="../favicon.png" alt="Etopa" width="22" height="22"
+                        class="d-inline-block align-top"> Etopa</a>
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-item nav-link active" href="./account.html" id="userbtn">{{ lang.account
+                                }}</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" href="#" id="logout">{{ lang.logout }} ({{ username }})</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="lang_btn">{{ lang.language }}</a>
+                            <div class="dropdown-menu" id="lang_menu">
+                                <a class="dropdown-item change-lang" href="#" lang="en">English</a>
+                                <a class="dropdown-item change-lang" href="#" lang="de">Deutsch</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <br>
-            <form id="change_username" class="form-row" autocomplete="off">
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="text" autocomplete="off" class="form-control" id="new_username"
-                        v-bind:placeholder="lang.new_username">
-                </div>
-                <div class="col-lg-4"></div>
-                <div class="col-12 col-lg-4 text-center">
-                    <button id="change_username_btn" type="submit"
-                        class="btn btn-outline-warning">{{ lang.change_username }}</button>
-                </div>
-            </form>
-            <br>
-            <form id="change_password" class="form-row" autocomplete="off">
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="password" autocomplete="off" class="form-control" id="new_password"
-                        v-bind:placeholder="lang.new_password">
-                </div>
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="password" autocomplete="off" class="form-control" id="repeat_new_password"
-                        v-bind:placeholder="lang.repeat_new_password">
-                </div>
-                <div class="col-12 col-lg-4 text-center">
-                    <button id="change_password_btn" type="submit"
-                        class="btn btn-outline-warning">{{ lang.change_password }}</button>
-                </div>
-            </form>
-            <br>
-            <form id="change_key" class="form-row" autocomplete="off">
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="password" autocomplete="off" class="form-control" id="new_key"
-                        v-bind:placeholder="lang.new_key">
-                </div>
-                <div class="col-12 col-lg-4 text-center">
-                    <input type="password" autocomplete="off" class="form-control" id="repeat_new_key"
-                        v-bind:placeholder="lang.repeat_new_key">
-                </div>
-                <div class="col-12 col-lg-4 text-center">
-                    <button id="change_key_btn" type="submit"
-                        class="btn btn-outline-warning">{{ lang.change_key }}</button>
-                </div>
-            </form>
-            <br>
-            <hr>
-            <div id="delete_user" class="row">
-                <div class="col text-center">
-                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" id="delete_user_check">
-                        <label class="custom-control-label" for="delete_user_check">{{ lang.delete_user }}</label>
+            </nav>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="password" autocomplete="off" class="form-control" id="key"
+                            v-bind:placeholder="lang.key">
                     </div>
-                    <br>
-                    <button id="delete_user_btn" type="submit" class="btn btn-danger"
-                        hidden>{{ lang.delete_user }}</button>
+                </div>
+                <br>
+                <form id="change_username" class="form-row" autocomplete="off">
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="text" autocomplete="off" class="form-control" id="new_username"
+                            v-bind:placeholder="lang.new_username">
+                    </div>
+                    <div class="col-lg-4"></div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <button id="change_username_btn" type="submit" class="btn btn-outline-warning">{{
+                            lang.change_username }}</button>
+                    </div>
+                </form>
+                <br>
+                <form id="change_password" class="form-row" autocomplete="off">
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="password" autocomplete="off" class="form-control" id="new_password"
+                            v-bind:placeholder="lang.new_password">
+                    </div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="password" autocomplete="off" class="form-control" id="repeat_new_password"
+                            v-bind:placeholder="lang.repeat_new_password">
+                    </div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <button id="change_password_btn" type="submit" class="btn btn-outline-warning">{{
+                            lang.change_password }}</button>
+                    </div>
+                </form>
+                <br>
+                <form id="change_key" class="form-row" autocomplete="off">
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="password" autocomplete="off" class="form-control" id="new_key"
+                            v-bind:placeholder="lang.new_key">
+                    </div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="password" autocomplete="off" class="form-control" id="repeat_new_key"
+                            v-bind:placeholder="lang.repeat_new_key">
+                    </div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <button id="change_key_btn" type="submit" class="btn btn-outline-warning">{{ lang.change_key
+                            }}</button>
+                    </div>
+                </form>
+                <br>
+                <hr>
+                <div id="delete_user" class="row">
+                    <div class="col text-center">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            <input type="checkbox" class="custom-control-input" id="delete_user_check">
+                            <label class="custom-control-label" for="delete_user_check">{{ lang.delete_user }}</label>
+                        </div>
+                        <br>
+                        <button id="delete_user_btn" type="submit" class="btn btn-danger" hidden>{{ lang.delete_user
+                            }}</button>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="cr container">
+            <a v-bind:href="config.PRIVACY_POLICY">{{ lang.privacy_policy }}</a>
+            &nbsp;/&nbsp;
+            <a href="https://ltheinrich.de/etopa">{{ lang.source_code }}</a>
         </div>
     </div>
     <div class="modal" tabindex="-1" role="dialog" hidden>

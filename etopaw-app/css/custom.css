@@ -4,7 +4,7 @@
 @media (min-width: 992px) {
   .card {
     margin-top: 3%;
-    margin-bottom: 3%;
+    margin-bottom: 5px;
   }
 
   .time-left-progress {
@@ -89,6 +89,21 @@
 
 .ten-top-margin {
   margin-top: 10px;
+}
+
+.cr {
+  margin-bottom: 10px;
+  text-align: right;
+  color: gray;
+}
+
+.cr a {
+  color: gray;
+}
+
+.cr a:hover {
+  text-decoration: none;
+  color: darkgray;
 }
 
 @font-face {font-family: 'Source Sans Pro';font-style: normal;font-weight: 300;font-display: swap;src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url('../fonts/source-sans-pro-v13-latin-300.woff2') format('woff2');}@font-face {font-family: 'Source Sans Pro';font-style: normal;font-weight: 400;font-display: swap;src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'),url('../fonts/source-sans-pro-v13-latin-regular.woff2') format('woff2');}@font-face {font-family: 'Source Sans Pro';font-style: italic;font-weight: 400;font-display: swap;src: local('Source Sans Pro Italic'), local('SourceSansPro-Italic'),url('../fonts/source-sans-pro-v13-latin-italic.woff2') format('woff2');}@font-face {font-family: 'Source Sans Pro';font-style: normal;font-weight: 700;font-display: swap;src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),url('../fonts/source-sans-pro-v13-latin-700.woff2') format('woff2');}

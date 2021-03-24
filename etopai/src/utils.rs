@@ -34,7 +34,7 @@ pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str
     let an = get_str(data, key)?;
 
     // check if alphanumeric
-    if !an.chars().all(char::is_alphanumeric) {
+    if an.is_empty() || !an.chars().all(char::is_alphanumeric) {
         return Fail::from(format!("{} is not alphanumeric", key));
     }
 
@@ -184,7 +184,7 @@ impl UserFiles {
     /// Create storage file
     pub fn create(&mut self, name: &str) -> Result<(), Fail> {
         // check if alphanumeric
-        if !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -211,7 +211,7 @@ impl UserFiles {
     /// Read access on existing storage file
     pub fn read(&self, name: &str) -> Result<RwLockReadGuard<StorageFile>, Fail> {
         // check if alphanumeric
-        if !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -225,7 +225,7 @@ impl UserFiles {
     /// Write access on storage file (create if not existent)
     pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<StorageFile>, Fail> {
         // check if alphanumeric
-        if !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -239,7 +239,7 @@ impl UserFiles {
     /// Delete storage file
     pub fn delete(&mut self, name: &str) -> Result<(), Fail> {
         // check if alphanumeric
-        if !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
         }
 

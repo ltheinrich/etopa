@@ -82,7 +82,9 @@ export const lang = {
         no_action_selected: "No action selected",
         repeat_secret_name: "Repeat secret name \"$name\"",
         repeat_name_incorrect: "Repeated name is incorrect",
-        sure_to_rename_to: "Are you really sure to rename \"$name\" to \"$new_name\"?"
+        sure_to_rename_to: "Are you really sure to rename \"$name\" to \"$new_name\"?",
+        source_code: "Source code",
+        privacy_policy: "Privacy policy"
     },
     de: {
         login: "Anmelden",
@@ -166,6 +168,8 @@ export const lang = {
         no_action_selected: "Keine Aktion ausgewählt",
         repeat_secret_name: "Geheimnis-Namen \"$name\" wiederholen",
         repeat_name_incorrect: "Der wiederholte Name ist inkorrekt",
-        sure_to_rename_to: "Geheimnis \"$name\" wirklich in \"$new_name\" umbenennen?"
+        sure_to_rename_to: "Geheimnis \"$name\" wirklich in \"$new_name\" umbenennen?",
+        source_code: "Quelltext",
+        privacy_policy: "Datenschutzerklärung"
     }
 };
