@@ -7,15 +7,13 @@
     <string name="etopa_instance">Etopa instance</string>
     <string name="default_instance" translatable="false">etopa.de</string>
     <string name="inputs_empty">Input fields are empty</string>
-    <string name="pin">PIN</string>
+    <string name="pin" translatable="false">PIN</string>
     <string name="unlock">Unlock</string>
     <string name="set_pin">Set PIN</string>
     <string name="pin_set">PIN successfully set</string>
     <string name="incorrect_pin">Incorrect PIN</string>
-    <string name="valid_pin">Valid PIN</string>
     <string name="incorrect_login">Incorrect login data</string>
     <string name="network_unreachable">Network unreachable</string>
-    <string name="offline_mode">Offline mode</string>
     <string name="decryption_failed">Decryption failed</string>
     <string name="settings">Settings</string>
     <string name="licenses">Licenses</string>
@@ -27,12 +25,12 @@
     <string name="edit_secret">Edit secret</string>
     <string name="name">Name</string>
     <string name="delete_secret">Delete secret</string>
-    <string name="type_secret_name">Type secret name ...</string>
+    <string name="type_secret_name">Type secret name</string>
     <string name="edit_var">\'%1$s\' edit</string>
     <string name="confirm_deletion">Confirm deletion</string>
     <string name="failed_error">Failed (unknown error)</string>
     <string name="secret_deleted">Secret deleted</string>
-    <string name="sending_request">Sending request...</string>
+    <string name="sending_request">Sending request</string>
     <string name="success">Success</string>
     <string name="name_exists">Name already exists</string>
     <string name="add">Add</string>
@@ -46,6 +44,5 @@
     <string name="biometric_verify">Unlock using biometric authentication</string>
     <string name="biometric_error">Biometric unlock: %1$s</string>
     <string name="disable_biometric">Disable biometric login</string>
-    <string name="unlocking">Unlocking...</string>
     <string name="permission_denied">Permission denied</string>
 </resources>

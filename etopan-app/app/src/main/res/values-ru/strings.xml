@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">логин</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="key">шифр</string>
+    <string name="etopa_instance">Etopa инстанция</string>
+    <string name="inputs_empty">Поля ввода пустые</string>
+    <string name="unlock">Разблокировать</string>
+    <string name="set_pin">Установить PIN-код</string>
+    <string name="pin_set">PIN-код успешно установлен</string>
+    <string name="incorrect_pin">Неверный PIN-код</string>
+    <string name="incorrect_login">Неверные данные для входа</string>
+    <string name="network_unreachable">Сеть недоступна</string>
+    <string name="decryption_failed">Расшифровка не удалась</string>
+    <string name="settings">Настройки</string>
+    <string name="licenses">Лицензии</string>
+    <string name="save">Сохранить</string>
+    <string name="settings_saved">Настройки сохранены</string>
+    <string name="rename">Переименовать</string>
+    <string name="delete">Удалить</string>
+    <string name="edit_secret">Изменить секрет</string>
+    <string name="name">Имя</string>
+    <string name="delete_secret">Удалить секрет</string>
+    <string name="type_secret_name">Введите секретное имя</string>
+    <string name="edit_var">\'%1$1\' редактировать</string>
+    <string name="confirm_deletion">Подтвердить удаление</string>
+    <string name="failed_error">Не удалось (неизвестная ошибка)</string>
+    <string name="secret_deleted">Секрет удален</string>
+    <string name="sending_request">Отправка запроса</string>
+    <string name="success">Успех</string>
+    <string name="name_exists">Регистрация аккаунта</string>
+    <string name="add">Создавать</string>
+    <string name="secret">Секрет</string>
+    <string name="secret_added">Секрет добавлен</string>
+    <string name="account_registration">Регистрация аккаунта</string>
+    <string name="invalid_secret">Неверный секрет</string>
+    <string name="cancel">Отмена</string>
+    <string name="biometric_unlock">Биометрическая разблокировка</string>
+    <string name="biometric_setup">Настройка биометрической разблокировки</string>
+    <string name="biometric_verify">Разблокировать с помощью биометрической аутентификации</string>
+    <string name="biometric_error">Биометрическая разблокировка: %1$s</string>
+    <string name="disable_biometric">Отключить биометрический логин</string>
+    <string name="permission_denied">Разрешение отказано</string>
+</resources>

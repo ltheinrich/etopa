@@ -6,15 +6,12 @@
     <string name="key">Schlüssel</string>
     <string name="etopa_instance">Etopa Instanz</string>
     <string name="inputs_empty">Eingabefelder sind leer</string>
-    <string name="pin">PIN</string>
     <string name="unlock">Entsperren</string>
     <string name="set_pin">PIN festlegen</string>
     <string name="pin_set">PIN erfolgreich gesetzt</string>
     <string name="incorrect_pin">Falsche PIN</string>
-    <string name="valid_pin">Gültige PIN</string>
     <string name="incorrect_login">Ungültige Anmeldedaten</string>
     <string name="network_unreachable">Netzwerk unerreichbar</string>
-    <string name="offline_mode">Offline-Modus</string>
     <string name="decryption_failed">Entschlüsselung fehlgeschlagen</string>
     <string name="settings">Einstellungen</string>
     <string name="licenses">Lizenzen</string>
@@ -30,7 +27,7 @@
     <string name="confirm_deletion">Löschen bestätigen</string>
     <string name="failed_error">Fehlgeschlagen (unbekannter Fehler)</string>
     <string name="secret_deleted">Geheimnis gelöscht</string>
-    <string name="sending_request">Sende Anfrage...</string>
+    <string name="sending_request">Sende Anfrage</string>
     <string name="success">Erfolgreich</string>
     <string name="name_exists">Name existiert bereits</string>
     <string name="add">Hinzufügen</string>
@@ -44,6 +41,5 @@
     <string name="biometric_verify">Mit Biometrie entsperren</string>
     <string name="biometric_error">Biometrische Anmeldung: %1$s</string>
     <string name="disable_biometric">Biometrische Anmeldung deaktivieren</string>
-    <string name="unlocking">Entsperren...</string>
     <string name="permission_denied">Zugriff abgelehnt</string>
 </resources>

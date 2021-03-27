@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">로그인</string>
+    <string name="username">사용자 이름</string>
+    <string name="password">암호</string>
+    <string name="key">열쇠</string>
+    <string name="etopa_instance">Etopa 인스턴스</string>
+    <string name="inputs_empty">입력 필드가 비어 있습니다.</string>
+    <string name="unlock">터놓다</string>
+    <string name="set_pin">PIN 설정</string>
+    <string name="pin_set">PIN이 설정되었습니다.</string>
+    <string name="incorrect_pin">잘못된 PIN</string>
+    <string name="incorrect_login">잘못된 로그인 데이터</string>
+    <string name="network_unreachable">네트워크에 연결할 수 없음</string>
+    <string name="decryption_failed">복호화 실패</string>
+    <string name="settings">설정</string>
+    <string name="licenses">라이선스</string>
+    <string name="save">저장</string>
+    <string name="settings_saved">설정이 저장되었습니다</string>
+    <string name="rename">이름 바꾸기</string>
+    <string name="delete">지우다</string>
+    <string name="edit_secret">비밀 수정</string>
+    <string name="name">이름</string>
+    <string name="delete_secret">비밀 삭제</string>
+    <string name="type_secret_name">비밀 이름 입력</string>
+    <string name="edit_var">%1$1\' 편집하다</string>
+    <string name="confirm_deletion">삭제 확인</string>
+    <string name="failed_error">실패 (알 수없는 오류)</string>
+    <string name="secret_deleted">비밀이 삭제되었습니다.</string>
+    <string name="sending_request">요청을 보내는 중</string>
+    <string name="success">성공</string>
+    <string name="name_exists">이름이 이미 있습니다.</string>
+    <string name="add">더하다</string>
+    <string name="secret">비밀</string>
+    <string name="secret_added">비밀 추가</string>
+    <string name="account_registration">계정 등록</string>
+    <string name="invalid_secret">잘못된 비밀</string>
+    <string name="cancel">취소</string>
+    <string name="biometric_unlock">생체 인식 잠금 해제</string>
+    <string name="biometric_setup">생체 인식 잠금 해제 설정</string>
+    <string name="biometric_verify">생체 인증을 사용하여 잠금 해제</string>
+    <string name="biometric_error">생체 인식 잠금 해제: %1$s</string>
+    <string name="disable_biometric">생체 인식 로그인 비활성화</string>
+    <string name="permission_denied">권한이 거부되었습니다.</string>
+</resources>

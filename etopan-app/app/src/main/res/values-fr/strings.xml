@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Login</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="key">Clé</string>
+    <string name="etopa_instance">Etopa instance</string>
+    <string name="inputs_empty">Les champs de saisie sont vides</string>
+    <string name="unlock">Ouvrir</string>
+    <string name="set_pin">Définir le code PIN</string>
+    <string name="pin_set">PIN correctement défini</string>
+    <string name="incorrect_pin">PIN incorrect</string>
+    <string name="incorrect_login">Données de connexion incorrectes</string>
+    <string name="network_unreachable">Réseau inaccessible</string>
+    <string name="decryption_failed">Décryptage échoué</string>
+    <string name="settings">Paramètres</string>
+    <string name="licenses">Licences</string>
+    <string name="save">Sauvegarder</string>
+    <string name="settings_saved">Paramètres sauvegardés</string>
+    <string name="rename">Renommer</string>
+    <string name="delete">Effacer</string>
+    <string name="edit_secret">Modifier le secret</string>
+    <string name="name">Nom</string>
+    <string name="delete_secret">Supprimer le secret</string>
+    <string name="type_secret_name">Tapez le nom secret</string>
+    <string name="edit_var">\'%1$s\' éditer</string>
+    <string name="confirm_deletion">Confirmer la suppression</string>
+    <string name="failed_error">Échec (erreur inconnue)</string>
+    <string name="secret_deleted">Secret supprimé</string>
+    <string name="sending_request">Envoyer une requete</string>
+    <string name="success">Succès</string>
+    <string name="name_exists">Le nom existe déjà</string>
+    <string name="add">Ajouter</string>
+    <string name="secret">Secret</string>
+    <string name="secret_added">Secret ajouté</string>
+    <string name="account_registration">Enregistrement du Compte</string>
+    <string name="invalid_secret">Secret invalide</string>
+    <string name="cancel">Annuler</string>
+    <string name="biometric_unlock">Déverrouillage biométrique</string>
+    <string name="biometric_setup">Configuration pour le déverrouillage biométrique</string>
+    <string name="biometric_verify">Déverrouiller à l\'aide de l\'authentification biométrique</string>
+    <string name="biometric_error">Déverrouillage biométrique: %1$s</string>
+    <string name="disable_biometric">Désactiver le login biométrique</string>
+    <string name="permission_denied">Permission refusée</string>
+</resources>

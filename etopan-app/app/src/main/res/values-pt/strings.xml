@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_denied">Permissão negada</string>
+    <string name="login">Conecte-se</string>
+    <string name="username">Nome de usuário</string>
+    <string name="password">Senha</string>
+    <string name="key">Chave</string>
+    <string name="etopa_instance">Etopa instância</string>
+    <string name="inputs_empty">Campos de entrada estão vazios</string>
+    <string name="unlock">Desbloquear</string>
+    <string name="set_pin">Definir PIN</string>
+    <string name="pin_set">PIN definido com sucesso</string>
+    <string name="incorrect_pin">PIN incorreto</string>
+    <string name="incorrect_login">Dados de login incorretos</string>
+    <string name="network_unreachable">Rede inacessível</string>
+    <string name="decryption_failed">A desencriptação falhou</string>
+    <string name="settings">Definições</string>
+    <string name="licenses">Licenças</string>
+    <string name="save">Salvar</string>
+    <string name="settings_saved">Configurações salvas</string>
+    <string name="rename">Renomear</string>
+    <string name="delete">Excluir</string>
+    <string name="edit_secret">Editar segredo</string>
+    <string name="name">Nome</string>
+    <string name="delete_secret">Excluir segredo</string>
+    <string name="type_secret_name">Digite o nome do segredo</string>
+    <string name="edit_var">\'%1$s\' edição</string>
+    <string name="confirm_deletion">Confirme a exclusão</string>
+    <string name="failed_error">Falha (erro desconhecido)</string>
+    <string name="secret_deleted">Segredo excluído</string>
+    <string name="sending_request">Enviando solicitação</string>
+    <string name="success">Sucesso</string>
+    <string name="name_exists">Nome já existe</string>
+    <string name="add">Adicionar</string>
+    <string name="secret">Segredo</string>
+    <string name="secret_added">Segredo adicionado</string>
+    <string name="account_registration">Registro de conta</string>
+    <string name="invalid_secret">Segredo inválido</string>
+    <string name="cancel">Cancelar</string>
+    <string name="biometric_unlock">Desbloqueio biométrico</string>
+    <string name="biometric_setup">Configuração para desbloqueio biométrico</string>
+    <string name="biometric_verify">Desbloquear usando autenticação biométrica</string>
+    <string name="biometric_error">Desbloqueio biométrico: %1$s</string>
+    <string name="disable_biometric">Desativar login biométrico</string>
+</resources>
