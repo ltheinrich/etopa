@@ -1,5 +1,4 @@
 import * as config_import from "../config.js";
-import { lang as lang_import } from "./lang.js";
 import init, * as wasm from "../pkg/etopaw.js";
 
 let valid_login = false;
@@ -224,7 +223,8 @@ export function confirm(text = "", exec_fn = async function () { }, custom_body)
 }
 
 export const config = config_import;
-export let lang = lang_import[localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")];
+export let lang = { help_qa: { download: {}, what_is: {}, usage: {}, questions: {} } };
+import("./" + (localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")) + ".js").then((module) => { lang = module.lang; vue.lang = lang; });
 
 export function set_lang(lang) {
     if (lang == undefined) {
