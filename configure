@@ -4,8 +4,12 @@ set -e
 source ~/.profile
 
 distro=`lsb_release -is`
-
 mkdir -p /tmp/etopa-configure
+
+if [[ -z "${TERM}" ]]; then
+  export TERM=xterm-256color
+fi
+
 bold=$(tput bold)
 italic=$(tput sitm)
 underline=$(tput smul)
