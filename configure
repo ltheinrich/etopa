@@ -15,6 +15,7 @@ if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
   sudo dnf -y groupinstall "Development Tools"
   sudo dnf -y install python java-latest-openjdk-devel gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config
 elif [ $distro == "Debian" ] || [ $distro == "Ubuntu" ]; then
+  sudo apt update
   sudo apt -y install build-essential python default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config
 else
   echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"

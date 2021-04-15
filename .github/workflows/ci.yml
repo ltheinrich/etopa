@@ -35,9 +35,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Dependencies
-        run: sudo apt update && sudo apt -y install musl-tools
-
       - name: Rust Toolchain
         id: rust-toolchain
         uses: actions-rs/toolchain@v1
@@ -51,7 +48,7 @@ jobs:
           path: |
             /usr/local/lib/android/sdk/ndk
             /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-configure-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-1
+          key: ${{ runner.os }}-configure-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/configure') }}
 
       - name: Cargo Cache
         uses: actions/cache@v2
@@ -65,7 +62,7 @@ jobs:
       - name: Configure
         if: steps.configure-cache.outputs.cache-hit != 'true'
         env:
-          ANDROID_SDK_MANAGER: ${ANDROID_HOME}/tools/bin/sdkmanager
+          ANDROID_SDK_MANAGER: $ANDROID_HOME/tools/bin/sdkmanager
         run: |
           ./configure
 
