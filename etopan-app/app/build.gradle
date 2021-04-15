@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-    ndkVersion "22.0.7026061"
+    ndkVersion "22.1.7171670"
 
     defaultConfig {
         applicationId "de.ltheinrich.etopa"
@@ -35,6 +35,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 

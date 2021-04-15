@@ -35,6 +35,7 @@ class AddActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = AppActivity::class.java
+        common.lockListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -99,7 +100,7 @@ class AddActivity : AppCompatActivity() {
         }
 
         common.hideKeyboard(currentFocus)
-        if (common.storage.map.containsKey(secretName)) {
+        if (common.storage!!.map.containsKey(secretName)) {
             return common.toast(R.string.name_exists)
         } else if (common.generateToken(secretValue) == "invalid") {
             return common.toast(R.string.invalid_secret)
@@ -132,8 +133,4 @@ class AddActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
-    override fun onPause() {
-        common.lockOnPause()
-        super.onPause()
-    }
 }

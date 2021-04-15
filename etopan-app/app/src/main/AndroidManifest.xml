@@ -19,38 +19,28 @@
         android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:clearTaskOnLaunch="true">
+            android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".AppActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:noHistory="false"
-            android:clearTaskOnLaunch="true" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LicensesActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:noHistory="false"
-            android:clearTaskOnLaunch="true" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".SettingsActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="false"
-            android:clearTaskOnLaunch="true" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".EditActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="false"
-            android:clearTaskOnLaunch="true" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".AddActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:noHistory="false"
-            android:clearTaskOnLaunch="true" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
     </application>
 
 </manifest>

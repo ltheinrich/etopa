@@ -15,7 +15,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Format
         run: cargo fmt --all --verbose -- --check
@@ -44,20 +44,14 @@ jobs:
         with:
           toolchain: stable
 
-      - name: NDK Cache
-        id: ndk-cache
-        uses: actions/cache@v2
-        with:
-          path: /usr/local/lib/android/sdk/ndk
-          key: ${{ runner.os }}-ndk-cache-22.0.7026061-1
-
-      - name: Binary Cache
-        id: bin-cache
+      - name: Configure Cache
+        id: configure-cache
         uses: actions/cache@v2
         with:
           path: |
+            /usr/local/lib/android/sdk/ndk
             /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-bin-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-3
+          key: ${{ runner.os }}-configure-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-1
 
       - name: Cargo Cache
         uses: actions/cache@v2
@@ -66,26 +60,19 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-1
+          key: ${{ runner.os }}-cargo-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Android NDK
-        if: steps.ndk-cache.outputs.cache-hit != 'true'
-        run: yes | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061"
-
-      - name: Cargo Tools
-        if: steps.bin-cache.outputs.cache-hit != 'true'
+      - name: Configure
+        if: steps.configure-cache.outputs.cache-hit != 'true'
+        env:
+          ANDROID_SDK_MANAGER: ${ANDROID_HOME}/tools/bin/sdkmanager
         run: |
-          cargo install cargo-license cargo-edit wasm-pack
-
-      - name: Build Tools
-        run: |
-          curl -L -o ~/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
-          curl -L https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0
+          ./configure
 
       - name: Make
         env:
-          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/22.0.7026061
           DEBUG_SIGN: y
-          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
+          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/*
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/*/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
-          make android & make web api && fg || true
+          make

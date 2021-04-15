@@ -12,11 +12,11 @@ CARGO_UPGRADE?=cargo upgrade
 NATIVE_TARGET_CPU?=native
 
 # android
-NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/bin
+NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
 export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
 ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
-BUNDLETOOL_JAR?=~/.bundletool-all.jar
+BUNDLETOOL_JAR?=~/.bundletool-1.5.0.jar
 ANDROID_APK_FILE?=etopa.apk
 ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
@@ -35,7 +35,7 @@ DEBUG_JKS_ALIAS?=androiddebugkey
 # web
 WEB_FILE_NAME?=etopa.tar.xz
 WASM_PACK_EXEC?=wasm-pack
-GOMINIFY_EXEC?=minify-v2.9.15
+GOMINIFY_EXEC?=minify-v2.8.0 # update to 2.9.17 (import calls bug)
 TEMP_EWM?=/tmp/etopa_ewm
 
 .PHONY: build upgrade check api web android clean

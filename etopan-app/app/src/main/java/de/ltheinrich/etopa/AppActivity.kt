@@ -35,6 +35,7 @@ class AppActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = MainActivity::class.java
+        common.lockListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -60,7 +61,7 @@ class AppActivity : AppCompatActivity() {
 
     private fun handleStorage(secureStorage: String, update: Boolean = true) {
         common.storage = Storage(common, secureStorage)
-        if (common.storage.map.containsValue(""))
+        if (common.storage!!.map.containsValue(""))
             common.toast(R.string.decryption_failed)
         else if (update)
             preferences.edit()
@@ -87,7 +88,7 @@ class AppActivity : AppCompatActivity() {
 
     private fun updateTokens() {
         tokens.clear()
-        for (secret in common.storage.map) {
+        for (secret in common.storage!!.map) {
             tokens.add(
                 Pair(
                     secret.key,
@@ -118,23 +119,7 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    private var focused: Boolean = false
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        focused = hasFocus
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (!focused)
-            finish()
-    }
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
-    override fun onPause() {
-        common.lockOnPause()
-        super.onPause()
-    }
 }

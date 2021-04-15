@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = MainActivity::class.java
+        common.lockListener(this)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         pinSet = preferences.getString("pin_set", null)

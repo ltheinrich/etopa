@@ -35,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             common.backActivity = AppActivity::class.java
         }
+        common.lockListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -130,8 +131,4 @@ class SettingsActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
-    override fun onPause() {
-        common.lockOnPause()
-        super.onPause()
-    }
 }

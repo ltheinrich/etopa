@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 source ~/.profile
 
 distro=`lsb_release -is`
@@ -82,20 +83,26 @@ if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
   mv /tmp/etopa-configure/cmdline-tools $HOME/.android/sdk/cmdline-tools/latest
   rm /tmp/etopa-configure/android-tools.zip
 fi
-yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3" "platforms;android-30" "ndk;22.0.7026061"
-yes | $HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
+SDK_MANAGER=$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager
+if [[ ! -z "${ANDROID_SDK_MANAGER}" ]] && [[ "${ANDROID_SDK_MANAGER}" == */sdkmanager ]]; then
+  SDK_MANAGER="${ANDROID_SDK_MANAGER}"
+fi
+yes | $SDK_MANAGER "build-tools;30.0.3" "platforms;android-30" "ndk;22.1.7171670"
+yes | $SDK_MANAGER --licenses
+
 
 echo android | keytool -list -keystore ~/.android/debug.keystore > /dev/null 2>&1
 if ! [ $? -eq 0 ]; then
   keytool -genkey -v -keystore $HOME/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 fi
 
-if ! [ -f "$HOME/.bundletool-all.jar" ]; then
-  curl -L -o $HOME/.bundletool-all.jar https://github.com/google/bundletool/releases/download/1.4.0/bundletool-all-1.4.0.jar
+if ! [ -f "$HOME/.bundletool-1.5.0.jar" ]; then
+  curl -L -o $HOME/.bundletool-1.5.0.jar https://github.com/google/bundletool/releases/download/1.5.0/bundletool-all-1.5.0.jar
 fi
 
-if ! [ -f "/usr/local/bin/minify-v2.9.15" ]; then
-  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v2.9.15/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.9.15)
+if ! [ -f "/usr/local/bin/minify-v2.8.0" ]; then
+  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v2.8.0/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v2.8.0)
 fi
 
 rm -rf /tmp/etopa-configure

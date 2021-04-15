@@ -33,6 +33,7 @@ class EditActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = AppActivity::class.java
+        common.lockListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -101,7 +102,7 @@ class EditActivity : AppCompatActivity() {
             }
 
             common.hideKeyboard(currentFocus)
-            if (common.storage.map.containsKey(secretNewName)) {
+            if (common.storage!!.map.containsKey(secretNewName)) {
                 common.toast(R.string.name_exists)
                 return@setOnClickListener
             }
@@ -132,8 +133,4 @@ class EditActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
-    override fun onPause() {
-        common.lockOnPause()
-        super.onPause()
-    }
 }

@@ -2,13 +2,8 @@ package de.ltheinrich.etopa.utils
 
 import android.app.Activity
 import android.app.ActivityManager
-import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
-import android.content.ClipData
-import android.content.ClipboardManager
+import android.content.*
 import android.content.Context.POWER_SERVICE
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
@@ -33,6 +28,7 @@ import org.json.JSONObject
 import java.util.*
 import kotlin.reflect.KClass
 
+
 typealias Handler = (response: JSONObject) -> Unit
 typealias StringHandler = (response: String) -> Unit
 typealias ErrorHandler = (error: VolleyError) -> Unit
@@ -56,12 +52,12 @@ enum class MenuType {
 
 class Common constructor(activity: Activity) {
 
-    lateinit var instance: String
-    lateinit var username: String
-    lateinit var passwordHash: String
-    lateinit var keyHash: String
-    lateinit var token: String
-    lateinit var storage: Storage
+    var instance: String? = null
+    var username: String = ""
+    var passwordHash: String = ""
+    var keyHash: String = ""
+    var token: String = ""
+    var storage: Storage? = null
     var pinHash: String = ""
     var backActivity: Class<*> = MainActivity::class.java
     var offline: Boolean = false
@@ -90,14 +86,13 @@ class Common constructor(activity: Activity) {
     }
 
     fun backKey(keyCode: Int): Boolean {
+        Log.d("Moo", "???!?")
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (backActivity == AppActivity::class.java && pinHash.isEmpty())
                 openActivity(MainActivity::class)
             else if (backActivity == MainActivity::class.java) {
-                val intent = Intent(activity.applicationContext, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                intent.putExtra("exitApp", true)
-                activity.startActivity(intent)
+                Log.d("Booo", "WTF")
+                activity.moveTaskToBack(true)
             } else
                 openActivity(backActivity)
             return true
@@ -118,9 +113,25 @@ class Common constructor(activity: Activity) {
         return true
     }
 
-    fun lockOnPause() {
-        if (checkBackground())
-            openActivity(MainActivity::class)
+    fun lockListener(activity: Activity) {
+        Log.d("Test", "Hallo1")
+        val intentFilter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+        activity.registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                if (intent.action == Intent.ACTION_SCREEN_OFF) {
+                    Log.d("Test", Intent.ACTION_SCREEN_OFF)
+                    triggerRestart(activity)
+                }
+            }
+        }, intentFilter)
+    }
+
+    fun triggerRestart(context: Activity) {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        context.finish()
+        Runtime.getRuntime().exit(0)
     }
 
     fun parseSecretUri(uri: String): Pair<String, String?> {
@@ -184,11 +195,11 @@ class Common constructor(activity: Activity) {
         val editor = preferences.edit()
         val defaultInstance = activity.getString(R.string.default_instance)
 
-        if (instance.isEmpty() || instance == defaultInstance) {
+        if (instance.isNullOrEmpty() || instance == defaultInstance) {
             editor.remove("instance")
             instance = defaultInstance
         } else {
-            editor.putString("instance", encrypt(pinHash, instance))
+            editor.putString("instance", encrypt(pinHash, instance!!))
         }
 
         if (passwordHash == emptyPasswordHash) {
@@ -359,8 +370,8 @@ class Common constructor(activity: Activity) {
         ActivityManager.getMyMemoryState(appProcessInfo)
         val powerManager = activity.getSystemService(POWER_SERVICE) as PowerManager
         @Suppress("DEPRECATION")
-        return !(if (checkSdk(Build.VERSION_CODES.KITKAT_WATCH)) powerManager.isInteractive else powerManager.isScreenOn) ||
-                !(appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE)
+        return !(if (checkSdk(Build.VERSION_CODES.KITKAT_WATCH)) powerManager.isInteractive else powerManager.isScreenOn)
+        /* && !(appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) */
     }
 
     fun biometricAvailable(): Boolean {
