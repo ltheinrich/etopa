@@ -69,7 +69,7 @@ jobs:
       - name: Make
         env:
           DEBUG_SIGN: y
-          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/*
-          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/*/toolchains/llvm/prebuilt/linux-x86_64/bin
+          NDK_BIN_PATH: /usr/local/lib/android/sdk/ndk/22.1.7171670
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
           make
