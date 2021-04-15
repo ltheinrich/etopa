@@ -6,12 +6,10 @@ source ~/.profile
 distro=`lsb_release -is`
 mkdir -p /tmp/etopa-configure
 
-if [[ ! -z "${TERM}" ]]; then
-  bold=$(tput bold)
-  italic=$(tput sitm)
-  underline=$(tput smul)
-  normal=$(tput sgr0)
-fi
+bold=$(TERM=xterm-256color tput bold)
+italic=$(TERM=xterm-256color tput sitm)
+underline=$(TERM=xterm-256color tput smul)
+normal=$(TERM=xterm-256color tput sgr0)
 
 if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
   sudo dnf -y groupinstall "Development Tools"
