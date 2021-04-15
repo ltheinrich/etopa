@@ -7,7 +7,8 @@ distro=`lsb_release -is`
 mkdir -p /tmp/etopa-configure
 
 if [[ -z "${TERM}" ]]; then
-  export TERM=xterm-256color
+  tput setab n
+  tput clear
 fi
 
 bold=$(tput bold)
