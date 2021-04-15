@@ -62,7 +62,7 @@ jobs:
       - name: Configure
         if: steps.configure-cache.outputs.cache-hit != 'true'
         env:
-          ANDROID_SDK_MANAGER: $ANDROID_HOME/tools/bin/sdkmanager
+          ANDROID_SDK_MANAGER: ${{ env.ANDROID_HOME }}/tools/bin/sdkmanager
         run: |
           ./configure
 
