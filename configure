@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-source ~/.profile
+source $HOME/.profile
 
 distro=`lsb_release -is`
 mkdir -p /tmp/etopa-configure
@@ -32,6 +32,8 @@ if ! [ $? -eq 0 ]; then
   chmod +x /tmp/etopa-configure/rustup.sh
   /tmp/etopa-configure/rustup.sh -y
   rm /tmp/etopa-configure/rustup.sh
+else
+  rustup update
 fi
 
 if [ -z "$ANDROID_HOME" ]; then

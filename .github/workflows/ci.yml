@@ -40,21 +40,18 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            /usr/local/lib/android/sdk/ndk
-            /usr/share/rust/.cargo/bin
-          key: ${{ runner.os }}-configure-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/configure') }}
+            ${{ env.ANDROID_HOME }}
+            /usr/local/bin/minify-*
+            /usr/share/rust/.cargo
+          key: ${{ runner.os }}-configure-cache
 
       - name: Cargo Cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
+          path: target
           key: ${{ runner.os }}-cargo-cache-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Configure
-        if: steps.configure-cache.outputs.cache-hit != 'true'
         env:
           ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/tools/bin/sdkmanager
         run: |
