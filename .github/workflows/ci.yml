@@ -40,7 +40,6 @@ jobs:
         with:
           path: |
             ${{ env.ANDROID_HOME }}
-            /usr/local/bin/minify-*
             /usr/share/rust/.cargo
           key: ${{ runner.os }}-configure-cache
 
