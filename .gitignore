@@ -3,6 +3,3 @@
 /etopaw-app/pkg
 /data/*.esdb
 /data/*.edb
-/android-tools.zip
-/android-ndk.zip
-/minify
