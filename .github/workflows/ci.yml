@@ -35,12 +35,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Rust Toolchain
-        id: rust-toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-
       - name: Configure Cache
         id: configure-cache
         uses: actions/cache@v2

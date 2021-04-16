@@ -34,12 +34,16 @@ if ! [ $? -eq 0 ]; then
   rm /tmp/etopa-configure/rustup.sh
 fi
 
-if ! [ "$ANDROID_NDK_ROOT" == "$HOME/.android/sdk/ndk" ]; then
-  echo -e '\nexport ANDROID_NDK_ROOT="$HOME/.android/sdk/ndk"' >> $HOME/.profile
+if [ -z "$ANDROID_HOME" ]; then
+  echo -e '\nexport ANDROID_HOME="$HOME/.android/sdk"' >> $HOME/.profile
 fi
 
-if ! [ "$ANDROID_SDK_ROOT" == "$HOME/.android/sdk" ]; then
-  echo -e '\nexport ANDROID_SDK_ROOT="$HOME/.android/sdk"' >> $HOME/.profile
+if [ -z "$ANDROID_SDK_ROOT" ]; then
+  echo -e '\nexport ANDROID_SDK_ROOT="$ANDROID_HOME"' >> $HOME/.profile
+fi
+
+if [ -z "$ANDROID_NDK_ROOT" ]; then
+  echo -e '\nexport ANDROID_NDK_ROOT="$ANDROID_HOME/ndk"' >> $HOME/.profile
 fi
 
 source $HOME/.profile
@@ -77,33 +81,33 @@ if ! [ $? -eq 0 ]; then
   cargo install wasm-pack
 fi
 
-if ! [ -f "$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
-  mkdir -p $HOME/.android/sdk/cmdline-tools
+if ! [ -f "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+  mkdir -p $ANDROID_HOME/cmdline-tools
   curl -o /tmp/etopa-configure/android-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
   unzip /tmp/etopa-configure/android-tools.zip -d /tmp/etopa-configure
-  mv /tmp/etopa-configure/cmdline-tools $HOME/.android/sdk/cmdline-tools/latest
+  mv /tmp/etopa-configure/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
   rm /tmp/etopa-configure/android-tools.zip
 fi
 
-SDK_MANAGER=$HOME/.android/sdk/cmdline-tools/latest/bin/sdkmanager
+SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
 if [[ ! -z "${ANDROID_SDK_MANAGER}" ]] && [[ "${ANDROID_SDK_MANAGER}" == */sdkmanager ]]; then
   SDK_MANAGER="${ANDROID_SDK_MANAGER}"
 fi
 yes | $SDK_MANAGER --licenses
 yes | $SDK_MANAGER "build-tools;30.0.3" "platforms;android-30" "ndk;22.1.7171670"
 
-mkdir -p $HOME/.android
-if ! [ -f "$HOME/.android/debug.keystore" ]; then
-  keytool -genkey -v -keystore $HOME/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+mkdir -p $ANDROID_HOME
+if ! [ -f "$ANDROID_HOME/debug.keystore" ]; then
+  keytool -genkey -v -keystore $ANDROID_HOME/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 else
-  echo android | keytool -list -keystore $HOME/.android/debug.keystore > /dev/null 2>&1
+  echo android | keytool -list -keystore $ANDROID_HOME/debug.keystore > /dev/null 2>&1
   if ! [ $? -eq 0 ]; then
-    keytool -genkey -v -keystore $HOME/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+    keytool -genkey -v -keystore $ANDROID_HOME/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
   fi
 fi
 
-if ! [ -f "$HOME/.bundletool-1.5.0.jar" ]; then
-  curl -L -o $HOME/.bundletool-1.5.0.jar https://github.com/google/bundletool/releases/download/1.5.0/bundletool-all-1.5.0.jar
+if ! [ -f "$ANDROID_HOME/bundletool-1.5.0.jar" ]; then
+  curl -L -o $ANDROID_HOME/bundletool-1.5.0.jar https://github.com/google/bundletool/releases/download/1.5.0/bundletool-all-1.5.0.jar
 fi
 
 if ! [ -f "/usr/local/bin/minify-v2.8.0" ]; then

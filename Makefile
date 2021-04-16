@@ -12,11 +12,11 @@ CARGO_UPGRADE?=cargo upgrade
 NATIVE_TARGET_CPU?=native
 
 # android
-NDK_TOOLCHAIN_BIN?=$(HOME)/.android/sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
+NDK_TOOLCHAIN_BIN?=$(ANDROID_NDK_ROOT)/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
 export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
-ANDROID_BT_PATH?=~/.android/sdk/build-tools/30.0.3
+ANDROID_BT_PATH?=$(ANDROID_HOME)/build-tools/30.0.3
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
-BUNDLETOOL_JAR?=~/.bundletool-1.5.0.jar
+BUNDLETOOL_JAR?=$(ANDROID_HOME)/bundletool-1.5.0.jar
 ANDROID_APK_FILE?=etopa.apk
 ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
@@ -28,7 +28,7 @@ JAVA_EXEC?=java
 JARSIGNER_EXEC?=jarsigner
 APKSIGNER_EXEC=${ANDROID_BT_PATH}/apksigner
 ZIPALIGN_EXEC=${ANDROID_BT_PATH}/zipalign
-DEBUG_ANDROID_KEYSTORE?=$(HOME)/.android/debug.keystore
+DEBUG_ANDROID_KEYSTORE?=$(ANDROID_HOME)/debug.keystore
 DEBUG_JKS_PASSWORD=android
 DEBUG_JKS_ALIAS?=androiddebugkey
 
