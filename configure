@@ -98,7 +98,6 @@ fi
 yes | $SDK_MANAGER --licenses
 yes | $SDK_MANAGER "build-tools;30.0.3" "platforms;android-30" "ndk;22.1.7171670"
 
-mkdir -p $ANDROID_HOME
 if ! [ -f "$ANDROID_HOME/debug.keystore" ]; then
   keytool -genkey -v -keystore $ANDROID_HOME/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 else
