@@ -6,8 +6,7 @@ use crate::data::StorageFile;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 /// Help output
-pub const HELP: &str = "
-Usage: etopai [OPTIONS]
+pub const HELP: &str = "Usage: etopai [OPTIONS]
 String S, Integer I, Boolean B
 
 Options:
