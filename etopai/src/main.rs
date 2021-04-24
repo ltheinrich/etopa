@@ -11,7 +11,7 @@ mod api;
 
 use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
 use data::StorageFile;
-use etopa::{meta::search, Command, Config, Fail};
+use etopa::{meta::search, CliBuilder, Config, Fail};
 use kern::http::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;
@@ -27,7 +27,7 @@ fn main() {
 
     // parse arguments
     let args: Vec<String> = args().collect();
-    let cmd = Command::from(&args, &["help"]);
+    let cmd = CliBuilder::new().options(&["help"]).build(&args);
     if cmd.option("help") {
         return println!("{}", HELP);
     } else if cmd.option("licenses") {
