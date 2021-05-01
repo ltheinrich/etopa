@@ -883,7 +883,7 @@ kern	1.3.2	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	I
 lazy_static	1.4.0	Marvin Löbel <loebel.marvin@gmail.com>	https://github.com/rust-lang-nursery/lazy-static.rs	Apache-2.0 OR MIT		A macro for declaring lazily evaluated statics in Rust.
 libc	0.2.94	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 log	0.4.14	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
-memchr	2.3.4	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/rust-memchr	MIT OR Unlicense		Safe interface to memchr.
+memchr	2.4.0	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/rust-memchr	MIT OR Unlicense		Safe interface to memchr.
 memory_units	0.4.0	Nick Fitzgerald <fitzgen@gmail.com>|Sergey Pepyakin <s.pepyakin@gmail.com>	https://github.com/pepyakin/memory_units	MPL-2.0		Safe conversions between units of memory
 once_cell	1.7.2	Aleksey Kladov <aleksey.kladov@gmail.com>	https://github.com/matklad/once_cell	Apache-2.0 OR MIT		Single assignment cells and lazy values.
 opaque-debug	0.3.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Macro for opaque Debug trait implementation
