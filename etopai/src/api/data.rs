@@ -35,6 +35,7 @@ pub fn get_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Resu
         }
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -63,6 +64,7 @@ pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Resu
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -101,6 +103,7 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -145,6 +148,7 @@ pub fn rename(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -178,6 +182,7 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }

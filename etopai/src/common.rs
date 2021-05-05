@@ -14,6 +14,10 @@ Options:
   --addr       S       IP address ([::])
   --threads    I       Number of threads to start (2)
   --vlt        I       Valid login time in seconds (604800/1 week)
+  --bantime    I       IP address ban time in seconds (3600/1 hour)
+  --loginfails I       Login fails until ban (50)
+  --logintime  I       Login fails cleanup time in seconds (60)
+  --acclimit   I       Account registration limit per hour (10)
   --data       S       Data directory (data)
   --cert       S       Path to TLS certificate (DATA_DIR/cert.pem)
   --key        S       Path to TLS certificate key (DATA_DIR/key.pem)
@@ -31,17 +35,24 @@ pub struct SharedData {
     pub users: RwLock<StorageFile>,
     pub logins: RwLock<UserLogins>,
     pub files: RwLock<UserFiles>,
+    pub security: RwLock<SecurityManager>,
     pub data_dir: String,
 }
 
 impl SharedData {
     /// Default SharedData
-    pub fn new(users: StorageFile, valid_login: u64, data_dir: String) -> Self {
+    pub fn new(
+        users: StorageFile,
+        security: SecurityManager,
+        valid_login: u64,
+        data_dir: String,
+    ) -> Self {
         // return default with provided users storage
         Self {
             users: RwLock::new(users),
             logins: RwLock::new(UserLogins::new(valid_login)),
             files: RwLock::new(UserFiles::new(data_dir.clone())),
+            security: RwLock::new(security),
             data_dir,
         }
     }
@@ -74,6 +85,16 @@ impl SharedData {
     /// User files writeable
     pub fn files_mut(&self) -> RwLockWriteGuard<UserFiles> {
         self.files.write().unwrap()
+    }
+
+    /// Security manager read-only
+    pub fn security(&self) -> RwLockReadGuard<SecurityManager> {
+        self.security.read().unwrap()
+    }
+
+    /// Security manager writeable
+    pub fn security_mut(&self) -> RwLockWriteGuard<SecurityManager> {
+        self.security.write().unwrap()
     }
 
     /*

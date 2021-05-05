@@ -13,10 +13,14 @@ pub fn valid(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Ve
     let username = get_username(headers)?;
     let token = get_str(headers, "token")?;
 
-    // validate
-    Ok(jsonify(
-        object!(valid: shared.logins().valid(username, token)),
-    ))
+    // validate or fail login
+    let login_valid = shared.logins().valid(username, token);
+    if !login_valid {
+        shared.security_mut().login_fail(req.ip());
+    }
+
+    // return login validation
+    Ok(jsonify(object!(valid: login_valid)))
 }
 
 /// Account logout handler
@@ -35,6 +39,7 @@ pub fn logout(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -62,6 +67,7 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
         Ok(jsonify(object!(error: false)))
     } else {
         // wrong login token
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -79,18 +85,32 @@ pub fn login(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Ve
             // verify argon2 password hash
             let password_verified = argon2_verify(password_hash, password.as_bytes());
             if !password_verified {
+                shared.security_mut().login_fail(req.ip());
                 return Fail::from("unauthenticated");
             }
 
             // return login token
             Ok(jsonify(object!(token: shared.logins_mut().add(username))))
         }
-        None => Fail::from("unauthenticated"),
+        None => {
+            shared.security_mut().login_fail(req.ip());
+            Fail::from("unauthenticated")
+        }
     }
 }
 
 /// Account registration handler
 pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+    // check ip address before registration
+    if !shared
+        .security
+        .read()
+        .unwrap()
+        .check(req.ip(), ApiAction::Register)
+    {
+        return Fail::from("too many registrations");
+    }
+
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -107,6 +127,7 @@ pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result
         .cache_mut()
         .insert(username.to_string(), password.to_string());
     users.write()?;
+    shared.security_mut().registration(req.ip());
 
     // return login token
     Ok(jsonify(object!(token: shared.logins_mut().add(username))))
@@ -163,6 +184,7 @@ pub fn change_username(
             .rename(username, new_username.to_string());
         Ok(jsonify(object!(error: false)))
     } else {
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }
@@ -193,6 +215,7 @@ pub fn change_password(
         users.write()?;
         Ok(jsonify(object!(error: false)))
     } else {
+        shared.security_mut().login_fail(req.ip());
         Fail::from("unauthenticated")
     }
 }

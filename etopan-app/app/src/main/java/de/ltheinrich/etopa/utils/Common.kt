@@ -86,12 +86,10 @@ class Common constructor(activity: Activity) {
     }
 
     fun backKey(keyCode: Int): Boolean {
-        Log.d("Moo", "???!?")
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (backActivity == AppActivity::class.java && pinHash.isEmpty())
                 openActivity(MainActivity::class)
             else if (backActivity == MainActivity::class.java) {
-                Log.d("Booo", "WTF")
                 activity.moveTaskToBack(true)
             } else
                 openActivity(backActivity)
@@ -114,14 +112,11 @@ class Common constructor(activity: Activity) {
     }
 
     fun lockListener(activity: Activity) {
-        Log.d("Test", "Hallo1")
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_OFF)
         activity.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                if (intent.action == Intent.ACTION_SCREEN_OFF) {
-                    Log.d("Test", Intent.ACTION_SCREEN_OFF)
+                if (intent.action == Intent.ACTION_SCREEN_OFF)
                     triggerRestart(activity)
-                }
             }
         }, intentFilter)
     }

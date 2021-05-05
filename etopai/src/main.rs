@@ -16,6 +16,7 @@ use kern::http::server::{listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;
 use std::sync::{Arc, RwLock};
+use utils::{ApiAction, SecurityManager};
 
 /// Main function
 fn main() {
@@ -43,7 +44,11 @@ fn main() {
     let port = cmd.param("port", config.value("port", "4490"));
     let addr = cmd.param("addr", config.value("addr", "[::]"));
     let threads = cmd.parameter("threads", config.get("threads", 2));
-    let vlt = cmd.parameter("vlt", config.get("vlt", 604_800));
+    let vlt: u64 = cmd.parameter("vlt", config.get("vlt", 604_800));
+    let ban_time: u64 = cmd.parameter("bantime", config.get("bantime", 3600));
+    let login_fails: u32 = cmd.parameter("loginfails", config.get("loginfails", 50));
+    let login_time: u64 = cmd.parameter("logintime", config.get("logintime", 60));
+    let account_limit: u32 = cmd.parameter("acclimit", config.get("acclimit", 10));
     let data = cmd.param("data", config.value("data", "data"));
     let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
     let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
@@ -53,6 +58,7 @@ fn main() {
     let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
 
     // start server
+    let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit);
     let tls_config = load_certificate(&cert, &key).unwrap();
     let listeners = listen(
         &format!("{}:{}", addr, port),
@@ -60,7 +66,12 @@ fn main() {
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData::new(users, vlt, data.to_string()))),
+        Arc::new(RwLock::new(SharedData::new(
+            users,
+            security,
+            vlt,
+            data.to_string(),
+        ))),
     )
     .unwrap();
 
@@ -96,6 +107,16 @@ fn handle(
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };
+
+    // check ip address
+    if !shared
+        .read()
+        .unwrap()
+        .security()
+        .check(req.ip(), ApiAction::Simple)
+    {
+        return Ok(json_error("blocked ip address"));
+    }
 
     // handle request
     Ok(match handler(req, shared.read().unwrap()) {
