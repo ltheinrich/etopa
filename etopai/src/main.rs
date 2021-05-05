@@ -28,7 +28,9 @@ fn main() {
 
     // parse arguments
     let args: Vec<String> = args().collect();
-    let cmd = CliBuilder::new().options(&["help"]).build(&args);
+    let cmd = CliBuilder::new()
+        .options(&["help", "licenses", "nolog"])
+        .build(&args);
     if cmd.option("help") {
         return println!("{}", HELP);
     } else if cmd.option("licenses") {
@@ -52,13 +54,14 @@ fn main() {
     let data = cmd.param("data", config.value("data", "data"));
     let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
     let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
+    let log = !cmd.option("nolog") && !config.get("nolog", false);
 
     // open username/password storage
     create_dir_all(data).ok();
     let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
 
     // start server
-    let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit);
+    let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
     let tls_config = load_certificate(&cert, &key).unwrap();
     let listeners = listen(
         &format!("{}:{}", addr, port),
@@ -71,6 +74,7 @@ fn main() {
             security,
             vlt,
             data.to_string(),
+            log,
         ))),
     )
     .unwrap();

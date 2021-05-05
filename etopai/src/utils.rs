@@ -256,12 +256,19 @@ pub struct SecurityManager {
     login_fails: u32,
     login_time: u64,
     account_limit: u32,
+    log: bool,
 }
 
 impl SecurityManager {
     /// Create empty
-    pub fn new(ban_time: u64, login_fails: u32, login_time: u64, account_limit: u32) -> Self {
-        let security = Self {
+    pub fn new(
+        ban_time: u64,
+        login_fails: u32,
+        login_time: u64,
+        account_limit: u32,
+        log: bool,
+    ) -> Self {
+        Self {
             bans: RwLock::new(BTreeMap::new()),
             fail_counter: RwLock::new(BTreeMap::new()),
             register_counter: RwLock::new(BTreeMap::new()),
@@ -269,8 +276,8 @@ impl SecurityManager {
             login_fails,
             login_time,
             account_limit,
-        };
-        security
+            log,
+        }
     }
 
     /// Check action
@@ -295,7 +302,7 @@ impl SecurityManager {
                             || !check_unexpired(&registrations.1, 3600))
                             && !banned
                     }
-                    None => true && !banned,
+                    None => !banned,
                 }
             }
             _ => {
@@ -337,6 +344,9 @@ impl SecurityManager {
                         .write()
                         .unwrap()
                         .insert(ip.to_string(), SystemTime::now());
+                    if self.log {
+                        println!("Banned IP address: {}", ip);
+                    }
                 }
             }
         } else {

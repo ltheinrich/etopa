@@ -21,7 +21,8 @@ Options:
   --data       S       Data directory (data)
   --cert       S       Path to TLS certificate (DATA_DIR/cert.pem)
   --key        S       Path to TLS certificate key (DATA_DIR/key.pem)
-  --licenses           List licenses of project and libraries";
+  --licenses           List licenses of project and libraries
+  --nolog              Print no log messages";
 
 /// licenses
 pub const LICENSES: &str = include_str!("../../NOTICE.txt");
@@ -37,6 +38,7 @@ pub struct SharedData {
     pub files: RwLock<UserFiles>,
     pub security: RwLock<SecurityManager>,
     pub data_dir: String,
+    pub log: bool,
 }
 
 impl SharedData {
@@ -46,6 +48,7 @@ impl SharedData {
         security: SecurityManager,
         valid_login: u64,
         data_dir: String,
+        log: bool,
     ) -> Self {
         // return default with provided users storage
         Self {
@@ -54,6 +57,7 @@ impl SharedData {
             files: RwLock::new(UserFiles::new(data_dir.clone())),
             security: RwLock::new(security),
             data_dir,
+            log,
         }
     }
 
@@ -96,6 +100,13 @@ impl SharedData {
     pub fn security_mut(&self) -> RwLockWriteGuard<SecurityManager> {
         self.security.write().unwrap()
     }
+
+    /*
+    /// Get print log messages setting
+    pub fn log(&self) -> bool {
+        self.log
+    }
+    */
 
     /*
     /// Data directory read-only
