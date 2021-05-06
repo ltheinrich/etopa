@@ -21,10 +21,10 @@ jobs:
         run: cargo fmt --all --verbose -- --check
 
       - name: Lint
-        run: cargo clippy --workspace --all-features --verbose -- -D warnings
+        run: cargo clippy --workspace --all-features --all-targets --verbose -- -D warnings
 
       - name: Test
-        run: cargo test --workspace --all-features --verbose
+        run: cargo test --workspace --all-features --all-targets --verbose
 
       - name: Notice
         run: if ! [ $(wc -l < NOTICE.txt) -gt 860 ]; then exit 1; fi

@@ -114,5 +114,5 @@ clean:
 
 check:
 	${RUST_BUILDER} fmt --all --verbose -- --check
-	${RUST_BUILDER} clippy --workspace --all-features --verbose -- -D warnings
-	${RUST_BUILDER} test --workspace --all-features --verbose
+	${RUST_BUILDER} clippy --workspace --all-features --all-targets --verbose -- -D warnings
+	${RUST_BUILDER} test --workspace --all-features --all-targets --verbose
