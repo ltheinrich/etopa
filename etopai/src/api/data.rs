@@ -69,6 +69,39 @@ pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Resu
     }
 }
 
+/// Update storage file secrets_sort handler
+pub fn update_sort(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+    // get values
+    let headers = req.headers();
+    let username = get_username(headers)?;
+    let token = get_str(headers, "token")?;
+    let secrets_sort = get_str(headers, "secretssort")?;
+
+    // verify login
+    if shared.logins().valid(username, token) {
+        // create storage file if not exists
+        if !shared.files().exists(username) {
+            shared.files_mut().create(username)?;
+        }
+
+        // get storage file
+        let files = shared.files();
+        let mut storage = files.write(username)?;
+        let cache = storage.cache_mut();
+
+        // update in storage file
+        cache.insert("secrets_sort".to_owned(), secrets_sort.to_owned());
+        storage.write()?;
+
+        // return success
+        Ok(jsonify(object!(error: false)))
+    } else {
+        // wrong login token
+        shared.security_mut().login_fail(req.ip());
+        Fail::from("unauthenticated")
+    }
+}
+
 /// Update storage file handler
 pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
     // get values

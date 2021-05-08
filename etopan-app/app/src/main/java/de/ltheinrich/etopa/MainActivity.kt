@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (BuildConfig.DEBUG)
+            DebugConfig()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         common.menuType = MenuType.SIMPLE

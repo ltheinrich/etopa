@@ -108,6 +108,7 @@ fn handle(
         "/data/update" => api::data::update,
         "/data/delete" => api::data::delete,
         "/data/rename" => api::data::rename,
+        "/data/update_sort" => api::data::update_sort,
         // handler not found
         _ => return Ok(json_error("handler not found")),
     };

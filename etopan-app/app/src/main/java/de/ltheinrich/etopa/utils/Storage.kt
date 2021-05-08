@@ -2,7 +2,7 @@ package de.ltheinrich.etopa.utils
 
 class Storage(private val common: Common, data: String) {
 
-    val map = HashMap<String, String>()
+    val map = LinkedHashMap<String, String>()
 
     init {
         val lines = data.split('\n')
@@ -17,15 +17,27 @@ class Storage(private val common: Common, data: String) {
             }
         }
 
+        val sort = splitLines["secrets_sort"].orEmpty().split(',');
+        sort.forEach { nameHash ->
+            val name = splitLines[nameHash + "_secret_name"]
+            val secret = splitLines[nameHash + "_secret"]
+            if (name != null && secret != null)
+                map[name] = secret
+        }
+
         names.forEach { nameHash ->
-            val name = splitLines[nameHash + "_secret_name"].orEmpty()
-            val secret = splitLines[nameHash + "_secret"].orEmpty()
-            map[name] = secret
+            if (!sort.contains(nameHash)) {
+                val name = splitLines[nameHash + "_secret_name"]
+                val secret = splitLines[nameHash + "_secret"]
+                if (name != null && secret != null)
+                    map[name] = secret
+            }
         }
     }
 
     fun encrypt(keyHash: String): String {
-        var secureStorage = StringBuilder()
+        val secureStorage = StringBuilder()
+        val sort = StringBuilder()
         map.entries.forEach { (name, secret) ->
             val hashedName = common.hashName(name)
             val encryptedName = common.encrypt(keyHash, name)
@@ -36,6 +48,8 @@ class Storage(private val common: Common, data: String) {
             secureStorage.append(hashedName)
             secureStorage.append("_secret_name=")
             secureStorage.appendLine(encryptedName)
+            sort.append(hashedName)
+            sort.append(',')
         }
         return secureStorage.toString()
     }

@@ -30,7 +30,7 @@ class AccountActivity : AppCompatActivity() {
         setContentView(binding.root)
         common.menuType = MenuType.DISABLED
         binding.toolbar.root.title =
-            getString(R.string.app_name) + ": " + getString(R.string.settings)
+            getString(R.string.app_name) + ": " + getString(R.string.account)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = AppActivity::class.java
