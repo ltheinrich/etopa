@@ -13,7 +13,7 @@ I would consider it stable to use, but there are still many functions yet to be 
 You can use the [Etopa.de instance](https://etopa.de/) or [host your own](https://github.com/ltheinrich/etopa/wiki/Install-server).
 
 ### Download Android app
-F-Droid: Add repository https://fdroid.ltheinrich.de and search for Etopa (fingerprint B90FC7691EC5BE977DCBBCB18C3984C794CCAFA5BB8712ED2D64F9FD8703B636)
+F-Droid: Add [repository](https://fdroid.ltheinrich.de/fdroid/repo/?fingerprint=B90FC7691EC5BE977DCBBCB18C3984C794CCAFA5BB8712ED2D64F9FD8703B636) and search for Etopa
 
 Google Play Store: [Etopa 2FA](https://play.google.com/store/apps/details?id=de.ltheinrich.etopa)
 
