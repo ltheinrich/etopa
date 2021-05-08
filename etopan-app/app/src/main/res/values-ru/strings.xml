@@ -42,4 +42,23 @@
     <string name="biometric_error">Биометрическая разблокировка: %1$s</string>
     <string name="disable_biometric">Отключить биометрический логин</string>
     <string name="permission_denied">Разрешение отказано</string>
+    <string name="verify_pin">Подтвердить PIN-код</string>
+    <string name="change_username">Изменение имени пользователя</string>
+    <string name="new_username">Новое имя пользователя</string>
+    <string name="change_password">Измени пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="new_password_repeat">повторите новый пароль</string>
+    <string name="new_key">Новый ключ</string>
+    <string name="new_key_repeat">Повторить новый ключ</string>
+    <string name="change_key">Сменить ключ</string>
+    <string name="delete_account">Удалить аккаунт</string>
+    <string name="key_account_deletion">Ключ для удаления аккаунта</string>
+    <string name="account">Счет</string>
+    <string name="username_changed">Имя пользователя изменено</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="password_changed">пароль изменен</string>
+    <string name="key_changed">Ключ изменен</string>
+    <string name="confirm_account_deletion">Подтвердите удаление аккаунта</string>
+    <string name="invalid_key">Неправильный ключ</string>
+    <string name="account_deleted">Аккаунт удален</string>
 </resources>

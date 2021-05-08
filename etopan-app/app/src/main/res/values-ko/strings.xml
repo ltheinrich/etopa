@@ -42,4 +42,23 @@
     <string name="biometric_error">생체 인식 잠금 해제: %1$s</string>
     <string name="disable_biometric">생체 인식 로그인 비활성화</string>
     <string name="permission_denied">권한이 거부되었습니다.</string>
+    <string name="verify_pin">"PIN 확인 "</string>
+    <string name="change_username">사용자 이름 변경</string>
+    <string name="new_username">새로운 사용자 이름</string>
+    <string name="change_password">비밀번호 변경</string>
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_repeat">새로운 비밀번호를 재 입력하세요</string>
+    <string name="new_key">새 키</string>
+    <string name="new_key_repeat">새 키 반복</string>
+    <string name="change_key">키 변경</string>
+    <string name="delete_account">계정 삭제</string>
+    <string name="key_account_deletion">계정 삭제를위한 키</string>
+    <string name="account">계정</string>
+    <string name="username_changed">사용자 이름이 변경되었습니다.</string>
+    <string name="unknown_error">알수없는 오류</string>
+    <string name="password_changed">비밀번호 변경</string>
+    <string name="key_changed">키 변경</string>
+    <string name="confirm_account_deletion">계정 삭제 확인</string>
+    <string name="invalid_key">유효하지 않은 키</string>
+    <string name="account_deleted">계정이 삭제되었습니다.</string>
 </resources>

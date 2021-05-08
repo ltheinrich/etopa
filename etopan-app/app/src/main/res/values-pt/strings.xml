@@ -42,4 +42,23 @@
     <string name="biometric_verify">Desbloquear usando autenticação biométrica</string>
     <string name="biometric_error">Desbloqueio biométrico: %1$s</string>
     <string name="disable_biometric">Desativar login biométrico</string>
+    <string name="verify_pin">Verificar PIN</string>
+    <string name="change_username">Mudar nome de usuário</string>
+    <string name="new_username">Novo usuário</string>
+    <string name="change_password">Alterar a senha</string>
+    <string name="new_password">Nova Senha</string>
+    <string name="new_password_repeat">Repita a nova senha</string>
+    <string name="new_key">Nova chave</string>
+    <string name="new_key_repeat">Repita a nova chave</string>
+    <string name="change_key">Chave de mudança</string>
+    <string name="delete_account">Deletar conta</string>
+    <string name="key_account_deletion">Chave para exclusão de conta</string>
+    <string name="account">Conta</string>
+    <string name="username_changed">Nome de usuário alterado</string>
+    <string name="unknown_error">Erro desconhecido</string>
+    <string name="password_changed">Senha alterada</string>
+    <string name="key_changed">Chave alterada</string>
+    <string name="confirm_account_deletion">Confirme a exclusão da conta</string>
+    <string name="invalid_key">Chave inválida</string>
+    <string name="account_deleted">Conta excluída</string>
 </resources>

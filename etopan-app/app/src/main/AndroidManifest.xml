@@ -41,6 +41,9 @@
         <activity
             android:name=".AddActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".AccountActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
     </application>
 
 </manifest>

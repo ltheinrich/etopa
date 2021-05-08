@@ -68,6 +68,10 @@ class Common constructor(activity: Activity) {
             openActivity(AddActivity::class)
             true
         }
+        R.id.action_account -> {
+            openActivity(AccountActivity::class)
+            true
+        }
         R.id.action_settings -> {
             openActivity(SettingsActivity::class)
             true
@@ -277,6 +281,7 @@ class Common constructor(activity: Activity) {
                 error.toString()
             )
         },
+        body: String? = null,
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST, "https://$instance/$url", null,
@@ -293,6 +298,12 @@ class Common constructor(activity: Activity) {
             override fun getHeaders(): Map<String, String> {
                 return data.toMap()
             }
+
+            override fun getBody(): ByteArray {
+                if (!body.isNullOrEmpty())
+                    return body.toByteArray(Charsets.UTF_8)
+                return ByteArray(0)
+            }
         }
         http.add(jsonObjectRequest)
     }
@@ -307,6 +318,7 @@ class Common constructor(activity: Activity) {
                 error.toString()
             )
         },
+        body: String? = null,
     ) {
         val stringRequest = object : StringRequest(
             Method.POST, "https://$instance/$url",
@@ -321,6 +333,12 @@ class Common constructor(activity: Activity) {
         ) {
             override fun getHeaders(): Map<String, String> {
                 return data.toMap()
+            }
+
+            override fun getBody(): ByteArray {
+                if (!body.isNullOrEmpty())
+                    return body.toByteArray(Charsets.UTF_8)
+                return ByteArray(0)
             }
         }
         http.add(stringRequest)

@@ -46,7 +46,6 @@ class EditActivity : AppCompatActivity() {
                 binding.deleteSecretName.editText?.text?.clear()
                 binding.deleteSecretConfirm.isChecked = false
             }
-
         }
 
         binding.deleteSecretName.editText?.addTextChangedListener(object : TextWatcher {

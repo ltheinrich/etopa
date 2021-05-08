@@ -42,4 +42,23 @@
     <string name="biometric_error">Déverrouillage biométrique: %1$s</string>
     <string name="disable_biometric">Désactiver le login biométrique</string>
     <string name="permission_denied">Permission refusée</string>
+    <string name="verify_pin">Vérifier le code PIN</string>
+    <string name="change_username">Changer le nom d\'utilisateur</string>
+    <string name="new_username">Nouveau nom d\'utilisateur</string>
+    <string name="change_password">Changer le mot de passe</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="new_password_repeat">Répété le nouveau mot de passe</string>
+    <string name="new_key">Nouvelle clé</string>
+    <string name="new_key_repeat">Répéter la nouvelle clé</string>
+    <string name="change_key">Changer de clé</string>
+    <string name="delete_account">Supprimer le compte</string>
+    <string name="key_account_deletion">Clé de suppression de compte</string>
+    <string name="account">Compte</string>
+    <string name="username_changed">Le nom d\'utilisateur a changé</string>
+    <string name="unknown_error">Erreur inconnue</string>
+    <string name="password_changed">Mot de passe changé</string>
+    <string name="key_changed">Clé modifiée</string>
+    <string name="confirm_account_deletion">Confirmer la suppression du compte</string>
+    <string name="invalid_key">Clé non valide</string>
+    <string name="account_deleted">Compte supprimé</string>
 </resources>

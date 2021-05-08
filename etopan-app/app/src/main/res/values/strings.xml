@@ -45,4 +45,23 @@
     <string name="biometric_error">Biometric unlock: %1$s</string>
     <string name="disable_biometric">Disable biometric login</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="verify_pin">Verify PIN</string>
+    <string name="change_username">Change username</string>
+    <string name="new_username">New username</string>
+    <string name="change_password">Change password</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_repeat">Repeat new password</string>
+    <string name="new_key">New key</string>
+    <string name="new_key_repeat">Repeat new key</string>
+    <string name="change_key">Change key</string>
+    <string name="delete_account">Delete account</string>
+    <string name="key_account_deletion">Key for account deletion</string>
+    <string name="account">Account</string>
+    <string name="username_changed">Username changed</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="password_changed">Password changed</string>
+    <string name="key_changed">Key changed</string>
+    <string name="confirm_account_deletion">Confirm account deletion</string>
+    <string name="invalid_key">Invalid key</string>
+    <string name="account_deleted">Account deleted</string>
 </resources>

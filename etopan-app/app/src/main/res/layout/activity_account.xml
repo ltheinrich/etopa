@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <include
+        android:id="@id/toolbar"
+        layout="@layout/layout_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="20dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/verify_pin"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/verify_pin"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberPassword"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_username"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/new_username"
+                android:layout_margin="15dp"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textUri"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/change_username"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:text="@string/change_username"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_password"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/new_password"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionNext" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_password_repeat"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/new_password_repeat"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/change_password"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:text="@string/change_password"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_key"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/new_key"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionNext" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_key_repeat"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/new_key_repeat"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/change_key"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:text="@string/change_key"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/key_account_deletion"
+                android:layout_width="@dimen/inputWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:hint="@string/key_account_deletion"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/confirm_account_deletion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirm_account_deletion"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/delete_account"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="@dimen/buttonWidth"
+                android:layout_height="@dimen/elemHeight"
+                android:text="@string/delete_account"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

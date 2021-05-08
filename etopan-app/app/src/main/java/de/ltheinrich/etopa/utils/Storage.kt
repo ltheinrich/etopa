@@ -1,6 +1,6 @@
 package de.ltheinrich.etopa.utils
 
-class Storage(private val common: Common, private val data: String) {
+class Storage(private val common: Common, data: String) {
 
     val map = HashMap<String, String>()
 
@@ -22,5 +22,21 @@ class Storage(private val common: Common, private val data: String) {
             val secret = splitLines[nameHash + "_secret"].orEmpty()
             map[name] = secret
         }
+    }
+
+    fun encrypt(keyHash: String): String {
+        var secureStorage = StringBuilder()
+        map.entries.forEach { (name, secret) ->
+            val hashedName = common.hashName(name)
+            val encryptedName = common.encrypt(keyHash, name)
+            val encryptedSecret = common.encrypt(keyHash, secret)
+            secureStorage.append(hashedName)
+            secureStorage.append("_secret=")
+            secureStorage.appendLine(encryptedSecret)
+            secureStorage.append(hashedName)
+            secureStorage.append("_secret_name=")
+            secureStorage.appendLine(encryptedName)
+        }
+        return secureStorage.toString()
     }
 }

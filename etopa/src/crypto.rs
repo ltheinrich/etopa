@@ -29,9 +29,9 @@ pub fn hash_password(password: impl AsRef<[u8]>) -> String {
 
 /// Generate pin hash for app encryption (local data)
 ///
-/// sha3-256(sha3-256(etopan + (etopa_app_pin + sha3-256(pin)))
-/// Even password length -> first 32 bytes
-/// Uneven password length -> last 32 bytes
+/// sha3-256(sha3-256(etopan + sha3-256(etopa_app_pin + sha3-256(pin)))
+/// Even PIN length -> first 32 bytes
+/// Uneven PIN length -> last 32 bytes
 pub fn hash_pin(pin: impl AsRef<[u8]>) -> String {
     // as ref
     let pin = pin.as_ref();
@@ -41,19 +41,19 @@ pub fn hash_pin(pin: impl AsRef<[u8]>) -> String {
     hasher.update(pin);
     let enc = hex_encode(hasher.finalize());
 
-    // hash the hash with app_pin
+    // hash the hash with etopa_app_pin
     hasher = Sha3_256::new();
     hasher.update(b"etopa_app_pin");
     hasher.update(enc);
     let enc = hasher.finalize();
 
-    // hash the hash with app_pin
+    // hash the hash with etopan
     hasher = Sha3_256::new();
     hasher.update(b"etopan");
     hasher.update(enc);
     let enc = hasher.finalize();
 
-    // hash the hash with app_pin
+    // hash the hash
     hasher = Sha3_256::new();
     hasher.update(enc);
     let result = hasher.finalize();

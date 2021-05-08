@@ -42,4 +42,23 @@
     <string name="biometric_error">Biometrische Anmeldung: %1$s</string>
     <string name="disable_biometric">Biometrische Anmeldung deaktivieren</string>
     <string name="permission_denied">Zugriff abgelehnt</string>
+    <string name="verify_pin">PIN verifizieren</string>
+    <string name="change_username">Benutzername ändern</string>
+    <string name="new_username">Neuer Benutzername</string>
+    <string name="change_password">Passwort ändern</string>
+    <string name="new_password">Neues Passwort</string>
+    <string name="new_password_repeat">Neues Passwort wiederholen</string>
+    <string name="new_key">Neuer Schlüssel</string>
+    <string name="new_key_repeat">Neuen Schlüssel wiederholen</string>
+    <string name="change_key">Schlüssel ändern</string>
+    <string name="delete_account">Account löschen</string>
+    <string name="key_account_deletion">Schlüssel zur Account-Löschung</string>
+    <string name="account">Account</string>
+    <string name="username_changed">Benutzername geändert</string>
+    <string name="unknown_error">Unbekannter Fehler</string>
+    <string name="password_changed">Passwort geändert</string>
+    <string name="key_changed">Schlüssel geändert</string>
+    <string name="invalid_key">Ungültiger Schlüssel</string>
+    <string name="confirm_account_deletion">Account-Löschung bestätigen</string>
+    <string name="account_deleted">Account gelöscht</string>
 </resources>

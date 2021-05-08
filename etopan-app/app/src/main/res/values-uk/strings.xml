@@ -42,4 +42,23 @@
     <string name="biometric_error">Біометричний логін: %1$s</string>
     <string name="disable_biometric">деактивувати Біометричний логін</string>
     <string name="permission_denied">У доступі відмовлено</string>
+    <string name="verify_pin">Підтвердьте PIN-код</string>
+    <string name="change_username">Змінити ім’я користувача</string>
+    <string name="new_username">Нове ім’я користувача</string>
+    <string name="change_password">Змінити пароль</string>
+    <string name="new_password">Новий пароль</string>
+    <string name="new_password_repeat">Повторіть новий пароль</string>
+    <string name="new_key">Новий ключ</string>
+    <string name="new_key_repeat">Повторіть нову клавішу</string>
+    <string name="change_key">Змінити ключ</string>
+    <string name="delete_account">Видалити аккаунт</string>
+    <string name="key_account_deletion">Ключ для видалення облікового запису</string>
+    <string name="account">Рахунок</string>
+    <string name="username_changed">Ім\'я користувача змінено</string>
+    <string name="unknown_error">Невідома помилка</string>
+    <string name="password_changed">Пароль змінено</string>
+    <string name="key_changed">Ключ змінено</string>
+    <string name="confirm_account_deletion">Підтвердьте видалення облікового запису</string>
+    <string name="invalid_key">Недійсний ключ</string>
+    <string name="account_deleted">Обліковий запис видалено</string>
 </resources>
