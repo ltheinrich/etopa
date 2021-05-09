@@ -215,81 +215,93 @@ class MainActivity : AppCompatActivity() {
         always: () -> Unit = {},
         onSuccess: (result: BiometricPrompt.AuthenticationResult) -> Unit,
     ) {
-        val biometricPrompt =
-            BiometricPrompt(this, ContextCompat.getMainExecutor(this),
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationError(
-                        errorCode: Int,
-                        errString: CharSequence,
-                    ) {
-                        super.onAuthenticationError(errorCode, errString)
-                        binding.pin.editText?.requestFocus()
-                        if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON && errorCode != BiometricPrompt.ERROR_CANCELED)
-                            common.toast(
-                                getString(R.string.biometric_error, errString),
-                                length = Toast.LENGTH_SHORT
-                            )
-                        always()
+        try {
+            val biometricPrompt =
+                BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                    object : BiometricPrompt.AuthenticationCallback() {
+                        override fun onAuthenticationError(
+                            errorCode: Int,
+                            errString: CharSequence,
+                        ) {
+                            super.onAuthenticationError(errorCode, errString)
+                            binding.pin.editText?.requestFocus()
+                            if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON && errorCode != BiometricPrompt.ERROR_CANCELED)
+                                common.toast(
+                                    getString(R.string.biometric_error, errString),
+                                    length = Toast.LENGTH_SHORT
+                                )
+                            try {
+                                always()
+                            } catch (ex: Exception) {
+                                common.toast(R.string.unknown_error)
+                            }
+                        }
+
+                        override fun onAuthenticationSucceeded(
+                            result: BiometricPrompt.AuthenticationResult,
+                        ) {
+                            super.onAuthenticationSucceeded(result)
+                            try {
+                                onSuccess(result)
+                                always()
+                            } catch (ex: Exception) {
+                                common.toast(R.string.unknown_error)
+                            }
+                        }
+                    })
+
+            val encryptedPin = preferences.getString("encryptedPin", null)
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getString(R.string.biometric_unlock))
+                .setSubtitle(
+                    if (encryptedPin == null) {
+                        getString(R.string.biometric_setup)
+                    } else {
+                        getString(R.string.biometric_verify)
                     }
-
-                    override fun onAuthenticationSucceeded(
-                        result: BiometricPrompt.AuthenticationResult,
-                    ) {
-                        super.onAuthenticationSucceeded(result)
-                        onSuccess(result)
-                        always()
-                    }
-                })
-
-        val encryptedPin = preferences.getString("encryptedPin", null)
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.biometric_unlock))
-            .setSubtitle(
-                if (encryptedPin == null) {
-                    getString(R.string.biometric_setup)
-                } else {
-                    getString(R.string.biometric_verify)
-                }
-            )
-            .setNegativeButtonText(getString(R.string.cancel))
-            .build()
-
-        val keyStore = getKeyStore()
-        if (!keyStore.containsAlias("etopan_pin")) {
-            var keySpec = KeyGenParameterSpec.Builder(
-                "etopan_pin",
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
-                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                .setUserAuthenticationRequired(true)
-            keySpec = if (common.checkSdk(Build.VERSION_CODES.R)) {
-                keySpec.setUserAuthenticationParameters(
-                    60000,
-                    KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG
                 )
-            } else {
-                @Suppress("DEPRECATION")
-                keySpec.setUserAuthenticationValidityDurationSeconds(60000)
-            }
-            generateSecretKey(keySpec.build())
-        }
+                .setNegativeButtonText(getString(R.string.cancel))
+                .build()
 
-        val secretKey = getSecretKey(keyStore)
-        val cipher = getCipher()
-        if (encryptedPin == null) {
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        } else {
-            cipher.init(
-                Cipher.DECRYPT_MODE,
-                secretKey,
-                IvParameterSpec(Base64.decode(encryptedPin.split('\n')[1], Base64.DEFAULT))
+            val keyStore = getKeyStore()
+            if (!keyStore.containsAlias("etopan_pin")) {
+                var keySpec = KeyGenParameterSpec.Builder(
+                    "etopan_pin",
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                )
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .setUserAuthenticationRequired(true)
+                keySpec = if (common.checkSdk(Build.VERSION_CODES.R)) {
+                    keySpec.setUserAuthenticationParameters(
+                        60000,
+                        KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    keySpec.setUserAuthenticationValidityDurationSeconds(60000)
+                }
+                generateSecretKey(keySpec.build())
+            }
+
+            val secretKey = getSecretKey(keyStore)
+            val cipher = getCipher()
+            if (encryptedPin == null) {
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+            } else {
+                cipher.init(
+                    Cipher.DECRYPT_MODE,
+                    secretKey,
+                    IvParameterSpec(Base64.decode(encryptedPin.split('\n')[1], Base64.DEFAULT))
+                )
+            }
+            biometricPrompt.authenticate(
+                promptInfo,
+                BiometricPrompt.CryptoObject(cipher)
             )
+        } catch (ex: Exception) {
+            common.toast(R.string.unknown_error)
         }
-        biometricPrompt.authenticate(
-            promptInfo,
-            BiometricPrompt.CryptoObject(cipher)
-        )
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

@@ -17,7 +17,7 @@ class Storage(private val common: Common, data: String) {
             }
         }
 
-        val sort = splitLines["secrets_sort"].orEmpty().split(',');
+        val sort = splitLines["secrets_sort"].orEmpty().split(',')
         sort.forEach { nameHash ->
             val name = splitLines[nameHash + "_secret_name"]
             val secret = splitLines[nameHash + "_secret"]
@@ -51,6 +51,9 @@ class Storage(private val common: Common, data: String) {
             sort.append(hashedName)
             sort.append(',')
         }
+        val encryptedSort = common.encrypt(keyHash, sort.toString())
+        secureStorage.append("secrets_sort=")
+        secureStorage.appendLine(encryptedSort)
         return secureStorage.toString()
     }
 }

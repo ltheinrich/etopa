@@ -109,7 +109,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
     let mut map = parse(&data);
     map.iter_mut().for_each(|(k, v)| {
         // check if secret or secret name
-        if k.ends_with("_secret") || k.ends_with("_secret_name") {
+        if k.ends_with("_secret") || k.ends_with("_secret_name") || k == "secrets_sort" {
             // decode hex
             let dec = crypto::hex_decode(&v).unwrap();
 
@@ -117,6 +117,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
             *v = crypto::decrypt(dec, key).unwrap()
         }
     });
+    map.insert("data".to_owned(), data);
 
     // return to JS
     JsValue::from_serde(&StringMap(map)).unwrap()
@@ -130,6 +131,7 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
 
     // new map and iterate through storage entries
     let mut map = BTreeMap::new();
+    let mut sort = String::with_capacity(storage.0.len() * 65);
     for (k, v) in storage.0 {
         // hash secret name
         let name = crypto::hash_name(&k);
@@ -145,7 +147,14 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
         // add secret and secret name
         map.insert(format!("{}_secret", name), hex_secret);
         map.insert(format!("{}_secret_name", name), hex_name);
+        sort.push_str(&name);
+        sort.push(',');
     }
+
+    // encrypt sort
+    let enc_sort = crypto::encrypt(&sort, key).unwrap();
+    let hex_sort = crypto::hex_encode(enc_sort);
+    map.insert("secrets_sort".to_owned(), hex_sort);
 
     // return serialized
     serialize(&map)
