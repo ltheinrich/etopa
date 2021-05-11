@@ -3,6 +3,9 @@ import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, a
 let wasm;
 let secrets;
 
+let lastSortUpdate = 0;
+let sortUpdateSecrets;
+
 const key = document.getElementById("key");
 const add = document.getElementById("add");
 const add_form = document.getElementById("add_form");
@@ -207,17 +210,39 @@ function reload_tokens(force = false) {
     }
 }
 
+function updateSort() {
+    if (lastSortUpdate > Date.now() - 1000) {
+        setTimeout(updateSort, 1000);
+    } else if (secrets != sortUpdateSecrets) {
+        lastSortUpdate = Date.now();
+        sortUpdateSecrets = secrets;
+        let sort = "";
+        for (const key in secrets) {
+            sort += wasm.hash_name(key) + ',';
+        }
+        api_fetch(async function (json) {
+            if (json.error != false) {
+                alert_error(lang.api_error_cs + json.error);
+            }
+        }, "data/update_sort", { secretssort: wasm.encrypt_hex(sort, storage_key()), ...login_data() });
+    }
+}
+
 function gen_tokens() {
     tokens.innerHTML = "";
+    let secretNames = Object.keys(secrets);
     for (const name in secrets) {
         const button_rename = document.createElement("a");
         const button_delete = document.createElement("a");
+        const right = document.createElement("div");
+        const button_up = document.createElement("button");
+        const button_down = document.createElement("button");
         const edit = document.createElement("a");
         const a = document.createElement("a");
         const token = wasm.gen_token(secrets[name], BigInt(Date.now()));
         a.innerHTML = "<div><strong>" + name + "</strong>&nbsp;" + token.substr(0, 3) + " " + token.substr(3) + "</div>";
         a.addEventListener("click", function (ev) {
-            if (ev.target != edit) {
+            if (ev.target != edit && ev.target != button_up && ev.target != button_down) {
                 const el = document.createElement("textarea");
                 el.value = token;
                 document.body.appendChild(el);
@@ -234,6 +259,42 @@ function gen_tokens() {
         a.classList.add("token");
         a.href = "#";
         if (online) {
+            button_up.innerHTML = "&#11014;&#65039";
+            button_up.classList.add("btn");
+            button_up.classList.add("btn-default");
+            button_up.classList.add("button-updown");
+            button_up.type = "button";
+            button_up.addEventListener("click", function () {
+                if (secretNames.indexOf(name) == 0) {
+                    return;
+                }
+                const nameIndex = secretNames.indexOf(name);
+                const before = secretNames[nameIndex - 1];
+                secretNames[nameIndex - 1] = secretNames[nameIndex];
+                secretNames[nameIndex] = before;
+                secrets = JSON.parse(JSON.stringify(secrets, secretNames));
+                gen_tokens();
+                updateSort();
+            });
+
+            button_down.innerHTML = "&#11015;&#65039";
+            button_down.classList.add("btn");
+            button_down.classList.add("btn-default");
+            button_down.classList.add("button-updown");
+            button_down.type = "button";
+            button_down.addEventListener("click", function () {
+                if (secretNames.indexOf(name) == secretNames.length - 1) {
+                    return;
+                }
+                const nameIndex = secretNames.indexOf(name);
+                const after = secretNames[nameIndex + 1];
+                secretNames[nameIndex + 1] = secretNames[nameIndex];
+                secretNames[nameIndex] = after;
+                secrets = JSON.parse(JSON.stringify(secrets, secretNames));
+                gen_tokens();
+                updateSort();
+            });
+
             edit.innerText = lang.edit;
             edit.addEventListener("click", function () {
                 let action;
@@ -295,7 +356,11 @@ function gen_tokens() {
             edit.classList.add("rounded-pill");
             edit.classList.add("rename-button");
             edit.href = "#";
-            a.appendChild(edit);
+
+            right.appendChild(button_up);
+            right.appendChild(button_down);
+            right.appendChild(edit);
+            a.appendChild(right);
         }
         tokens.appendChild(a);
     }

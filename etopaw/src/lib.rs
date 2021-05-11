@@ -94,6 +94,9 @@ pub fn gen_token(secret: &str, time_millis: u64) -> String {
 #[derive(Serialize, Deserialize)]
 struct StringMap(BTreeMap<String, String>);
 
+#[derive(Serialize, Deserialize)]
+struct StringVec(Vec<String>);
+
 /// Unsorted parse storage file and decrypt secrets
 #[wasm_bindgen]
 pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
@@ -123,13 +126,12 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
 
 /// Encrypt secrets and serialize map
 #[wasm_bindgen]
-pub fn serialize_storage(storage: JsValue, key: &str) -> String {
+pub fn serialize_storage(storage: JsValue, sort: &str, key: &str) -> String {
     // deserialize from JS
     let storage: StringMap = storage.into_serde().unwrap();
 
     // new map and iterate through storage entries
     let mut map = BTreeMap::new();
-    let mut sort = String::with_capacity(storage.0.len() * 65);
     for (k, v) in storage.0 {
         // hash secret name
         let name = crypto::hash_name(&k);
@@ -145,8 +147,6 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
         // add secret and secret name
         map.insert(format!("{}_secret", name), hex_secret);
         map.insert(format!("{}_secret_name", name), hex_name);
-        sort.push_str(&name);
-        sort.push(',');
     }
 
     // encrypt sort
@@ -156,24 +156,4 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
 
     // return serialized
     serialize(&map)
-}
-
-/// Encrypt secrets sort
-#[wasm_bindgen]
-pub fn encrypt_sort(storage: JsValue, key: &str) -> String {
-    // deserialize from JS
-    let storage: StringMap = storage.into_serde().unwrap();
-
-    // plaintext sort string
-    let mut sort = String::with_capacity(storage.0.len() * 65);
-    for (k, _) in storage.0 {
-        // hash secret name
-        let name = crypto::hash_name(&k);
-        sort.push_str(&name);
-        sort.push(',');
-    }
-
-    // encrypt sort and return
-    let enc_sort = crypto::encrypt(&sort, key).unwrap();
-    crypto::hex_encode(enc_sort)
 }

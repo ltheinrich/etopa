@@ -83,7 +83,11 @@ async function change_key() {
     const new_storage_key = wasm.hash_key(new_key.value);
     try {
         const secrets = await load_secrets(wasm);
-        const new_storage = wasm.serialize_storage(secrets, new_storage_key);
+        let sort = "";
+        for (const key in secrets) {
+            sort += wasm.hash_name(key) + ',';
+        }
+        const new_storage = wasm.serialize_storage(secrets, sort, new_storage_key);
         disabled(true);
         await api_fetch(async function (json) {
             if (json.error == false) {
