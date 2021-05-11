@@ -82,5 +82,6 @@ export const lang = {
     repeat_name_incorrect: "Неверный повтор имени",
     sure_to_rename_to: "Секрет точно переиминовать в \"$name\" \"$new_name\"?",
     source_code: "Исходный текст",
-    privacy_policy: "Декларация о защите данных"
+    privacy_policy: "Декларация о защите данных",
+    incorrect_username: "Неправильное имя пользователя"
 };

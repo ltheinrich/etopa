@@ -231,6 +231,7 @@ function gen_tokens() {
         a.classList.add("d-flex");
         a.classList.add("justify-content-between");
         a.classList.add("align-items-center");
+        a.classList.add("token");
         a.href = "#";
         if (online) {
             edit.innerText = lang.edit;
@@ -290,8 +291,8 @@ function gen_tokens() {
                 });
             });
             edit.classList.add("badge");
-            edit.classList.add("badge-info");
-            edit.classList.add("badge-pill");
+            edit.classList.add("bg-info");
+            edit.classList.add("rounded-pill");
             edit.classList.add("rename-button");
             edit.href = "#";
             a.appendChild(edit);

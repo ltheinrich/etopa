@@ -83,5 +83,6 @@ export const lang = {
     repeat_name_incorrect: "Repeated name is incorrect",
     sure_to_rename_to: "Are you really sure to rename \"$name\" to \"$new_name\"?",
     source_code: "Source code",
-    privacy_policy: "Privacy policy"
+    privacy_policy: "Privacy policy",
+    incorrect_username: "Incorrect username"
 };

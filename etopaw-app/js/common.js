@@ -31,6 +31,9 @@ export function set_valid_login(valid) {
 export async function reload_storage_data(wasm) {
     return await raw_fetch(async function (data) {
         const dec = new TextDecoder("utf-8").decode(data);
+        if (dec.startsWith("<")) {
+            return false;
+        }
         try {
             JSON.parse(dec).error;
             vue.username = lang.offline_mode;
@@ -61,12 +64,11 @@ export async function load_secrets(wasm) {
                     const secret = storage[splitKeys[i] + "_secret"];
                     if (name != null && secret != null) {
                         secrets[name] = secret;
-                        console.log(name);
                     }
                 }
             }
             for (const key in storage) {
-                if (sortedKeys != null && !sortedKeys.includes(key) && key.endsWith("_secret")) {
+                if ((sortedKeys == null || !sortedKeys.includes(key)) && key.endsWith("_secret")) {
                     secrets[storage[key + "_name"]] = storage[key];
                 }
             }

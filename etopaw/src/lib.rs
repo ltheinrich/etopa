@@ -1,7 +1,5 @@
 //! Etopa for Web
 
-#![cfg(target_arch = "wasm32")]
-
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
@@ -88,7 +86,7 @@ pub fn gen_token(secret: &str, time_millis: u64) -> String {
     match Generator::new(secret) {
         Ok(gen) => gen
             .token_at(time_millis / 1000)
-            .unwrap_or("invalid secret".to_string()),
+            .unwrap_or_else(|_| "invalid secret".to_string()),
         _ => "invalid secret".to_string(),
     }
 }
@@ -96,7 +94,7 @@ pub fn gen_token(secret: &str, time_millis: u64) -> String {
 #[derive(Serialize, Deserialize)]
 struct StringMap(BTreeMap<String, String>);
 
-/// Parse storage file and decrypt secrets
+/// Unsorted parse storage file and decrypt secrets
 #[wasm_bindgen]
 pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
     // remove \r\n
@@ -158,4 +156,24 @@ pub fn serialize_storage(storage: JsValue, key: &str) -> String {
 
     // return serialized
     serialize(&map)
+}
+
+/// Encrypt secrets sort
+#[wasm_bindgen]
+pub fn encrypt_sort(storage: JsValue, key: &str) -> String {
+    // deserialize from JS
+    let storage: StringMap = storage.into_serde().unwrap();
+
+    // plaintext sort string
+    let mut sort = String::with_capacity(storage.0.len() * 65);
+    for (k, _) in storage.0 {
+        // hash secret name
+        let name = crypto::hash_name(&k);
+        sort.push_str(&name);
+        sort.push(',');
+    }
+
+    // encrypt sort and return
+    let enc_sort = crypto::encrypt(&sort, key).unwrap();
+    crypto::hex_encode(enc_sort)
 }

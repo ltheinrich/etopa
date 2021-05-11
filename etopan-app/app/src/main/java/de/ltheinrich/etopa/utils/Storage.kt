@@ -56,4 +56,14 @@ class Storage(private val common: Common, data: String) {
         secureStorage.appendLine(encryptedSort)
         return secureStorage.toString()
     }
+
+    fun encryptSort(): String {
+        val sort = StringBuilder()
+        map.entries.forEach { (name, _) ->
+            val hashedName = common.hashName(name)
+            sort.append(hashedName)
+            sort.append(',')
+        }
+        return common.encrypt(common.keyHash, sort.toString())
+    }
 }

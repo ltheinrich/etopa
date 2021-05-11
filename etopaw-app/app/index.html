@@ -49,7 +49,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-center">
                     <div id="loading" class="spinner-border text-primary" role="status">
-                        <span class="sr-only">Loading...</span>
+                        <span class="sr-only"></span>
                     </div>
                 </div>
                 <div id="totp" hidden>
@@ -105,7 +105,7 @@
                 </div>
             </form>
         </div>
-        <div class="cr container">
+        <div class="cr">
             <a v-bind:href="config.PRIVACY_POLICY">{{ lang.privacy_policy }}</a>
             &nbsp;/&nbsp;
             <a href="https://ltheinrich.de/etopa">{{ lang.source_code }}</a>
@@ -116,7 +116,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
-                    <button type="button" class="close modal-close">
+                    <button type="button" class="btn-close close modal-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

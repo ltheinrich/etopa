@@ -114,5 +114,7 @@ clean:
 
 check:
 	${RUST_BUILDER} fmt --all --verbose -- --check
-	${RUST_BUILDER} clippy --workspace --all-features --all-targets --verbose -- -D warnings
-	${RUST_BUILDER} test --workspace --all-features --all-targets --verbose
+	${RUST_BUILDER} clippy -p etopa -p etopai -p etopan --all-features --all-targets --verbose -- -D warnings
+	${RUST_BUILDER} clippy -p etopaw --all-features --target wasm32-unknown-unknown --verbose -- -D warnings
+	${RUST_BUILDER} test -p etopa -p etopai -p etopan --all-features --all-targets --verbose
+	${WASM_PACK_EXEC} test etopaw --node

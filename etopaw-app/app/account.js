@@ -30,7 +30,7 @@ load(async function (temp_wasm) {
         return false;
     };
     delete_user_btn.addEventListener("click", function () {
-        confirm(lang.delete_user_qm, delete_user);
+        confirm(lang.delete_user_qm, delete_user, "<input autocomplete=\"off\" id=\"delete_verify_username\" class=\"form-control ten-top-margin\" type=\"text\" placeholder=\"" + lang.username + "\">");
         return false;
     });
     delete_user_check.addEventListener("click", function () {
@@ -106,6 +106,8 @@ async function change_key() {
 async function delete_user() {
     if (wasm.hash_key(key.value) != storage_key()) {
         return alert_error(lang.key_incorrect);
+    } else if (document.getElementById("delete_verify_username").value != username()) {
+        return alert_error(lang.incorrect_username);
     }
     disabled(true);
     await api_fetch(async function (json) {

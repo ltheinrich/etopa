@@ -82,5 +82,6 @@ export const lang = {
     repeat_name_incorrect: "Der wiederholte Name ist inkorrekt",
     sure_to_rename_to: "Geheimnis \"$name\" wirklich in \"$new_name\" umbenennen?",
     source_code: "Quelltext",
-    privacy_policy: "Datenschutzerklärung"
+    privacy_policy: "Datenschutzerklärung",
+    incorrect_username: "Benutzername inkorrekt"
 };

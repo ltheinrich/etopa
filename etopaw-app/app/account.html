@@ -47,14 +47,14 @@
                 </div>
             </nav>
             <div class="card-body">
-                <div class="form-row">
+                <div class="form-row row">
                     <div class="col-12 col-lg-4 text-center">
                         <input type="password" autocomplete="off" class="form-control" id="key"
                             v-bind:placeholder="lang.key">
                     </div>
                 </div>
                 <br>
-                <form id="change_username" class="form-row" autocomplete="off">
+                <form id="change_username" class="form-row row" autocomplete="off">
                     <div class="col-12 col-lg-4 text-center">
                         <input type="text" autocomplete="off" class="form-control" id="new_username"
                             v-bind:placeholder="lang.new_username">
@@ -66,7 +66,7 @@
                     </div>
                 </form>
                 <br>
-                <form id="change_password" class="form-row" autocomplete="off">
+                <form id="change_password" class="form-row row" autocomplete="off">
                     <div class="col-12 col-lg-4 text-center">
                         <input type="password" autocomplete="off" class="form-control" id="new_password"
                             v-bind:placeholder="lang.new_password">
@@ -81,7 +81,7 @@
                     </div>
                 </form>
                 <br>
-                <form id="change_key" class="form-row" autocomplete="off">
+                <form id="change_key" class="form-row row" autocomplete="off">
                     <div class="col-12 col-lg-4 text-center">
                         <input type="password" autocomplete="off" class="form-control" id="new_key"
                             v-bind:placeholder="lang.new_key">
@@ -101,7 +101,8 @@
                     <div class="col text-center">
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             <input type="checkbox" class="custom-control-input" id="delete_user_check">
-                            <label class="custom-control-label" for="delete_user_check">{{ lang.delete_user }}</label>
+                            <label class="custom-control-label" for="delete_user_check">&nbsp;{{ lang.delete_user
+                                }}</label>
                         </div>
                         <br>
                         <button id="delete_user_btn" type="submit" class="btn btn-danger" hidden>{{ lang.delete_user
@@ -121,7 +122,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
-                    <button type="button" class="close modal-close">
+                    <button type="button" class="btn-close close modal-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

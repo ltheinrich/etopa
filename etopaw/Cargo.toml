@@ -20,3 +20,6 @@ crate-type = ["cdylib", "rlib"]
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false #["-Oz", "--enable-mutable-globals"]
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.24"
