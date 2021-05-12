@@ -61,4 +61,6 @@
     <string name="invalid_key">Ungültiger Schlüssel</string>
     <string name="confirm_account_deletion">Account-Löschung bestätigen</string>
     <string name="account_deleted">Account gelöscht</string>
+    <string name="move_up">Nach oben</string>
+    <string name="move_down">Nach unten</string>
 </resources>

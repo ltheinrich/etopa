@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -105,13 +106,73 @@ class AppActivity : AppCompatActivity() {
         menuInfo: ContextMenu.ContextMenuInfo?,
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        selectedSecretName = ((v as ViewGroup).getChildAt(0) as TextView).text.toString()
-        v.id.let { menu?.add(it, Menu.FIRST, Menu.NONE, R.string.edit_secret) }
+        if (common.offline) {
+            menu?.close()
+            common.toast(R.string.network_unreachable)
+        } else {
+            selectedSecretName = ((v as ViewGroup).getChildAt(0) as TextView).text.toString()
+            v.id.let {
+                menu?.add(it, Menu.FIRST, Menu.NONE, R.string.edit_secret)
+                if (common.storage != null) {
+                    if (!common.storage!!.isFirstSorted(selectedSecretName))
+                        menu?.add(it, Menu.FIRST + 1, Menu.NONE, R.string.move_up)
+                    if (!common.storage!!.isLastSorted(selectedSecretName))
+                        menu?.add(it, Menu.FIRST + 2, Menu.NONE, R.string.move_down)
+                }
+            }
+        }
     }
 
     override fun onContextItemSelected(item: MenuItem) = when (item.itemId) {
         Menu.FIRST -> {
             common.openActivity(EditActivity::class, Pair("secretName", selectedSecretName))
+            true
+        }
+        Menu.FIRST + 1 -> {
+            if (common.storage == null) {
+                common.toast(R.string.unknown_error)
+            } else {
+                common.storage!!.moveUp(selectedSecretName)
+                updateTokens()
+                common.request(
+                    "data/update_sort",
+                    {
+                        val error = it.getString("error")
+                        if (error != "false") {
+                            Log.e("API error", error)
+                            common.toast(R.string.unknown_error)
+                        }
+                    },
+                    Pair("username", common.username),
+                    Pair("token", common.token),
+                    Pair("secretssort", common.storage!!.encryptSort()),
+                    error_handler = {
+                        common.toast(R.string.network_unreachable)
+                    }
+                )
+            }
+            true
+        }
+        Menu.FIRST + 2 -> {
+            if (common.storage == null) {
+                common.toast(R.string.unknown_error)
+            } else {
+                common.storage!!.moveDown(selectedSecretName)
+                updateTokens()
+                common.request(
+                    "data/update_sort",
+                    {
+                        val error = it.getString("error")
+                        if (error != "false") {
+                            Log.e("API error", error)
+                            common.toast(R.string.unknown_error)
+                        }
+                    },
+                    Pair("username", common.username),
+                    Pair("token", common.token),
+                    Pair("secretssort", common.storage!!.encryptSort())
+                )
+            }
             true
         }
         else -> {

@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">Confirmar la eliminación de la cuenta</string>
     <string name="invalid_key">Tecla inválida</string>
     <string name="account_deleted">Cuenta borrada</string>
+    <string name="move_up">Hacia arriba</string>
+    <string name="move_down">Hacia abajo</string>
 </resources>

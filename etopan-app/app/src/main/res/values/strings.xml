@@ -64,4 +64,6 @@
     <string name="confirm_account_deletion">Confirm account deletion</string>
     <string name="invalid_key">Invalid key</string>
     <string name="account_deleted">Account deleted</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
 </resources>

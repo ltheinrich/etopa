@@ -259,15 +259,16 @@ function gen_tokens() {
         a.classList.add("token");
         a.href = "#";
         if (online) {
+            if (secretNames.indexOf(name) == 0)
+                button_up.disabled = true;
             button_up.innerHTML = "&#11014;&#65039";
             button_up.classList.add("btn");
             button_up.classList.add("btn-default");
             button_up.classList.add("button-updown");
             button_up.type = "button";
             button_up.addEventListener("click", function () {
-                if (secretNames.indexOf(name) == 0) {
-                    return;
-                }
+                if (secretNames.indexOf(name) == 0)
+                    return
                 const nameIndex = secretNames.indexOf(name);
                 const before = secretNames[nameIndex - 1];
                 secretNames[nameIndex - 1] = secretNames[nameIndex];
@@ -277,15 +278,16 @@ function gen_tokens() {
                 updateSort();
             });
 
+            if (secretNames.indexOf(name) == secretNames.length - 1)
+                button_down.disabled = true;
             button_down.innerHTML = "&#11015;&#65039";
             button_down.classList.add("btn");
             button_down.classList.add("btn-default");
             button_down.classList.add("button-updown");
             button_down.type = "button";
             button_down.addEventListener("click", function () {
-                if (secretNames.indexOf(name) == secretNames.length - 1) {
-                    return;
-                }
+                if (secretNames.indexOf(name) == secretNames.length - 1)
+                    return
                 const nameIndex = secretNames.indexOf(name);
                 const after = secretNames[nameIndex + 1];
                 secretNames[nameIndex + 1] = secretNames[nameIndex];

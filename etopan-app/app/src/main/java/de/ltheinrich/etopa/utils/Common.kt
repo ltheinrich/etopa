@@ -105,13 +105,14 @@ class Common constructor(activity: Activity) {
     fun createMenu(menu: Menu?): Boolean {
         activity.menuInflater.inflate(R.menu.toolbar_menu, menu)
         val simpleItems = arrayOf(R.id.action_licenses)
+        val offlineDisabled = arrayOf(R.id.action_account, R.id.action_add)
         when (menuType) {
             MenuType.DISABLED -> menu?.iterator()?.forEach { item -> item.isVisible = false }
-            MenuType.SIMPLE -> simpleItems.forEach { itemId ->
-                menu?.findItem(itemId)?.isVisible = true
-            }
+            MenuType.SIMPLE -> simpleItems.forEach { menu?.findItem(it)?.isVisible = true }
             MenuType.FULL -> menu?.iterator()?.forEach { item -> item.isVisible = true }
         }
+        if (offline)
+            offlineDisabled.forEach { menu?.findItem(it)?.isVisible = false }
         return true
     }
 

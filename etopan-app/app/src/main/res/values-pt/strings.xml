@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">Confirme a exclusão da conta</string>
     <string name="invalid_key">Chave inválida</string>
     <string name="account_deleted">Conta excluída</string>
+    <string name="move_up">Pra cima</string>
+    <string name="move_down">Para baixo</string>
 </resources>

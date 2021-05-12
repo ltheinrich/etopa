@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">Подтвердите удаление аккаунта</string>
     <string name="invalid_key">Неправильный ключ</string>
     <string name="account_deleted">Аккаунт удален</string>
+    <string name="move_up">Вверх</string>
+    <string name="move_down">Вниз</string>
 </resources>

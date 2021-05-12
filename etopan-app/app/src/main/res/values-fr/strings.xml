@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">Confirmer la suppression du compte</string>
     <string name="invalid_key">Clé non valide</string>
     <string name="account_deleted">Compte supprimé</string>
+    <string name="move_up">Vers le haut</string>
+    <string name="move_down">Vers le bas</string>
 </resources>

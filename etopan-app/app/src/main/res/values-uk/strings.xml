@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">Підтвердьте видалення облікового запису</string>
     <string name="invalid_key">Недійсний ключ</string>
     <string name="account_deleted">Обліковий запис видалено</string>
+    <string name="move_up">Вгору</string>
+    <string name="move_down">Вниз</string>
 </resources>

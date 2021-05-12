@@ -2,7 +2,7 @@ package de.ltheinrich.etopa.utils
 
 class Storage(private val common: Common, data: String) {
 
-    val map = LinkedHashMap<String, String>()
+    var map = LinkedHashMap<String, String>()
 
     init {
         val lines = data.split('\n')
@@ -33,6 +33,54 @@ class Storage(private val common: Common, data: String) {
                     map[name] = secret
             }
         }
+    }
+
+    fun moveUp(name: String) {
+        val keys = ArrayList(map.keys)
+        val values = ArrayList(map.values)
+        val index = keys.indexOf(name)
+        if (index == 0)
+            return
+
+        val before = Pair(keys[index - 1], values[index - 1])
+        keys[index - 1] = keys[index]
+        values[index - 1] = values[index]
+        keys[index] = before.first
+        values[index] = before.second
+
+        val map = LinkedHashMap<String, String>()
+        keys.forEachIndexed { i, key -> map[key] = values[i] }
+        this.map = map
+    }
+
+    fun isLastSorted(name: String): Boolean {
+        val keys = ArrayList(map.keys)
+        val index = keys.indexOf(name)
+        return index == keys.size - 1
+    }
+
+    fun isFirstSorted(name: String): Boolean {
+        val keys = ArrayList(map.keys)
+        val index = keys.indexOf(name)
+        return index == 0
+    }
+
+    fun moveDown(name: String) {
+        val keys = ArrayList(map.keys)
+        val values = ArrayList(map.values)
+        val index = keys.indexOf(name)
+        if (index == keys.size - 1)
+            return
+
+        val after = Pair(keys[index + 1], values[index + 1])
+        keys[index + 1] = keys[index]
+        values[index + 1] = values[index]
+        keys[index] = after.first
+        values[index] = after.second
+
+        val map = LinkedHashMap<String, String>()
+        keys.forEachIndexed { i, key -> map[key] = values[i] }
+        this.map = map
     }
 
     fun encrypt(keyHash: String): String {
@@ -67,3 +115,4 @@ class Storage(private val common: Common, data: String) {
         return common.encrypt(common.keyHash, sort.toString())
     }
 }
+

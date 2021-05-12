@@ -61,4 +61,6 @@
     <string name="confirm_account_deletion">계정 삭제 확인</string>
     <string name="invalid_key">유효하지 않은 키</string>
     <string name="account_deleted">계정이 삭제되었습니다.</string>
+    <string name="move_up">쪽으로</string>
+    <string name="move_down">하향</string>
 </resources>
