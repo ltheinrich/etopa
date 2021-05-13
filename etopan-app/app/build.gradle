@@ -13,7 +13,7 @@ android {
         versionCode 12
         versionName "0.0.10"
 
-        resConfigs "en", "de", "ru", "uk", "es", "pt", "fr", "ko"
+        resConfigs "en", "de", "ru", "es", "pt", "fr", "ko"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
