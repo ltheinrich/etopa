@@ -1,0 +1,5 @@
+#etopan-app/app/src/main/java/de/ltheinrich/etopa/utils/Common.kt linguist-language=Rust
+Cargo.lock linguist-language=Rust
+Cargo.toml linguist-language=Rust
+**/Cargo.lock linguist-language=Rust
+**/Cargo.toml linguist-language=Rust
