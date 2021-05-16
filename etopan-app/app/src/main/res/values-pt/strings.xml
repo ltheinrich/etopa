@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="permission_denied">Permissão negada</string>
-    <string name="login">Conecte-se</string>
     <string name="username">Nome de usuário</string>
     <string name="password">Senha</string>
     <string name="key">Chave</string>
@@ -19,7 +18,6 @@
     <string name="save">Salvar</string>
     <string name="settings_saved">Configurações salvas</string>
     <string name="rename">Renomear</string>
-    <string name="delete">Excluir</string>
     <string name="edit_secret">Editar segredo</string>
     <string name="name">Nome</string>
     <string name="delete_secret">Excluir segredo</string>

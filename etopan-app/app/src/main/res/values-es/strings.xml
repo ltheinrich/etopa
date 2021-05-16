@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">Iniciar sesión</string>
     <string name="username">Nombre de usuario</string>
     <string name="password">Contraseña</string>
     <string name="key">Clave</string>
@@ -18,12 +17,11 @@
     <string name="save">Guardar</string>
     <string name="settings_saved">Ajustes guardados</string>
     <string name="rename">Rebautizar</string>
-    <string name="delete">Borrar</string>
     <string name="edit_secret">Editar secreto</string>
     <string name="name">Nombre</string>
     <string name="delete_secret">Eliminar secreto</string>
     <string name="type_secret_name">Escriba nombre de secreto</string>
-    <string name="edit_var">\'%1$1\' edición</string>
+    <string name="edit_var">\'%1$s\' edición</string>
     <string name="confirm_deletion">Confirmar eliminación</string>
     <string name="failed_error">Falló (error desconocido)</string>
     <string name="secret_deleted">Secreto eliminado</string>

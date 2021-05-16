@@ -29,7 +29,7 @@ class EditActivity : AppCompatActivity() {
         setContentView(binding.root)
         common.menuType = MenuType.DISABLED
         val secretName = intent.getStringExtra("secretName").orEmpty()
-        binding.toolbar.root.title = getString(R.string.edit_var, secretName)
+        binding.toolbar.root.title = String.format(getString(R.string.edit_var), secretName)
         setSupportActionBar(binding.toolbar.root)
         preferences = getSharedPreferences("etopa", Context.MODE_PRIVATE)
         common.backActivity = AppActivity::class.java

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Etopa</string>
-    <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="key">Key</string>
@@ -21,7 +20,6 @@
     <string name="settings_saved">Settings saved</string>
     <string name="token_format" translatable="false">%1$s %2$s</string>
     <string name="rename">Rename</string>
-    <string name="delete">Delete</string>
     <string name="edit_secret">Edit secret</string>
     <string name="name">Name</string>
     <string name="delete_secret">Delete secret</string>

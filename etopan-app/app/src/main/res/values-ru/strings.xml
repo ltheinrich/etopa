@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">логин</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="key">шифр</string>
@@ -18,12 +17,11 @@
     <string name="save">Сохранить</string>
     <string name="settings_saved">Настройки сохранены</string>
     <string name="rename">Переименовать</string>
-    <string name="delete">Удалить</string>
     <string name="edit_secret">Изменить секрет</string>
     <string name="name">Имя</string>
     <string name="delete_secret">Удалить секрет</string>
     <string name="type_secret_name">Введите секретное имя</string>
-    <string name="edit_var">\'%1$1\' редактировать</string>
+    <string name="edit_var">\'%1$s\' редактировать</string>
     <string name="confirm_deletion">Подтвердить удаление</string>
     <string name="failed_error">Не удалось (неизвестная ошибка)</string>
     <string name="secret_deleted">Секрет удален</string>

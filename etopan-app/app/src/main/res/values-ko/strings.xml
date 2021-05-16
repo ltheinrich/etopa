@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">로그인</string>
     <string name="username">사용자 이름</string>
     <string name="password">암호</string>
     <string name="key">열쇠</string>
@@ -18,12 +17,11 @@
     <string name="save">저장</string>
     <string name="settings_saved">설정이 저장되었습니다</string>
     <string name="rename">이름 바꾸기</string>
-    <string name="delete">지우다</string>
     <string name="edit_secret">비밀 수정</string>
     <string name="name">이름</string>
     <string name="delete_secret">비밀 삭제</string>
     <string name="type_secret_name">비밀 이름 입력</string>
-    <string name="edit_var">%1$1\' 편집하다</string>
+    <string name="edit_var">%1$s\' 편집하다</string>
     <string name="confirm_deletion">삭제 확인</string>
     <string name="failed_error">실패 (알 수없는 오류)</string>
     <string name="secret_deleted">비밀이 삭제되었습니다.</string>

@@ -1,6 +1,5 @@
 //! Etopa for Android
 
-//#![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
 use etopa::crypto::argon2_hash;
@@ -167,4 +166,49 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
 
     // return token
     make_string(&env, token)
+}
+
+/// Decode URL
+#[no_mangle]
+pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decodeUrl(
+    env: JNIEnv,
+    _: JObject,
+    jencoded_url: JString,
+) -> jstring {
+    // receive encoded url
+    let encoded_url = recv_string(&env, jencoded_url);
+
+    let url = encoded_url
+        .replace("%20", " ")
+        .replace("%21", "!")
+        .replace("%22", "\"")
+        .replace("%23", "#")
+        .replace("%24", "$")
+        .replace("%25", "%")
+        .replace("%26", "&")
+        .replace("%27", "'")
+        .replace("%28", "(")
+        .replace("%29", ")")
+        .replace("%2A", "*")
+        .replace("%2B", "+")
+        .replace("%2C", ",")
+        .replace("%2D", "-")
+        .replace("%2E", ".")
+        .replace("%2F", "/")
+        .replace("%3A", ":")
+        .replace("%3B", ";")
+        .replace("%3C", "<")
+        .replace("%3D", "=")
+        .replace("%3E", ">")
+        .replace("%3F", "?")
+        .replace("%40", "@")
+        .replace("%5B", "[")
+        .replace("%5C", "\\")
+        .replace("%5D", "]")
+        .replace("%7B", "{")
+        .replace("%7C", "|")
+        .replace("%7D", "}");
+
+    // return token
+    make_string(&env, url)
 }

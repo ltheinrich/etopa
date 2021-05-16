@@ -8,7 +8,7 @@ class Storage(private val common: Common, data: String) {
         val lines = data.split('\n')
         val splitLines = HashMap<String, String>()
         val names = ArrayList<String>()
-
+        
         lines.forEach { line ->
             if (line.contains('=') || line.contains('_')) {
                 val splitLine = line.split('=')
@@ -35,24 +35,6 @@ class Storage(private val common: Common, data: String) {
         }
     }
 
-    fun moveUp(name: String) {
-        val keys = ArrayList(map.keys)
-        val values = ArrayList(map.values)
-        val index = keys.indexOf(name)
-        if (index == 0)
-            return
-
-        val before = Pair(keys[index - 1], values[index - 1])
-        keys[index - 1] = keys[index]
-        values[index - 1] = values[index]
-        keys[index] = before.first
-        values[index] = before.second
-
-        val map = LinkedHashMap<String, String>()
-        keys.forEachIndexed { i, key -> map[key] = values[i] }
-        this.map = map
-    }
-
     fun isLastSorted(name: String): Boolean {
         val keys = ArrayList(map.keys)
         val index = keys.indexOf(name)
@@ -65,18 +47,21 @@ class Storage(private val common: Common, data: String) {
         return index == 0
     }
 
-    fun moveDown(name: String) {
+    fun moveUp(name: String) = move(name, -1)
+    fun moveDown(name: String) = move(name, 1)
+
+    private fun move(name: String, dif: Int) {
         val keys = ArrayList(map.keys)
         val values = ArrayList(map.values)
         val index = keys.indexOf(name)
-        if (index == keys.size - 1)
+        if (index + dif < 0 || index + dif > keys.size - 1)
             return
 
-        val after = Pair(keys[index + 1], values[index + 1])
-        keys[index + 1] = keys[index]
-        values[index + 1] = values[index]
-        keys[index] = after.first
-        values[index] = after.second
+        val other = Pair(keys[index + dif], values[index + dif])
+        keys[index + dif] = keys[index]
+        values[index + dif] = values[index]
+        keys[index] = other.first
+        values[index] = other.second
 
         val map = LinkedHashMap<String, String>()
         keys.forEachIndexed { i, key -> map[key] = values[i] }
