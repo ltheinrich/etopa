@@ -207,14 +207,12 @@ version = "0.0.0"
 dependencies = [
  "aes-gcm",
  "base32",
- "getrandom",
  "hex",
  "kern",
  "rand",
  "ring",
  "rust-argon2",
  "sha3",
- "wasm-bindgen",
 ]
 
 [[package]]
@@ -240,8 +238,10 @@ version = "0.0.0"
 dependencies = [
  "console_error_panic_hook",
  "etopa",
+ "getrandom",
  "serde",
  "serde_derive",
+ "wasm-bindgen",
  "wasm-bindgen-test",
  "wee_alloc",
 ]
