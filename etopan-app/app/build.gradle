@@ -10,7 +10,7 @@ android {
         applicationId "de.ltheinrich.etopa"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 12
+        versionCode 13
         versionName "0.1.0"
 
         resConfigs "en", "de", "ru", "es", "pt", "fr", "ko"
