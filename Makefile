@@ -3,6 +3,12 @@ EXTRA_DIR?=extra
 RUST_BUILDER?=cargo
 NOTICE_FILE?=NOTICE.txt
 
+# versions
+NDK_VERSION=22.1.7171670
+BUNDLETOOL_VERSION=1.6.1
+BUILDTOOLS_VERSION=30.0.3
+MINIFY_VERSION=2.9.17
+
 # api
 API_FILE_NAME?=etopa
 API_TARGET_TRIPLE?=x86_64-unknown-linux-musl
@@ -12,11 +18,11 @@ CARGO_UPGRADE?=cargo upgrade
 NATIVE_TARGET_CPU?=native
 
 # android
-NDK_TOOLCHAIN_BIN?=$(ANDROID_NDK_ROOT)/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
+NDK_TOOLCHAIN_BIN?=$(ANDROID_NDK_ROOT)/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/bin
 export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
-ANDROID_BT_PATH?=$(ANDROID_HOME)/build-tools/30.0.3
+ANDROID_BT_PATH?=$(ANDROID_HOME)/build-tools/${BUILDTOOLS_VERSION}
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
-BUNDLETOOL_JAR?=$(ANDROID_HOME)/bundletool-1.5.0.jar
+BUNDLETOOL_JAR?=$(ANDROID_HOME)/bundletool-${BUNDLETOOL_VERSION}.jar
 ANDROID_APK_FILE?=etopa.apk
 ANDROID_AAB_FILE?=${EXTRA_DIR}/etopa.aab
 ANDROID_MAPPING?=${EXTRA_DIR}/mapping.txt
@@ -35,7 +41,7 @@ DEBUG_JKS_ALIAS?=androiddebugkey
 # web
 WEB_FILE_NAME?=etopa.tar.xz
 WASM_PACK_EXEC?=wasm-pack
-GOMINIFY_EXEC?=minify-v2.8.0 # update to 2.9.17 (import calls bug)
+GOMINIFY_EXEC?=minify-v${MINIFY_VERSION}
 TEMP_EWM?=/tmp/etopa_ewm
 
 .PHONY: build upgrade check api web android clean
