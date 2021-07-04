@@ -122,4 +122,4 @@ check:
 	${RUST_BUILDER} fmt --all --verbose -- --check
 	${RUST_BUILDER} clippy --workspace --all-features --all-targets --verbose -- -D warnings
 	${RUST_BUILDER} test -p etopa -p etopai -p etopan --all-features --all-targets --verbose
-	${WASM_PACK_EXEC} test etopaw --node
+	${WASM_PACK_EXEC} test --node etopaw
