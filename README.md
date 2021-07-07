@@ -4,8 +4,7 @@
 
 # Etopa
 ### Time-based one-time password authenticator (2FA)
-Etopa is a two-factor-authentication app, which runs as a web server and can be accessed using a web browser or using an Android app.
-I would consider it stable to use, but there are still many functions yet to be implemented.
+Etopa is a two-factor-authentication app, which runs as a web server and can be accessed using a web browser or using an Android app. Feel free to suggest feature implementations or report bugs by creating an [Issue](https://github.com/ltheinrich/etopa/issues) on GitHub.
 
 <hr>
 
