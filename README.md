@@ -37,3 +37,9 @@ API server: `target/build/etopa`
 Android APK: `target/build/etopa.apk`
 
 Web archive: `target/build/etopa.tar.xz`
+
+### Known errors
+Fix *Installed Build Tools revision 31.0.0 is corrupted. Remove and install again using the SDK Manager.*
+> \# Install build-tools 30.0.3 additionally, then copy both files:<br>
+> cp $ANDROID_HOME/build-tools/30.0.3/dx.jar $ANDROID_HOME/build-tools/31.0.0/dx<br>
+> cp $ANDROID_HOME/build-tools/30.0.3/lib/dx.jar $ANDROID_HOME/build-tools/31.0.0/lib/dx.jar
