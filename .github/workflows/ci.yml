@@ -54,7 +54,9 @@ jobs:
           ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/tools/bin/sdkmanager
         run: |
           ./configure
+          yes | /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses
           yes | /usr/local/lib/android/sdk/tools/bin/sdkmanager "build-tools;30.0.3"
+          ls /usr/local/lib/android/sdk/build-tools && ls /usr/local/lib/android/sdk/build-tools/*
           cd /usr/local/lib/android/sdk/build-tools && cp 30.0.3/dx.jar 31.0.0/ && cp 30.0.3/lib/dx.jar 31.0.0/lib/
 
       - name: Make
