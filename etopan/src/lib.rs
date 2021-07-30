@@ -30,7 +30,7 @@ pub fn make_string(env: &JNIEnv, string: impl Into<JNIString>) -> jstring {
 
 /// Empty string for Java
 pub fn empty_string(env: &JNIEnv) -> jstring {
-    make_string(&env, "")
+    make_string(env, "")
 }
 
 /// Hash key
