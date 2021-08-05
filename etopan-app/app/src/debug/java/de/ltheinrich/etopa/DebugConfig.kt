@@ -1,5 +1,6 @@
 package de.ltheinrich.etopa
 
+import androidx.viewbinding.BuildConfig
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.HttpsURLConnection
