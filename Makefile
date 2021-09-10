@@ -1,7 +1,6 @@
 TARGET_OUTPUT_DIR?=${PWD}/target/build
 EXTRA_DIR?=extra
-### temporary nightly build ###
-RUST_BUILDER?=cargo -Zbuild-std
+RUST_BUILDER?=cargo
 NOTICE_FILE?=NOTICE.txt
 
 # versions

@@ -50,9 +50,6 @@ fi
 source $HOME/.profile
 
 rustup update
-### temporary nightly build ###
-rustup toolchain install nightly
-rustup component add rust-src --toolchain nightly
 targets=`rustup target list`
 
 if ! [[ $targets == *"x86_64-unknown-linux-musl (installed)"* ]]; then
