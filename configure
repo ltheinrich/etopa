@@ -2,13 +2,7 @@
 
 set -e
 source $HOME/.profile
-
-# versions
-ANDROID_PLATFORM=31
-BUILDTOOLS_VERSION=31.0.0
-NDK_VERSION=22.1.7171670
-BUNDLETOOL_VERSION=1.6.1
-MINIFY_VERSION=2.9.19
+source build-config.sh
 
 distro=`lsb_release -is`
 mkdir -p /tmp/etopa-configure
@@ -39,8 +33,6 @@ if ! [ $? -eq 0 ]; then
   chmod +x /tmp/etopa-configure/rustup.sh
   /tmp/etopa-configure/rustup.sh -y
   rm /tmp/etopa-configure/rustup.sh
-else
-  rustup update
 fi
 
 if [ -z "$ANDROID_HOME" ]; then
@@ -57,6 +49,10 @@ fi
 
 source $HOME/.profile
 
+rustup update
+### temporary nightly build ###
+rustup toolchain install nightly
+rustup component add rust-src --toolchain nightly
 targets=`rustup target list`
 
 if ! [[ $targets == *"x86_64-unknown-linux-musl (installed)"* ]]; then

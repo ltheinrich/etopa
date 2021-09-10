@@ -1,13 +1,14 @@
 TARGET_OUTPUT_DIR?=${PWD}/target/build
 EXTRA_DIR?=extra
-RUST_BUILDER?=cargo
+### temporary nightly build ###
+RUST_BUILDER?=cargo -Zbuild-std
 NOTICE_FILE?=NOTICE.txt
 
 # versions
-BUILDTOOLS_VERSION=31.0.0
-NDK_VERSION=22.1.7171670
-BUNDLETOOL_VERSION=1.6.1
-MINIFY_VERSION=2.9.19
+BUILDTOOLS_VERSION=$(shell ./build-config.sh BUILDTOOLS_VERSION)
+NDK_VERSION=$(shell ./build-config.sh NDK_VERSION)
+BUNDLETOOL_VERSION=$(shell ./build-config.sh BUNDLETOOL_VERSION)
+MINIFY_VERSION=$(shell ./build-config.sh MINIFY_VERSION)
 
 # api
 API_FILE_NAME?=etopa
@@ -71,6 +72,7 @@ android-build: export CC_aarch64-linux-android = aarch64-linux-android21-clang
 android-build: export CC_armv7-linux-androideabi = armv7a-linux-androideabi21-clang
 android-build: export CC_x86_64-linux-android = x86_64-linux-android21-clang
 android-build: export CC_i686-linux-android = i686-linux-android21-clang
+android-build: export TARGET_AR = llvm-ar
 android-build:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE}
