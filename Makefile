@@ -5,10 +5,10 @@ RUST_BUILDER?=cargo -Zbuild-std
 NOTICE_FILE?=NOTICE.txt
 
 # versions
-BUILDTOOLS_VERSION=$(shell ./build-config.sh BUILDTOOLS_VERSION)
-NDK_VERSION=$(shell ./build-config.sh NDK_VERSION)
-BUNDLETOOL_VERSION=$(shell ./build-config.sh BUNDLETOOL_VERSION)
-MINIFY_VERSION=$(shell ./build-config.sh MINIFY_VERSION)
+BUILDTOOLS_VERSION=$(shell ./build-config BUILDTOOLS_VERSION)
+NDK_VERSION=$(shell ./build-config NDK_VERSION)
+BUNDLETOOL_VERSION=$(shell ./build-config BUNDLETOOL_VERSION)
+MINIFY_VERSION=$(shell ./build-config MINIFY_VERSION)
 
 # api
 API_FILE_NAME?=etopa

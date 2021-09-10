@@ -2,7 +2,7 @@
 
 set -e
 source $HOME/.profile
-source build-config.sh
+source build-config
 
 distro=`lsb_release -is`
 mkdir -p /tmp/etopa-configure
