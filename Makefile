@@ -66,12 +66,12 @@ web:
 	(cd ${TEMP_EWM} && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
-#android: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
+#android-build: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
 android-build: export CC_aarch64-linux-android = aarch64-linux-android21-clang
 android-build: export CC_armv7-linux-androideabi = armv7a-linux-androideabi21-clang
 android-build: export CC_x86_64-linux-android = x86_64-linux-android21-clang
 android-build: export CC_i686-linux-android = i686-linux-android21-clang
-android-build: export TARGET_AR = llvm-ar
+#android-build: export TARGET_AR = llvm-ar
 android-build:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE}
