@@ -61,4 +61,4 @@ jobs:
           DEBUG_SIGN: y
           NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
-          make
+          make noclean

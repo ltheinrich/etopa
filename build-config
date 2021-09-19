@@ -1,9 +1,11 @@
 #!/bin/bash
 
+# versions from build.gradle
+export ANDROID_PLATFORM=$(sed -n '6p' etopan-app/app/build.gradle | grep -oE "[^ ]+$")
+export BUILDTOOLS_VERSION=$(sed -n '7p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
+export NDK_VERSION=$(sed -n '8p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
+
 # versions
-export ANDROID_PLATFORM=31
-export BUILDTOOLS_VERSION=31.0.0
-export NDK_VERSION=22.1.7171670
 export BUNDLETOOL_VERSION=1.8.0
 export MINIFY_VERSION=2.9.21
 

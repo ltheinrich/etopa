@@ -275,12 +275,12 @@ class MainActivity : AppCompatActivity() {
                     .setUserAuthenticationRequired(true)
                 keySpec = if (common.checkSdk(Build.VERSION_CODES.R)) {
                     keySpec.setUserAuthenticationParameters(
-                        60000,
+                        Integer.MAX_VALUE,
                         KeyProperties.AUTH_DEVICE_CREDENTIAL or KeyProperties.AUTH_BIOMETRIC_STRONG
                     )
                 } else {
                     @Suppress("DEPRECATION")
-                    keySpec.setUserAuthenticationValidityDurationSeconds(60000)
+                    keySpec.setUserAuthenticationValidityDurationSeconds(Integer.MAX_VALUE)
                 }
                 generateSecretKey(keySpec.build())
             }
@@ -301,7 +301,9 @@ class MainActivity : AppCompatActivity() {
                 BiometricPrompt.CryptoObject(cipher)
             )
         } catch (ex: Exception) {
+            preferences.edit().putBoolean("biometricDisabled", true).apply()
             common.toast(R.string.unknown_error)
+            common.toast(R.string.disable_biometric)
         }
     }
 

@@ -9,10 +9,10 @@ mod utils;
 
 mod api;
 
-use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
+use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES, TLS_CERTIFICATE, TLS_KEY};
 use data::StorageFile;
 use etopa::{meta::search, CliBuilder, Config, Fail};
-use kern::http::server::{listen, load_certificate, HttpRequest, HttpSettings};
+use kern::http::server::{certificate_config, listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;
 use std::sync::{Arc, RwLock};
@@ -62,7 +62,16 @@ fn main() {
 
     // start server
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
-    let tls_config = load_certificate(&cert, &key).unwrap();
+    let tls_config = match load_certificate(&cert, &key) {
+        Ok(config) => config,
+        Err(err) => {
+            eprintln!(
+                "Could not load TLS certificate or key:\n{}\nWARNING! Default certificate and key\n",
+                err
+            );
+            certificate_config(TLS_CERTIFICATE, TLS_KEY).unwrap()
+        }
+    };
     let listeners = listen(
         &format!("{}:{}", addr, port),
         threads,

@@ -30,6 +30,12 @@ pub const LICENSES: &str = include_str!("../../NOTICE.txt");
 /// Android build.gradle (get version string)
 pub const BUILD_GRADLE: &str = include_str!("../../etopan-app/app/build.gradle");
 
+/// Default TLS certificate
+pub const TLS_CERTIFICATE: &[u8] = include_bytes!("../../data/cert.pem");
+
+/// Default TLS key
+pub const TLS_KEY: &[u8] = include_bytes!("../../data/key.pem");
+
 /// Data shared between handlers
 #[derive(Debug)]
 pub struct SharedData {

@@ -13,6 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
@@ -25,6 +27,7 @@ class AddActivity : AppCompatActivity() {
     private val common: Common = Common.getInstance(this)
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivityAddBinding
+    private lateinit var qrCodeLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,16 @@ class AddActivity : AppCompatActivity() {
             addSecret()
         }
 
+        qrCodeLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                val result = IntentIntegrator.parseActivityResult(it.resultCode, it.data)
+                if (result != null && result.contents != null) {
+                    val secret = common.parseSecretUri(result.contents)
+                    binding.secretValue.editText?.setText(secret.first)
+                    binding.secretName.editText?.setText(secret.second)
+                }
+            }
+
         binding.qrCode.setOnClickListener {
             scanQRCode()
         }
@@ -64,7 +77,7 @@ class AddActivity : AppCompatActivity() {
                 setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
                 setBeepEnabled(false)
             }
-            integrator.initiateScan()
+            qrCodeLauncher.launch(integrator.createScanIntent())
         }
     }
 
@@ -79,17 +92,6 @@ class AddActivity : AppCompatActivity() {
                 scanQRCode()
             else
                 common.toast(R.string.permission_denied)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null && result.contents != null) {
-            val secret = common.parseSecretUri(result.contents)
-            binding.secretValue.editText?.setText(secret.first)
-            binding.secretName.editText?.setText(secret.second)
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
     private fun addSecret() {

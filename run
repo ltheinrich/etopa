@@ -1,15 +1,17 @@
 #!/bin/bash
 
+source build-config
+
 if [ "$#" -lt 1 ]; then
   echo "./run api|web|android|android+"
 elif [ $1 == "api" ]; then
   cargo run -p etopai -- $@
 elif [ $1 == "web" ]; then
   wasm-pack build --dev --no-typescript -t web -d ../etopaw-app/pkg etopaw
-  elif [ $1 == "android" ]; then
+elif [ $1 == "android" ]; then
   JNI_LIBS=etopan-app/app/src/main/jniLibs
-  if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/23.0.7599858/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.android/sdk/ndk/23.0.7599858/toolchains/llvm/prebuilt/linux-x86_64/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/sdk/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin"
   fi
   LINKER_AARCH64=aarch64-linux-android21-clang
   LINKER_I686=i686-linux-android21-clang
@@ -20,8 +22,8 @@ elif [ $1 == "web" ]; then
   cp target/i686-linux-android/debug/libetopan.so $JNI_LIBS/x86/libetopan.so
 elif [ $1 == "android+" ]; then
   JNI_LIBS=etopan-app/app/src/main/jniLibs
-  if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/23.0.7599858/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
-    export PATH="$PATH:$HOME/.android/sdk/ndk/23.0.7599858/toolchains/llvm/prebuilt/linux-x86_64/bin"
+  if ! [[ "$PATH" == ?(*:)"$HOME/.android/sdk/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin"?(:*) ]]; then
+    export PATH="$PATH:$HOME/.android/sdk/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin"
   fi
   LINKER_AARCH64=aarch64-linux-android21-clang
   LINKER_ARMV7=armv7a-linux-androideabi21-clang

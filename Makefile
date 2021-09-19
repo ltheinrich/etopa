@@ -44,9 +44,11 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-v${MINIFY_VERSION}
 TEMP_EWM?=/tmp/etopa_ewm
 
-.PHONY: build upgrade check api web android clean
+.PHONY: build clean noclean upgrade check api web android
 
-build: upgrade rmtarget check api web android
+build: clean noclean
+
+noclean: rmtarget upgrade check api web android
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
 api:

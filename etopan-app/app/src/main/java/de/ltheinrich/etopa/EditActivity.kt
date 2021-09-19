@@ -112,8 +112,23 @@ class EditActivity : AppCompatActivity() {
                 {
                     val error = it.getString("error")
                     if (error == "false") {
-                        common.toast(R.string.success)
-                        common.openActivity(AppActivity::class)
+                        common.storage!!.renameSecretKey(secretName, secretNewName)
+                        common.request(
+                            "data/update_sort",
+                            { sort_error ->
+                                val errorSort = sort_error.getString("error")
+                                if (errorSort == "false") {
+                                    common.toast(R.string.success)
+                                    common.openActivity(AppActivity::class)
+                                } else {
+                                    Log.e("API error", errorSort)
+                                    common.toast(R.string.unknown_error)
+                                }
+                            },
+                            Pair("username", common.username),
+                            Pair("token", common.token),
+                            Pair("secretssort", common.storage!!.encryptSort())
+                        )
                     } else {
                         common.toast(R.string.failed_error)
                         Log.d("API error", error)

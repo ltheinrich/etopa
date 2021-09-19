@@ -8,7 +8,7 @@ class Storage(private val common: Common, data: String) {
         val lines = data.split('\n')
         val splitLines = HashMap<String, String>()
         val names = ArrayList<String>()
-        
+
         lines.forEach { line ->
             if (line.contains('=') || line.contains('_')) {
                 val splitLine = line.split('=')
@@ -66,6 +66,18 @@ class Storage(private val common: Common, data: String) {
         val map = LinkedHashMap<String, String>()
         keys.forEachIndexed { i, key -> map[key] = values[i] }
         this.map = map
+    }
+
+    fun renameSecretKey(name: String, newName: String) {
+        if (!map.containsKey(name))
+            return
+
+        map[newName] = map[name].orEmpty()
+        val keys = ArrayList(map.keys)
+        val index = keys.indexOf(name)
+
+        move(newName, index - keys.size + 1)
+        map.remove(name)
     }
 
     fun encrypt(keyHash: String): String {

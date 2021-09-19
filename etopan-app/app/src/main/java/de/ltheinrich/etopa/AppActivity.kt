@@ -1,5 +1,6 @@
 package de.ltheinrich.etopa
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -87,6 +88,7 @@ class AppActivity : AppCompatActivity() {
         }.run()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateTokens() {
         tokens.clear()
         for (secret in common.storage!!.map) {

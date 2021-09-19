@@ -156,8 +156,14 @@ async function rename_token(name, new_name) {
                 const secret_name_encrypted = wasm.encrypt_hex(new_name, storage_key());
                 api_fetch(async function (json) {
                     if (json.error == false) {
-                        reload_secrets();
+                        let secretNames = Object.keys(secrets);
+                        const nameIndex = secretNames.indexOf(name);
+                        secretNames[nameIndex] = new_name;
+                        secrets[new_name] = secrets[name];
+                        delete secrets[name];
+                        secrets = JSON.parse(JSON.stringify(secrets, secretNames));
                         gen_tokens();
+                        updateSort();
                     } else {
                         alert_error(lang.api_error_cs + json.error);
                     }
