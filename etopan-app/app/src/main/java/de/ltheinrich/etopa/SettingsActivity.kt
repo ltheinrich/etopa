@@ -118,7 +118,7 @@ class SettingsActivity : AppCompatActivity() {
                     common.newLogin(preferences)
                 } else {
                     common.toast(R.string.name_exists)
-                    Log.d("API error", response.getString("error"))
+                    Log.e("API error", response.getString("error"))
                 }
             },
             Pair("username", common.username),

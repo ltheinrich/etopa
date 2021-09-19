@@ -105,7 +105,7 @@ class AccountActivity : AppCompatActivity() {
                     common.openActivity(MainActivity::class)
                 } else {
                     common.toast(R.string.unknown_error)
-                    Log.d("API error", response.getString("error"))
+                    Log.e("API error", response.getString("error"))
                 }
             },
             Pair("username", common.username),
@@ -180,7 +180,7 @@ class AccountActivity : AppCompatActivity() {
                             common.backKey(KeyEvent.KEYCODE_BACK)
                         } else {
                             common.toast(R.string.unknown_error)
-                            Log.d("API error", response.getString("error"))
+                            Log.e("API error", response.getString("error"))
                         }
                     },
                     Pair("username", common.username),
@@ -251,7 +251,7 @@ class AccountActivity : AppCompatActivity() {
                     common.backKey(KeyEvent.KEYCODE_BACK)
                 } else {
                     common.toast(R.string.unknown_error)
-                    Log.d("API error", response.getString("error"))
+                    Log.e("API error", response.getString("error"))
                 }
             },
             Pair("username", common.username),
@@ -301,7 +301,7 @@ class AccountActivity : AppCompatActivity() {
                     common.backKey(KeyEvent.KEYCODE_BACK)
                 } else {
                     common.toast(R.string.name_exists)
-                    Log.d("API error", response.getString("error"))
+                    Log.e("API error", response.getString("error"))
                 }
             },
             Pair("username", common.username),

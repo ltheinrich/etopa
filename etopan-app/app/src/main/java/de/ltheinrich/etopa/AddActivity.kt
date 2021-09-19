@@ -118,7 +118,7 @@ class AddActivity : AppCompatActivity() {
                     common.openActivity(AppActivity::class)
                 } else {
                     common.toast(R.string.failed_error)
-                    Log.d("API error", error)
+                    Log.e("API error", error)
                 }
             },
             Pair("secretname", common.hashName(secretName)),
