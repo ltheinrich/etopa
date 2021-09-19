@@ -11,8 +11,8 @@ android {
         applicationId "de.ltheinrich.etopa"
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 13
-        versionName "0.1.0"
+        versionCode 14
+        versionName "0.1.1"
 
         resConfigs "en", "de", "ru", "es", "pt", "fr", "ko"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
