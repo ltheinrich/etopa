@@ -3,6 +3,7 @@ name = "etopa"
 version = "0.0.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2021"
+rust-version = "1.56"
 license = "ISC"
 repository = "https://ltheinrich.de/etopa"
 description = "Time-based one-time password authenticator"
