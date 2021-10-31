@@ -48,7 +48,7 @@ TEMP_EWM?=/tmp/etopa_ewm
 
 build: clean noclean
 
-noclean: rmtarget upgrade check api web android
+noclean: upgrade check api web android
 	\cp ${NOTICE_FILE} ${TARGET_OUTPUT_DIR}/NOTICE.txt
 
 api:
@@ -113,9 +113,6 @@ upgrade:
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
 	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
-
-rmtarget:
-	rm -rf ${TARGET_OUTPUT_DIR}
 
 clean:
 	${RUST_BUILDER} clean
