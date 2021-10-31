@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         common.backActivity = MainActivity::class.java
         common.lockListener(this)
 
+        hideProgress()
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         pinSet = preferences.getString("pin_set", null)
         if (pinSet == null) {
@@ -104,6 +106,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun requestBiometric() {
         biometricLogin { result ->
+            showProgress()
             val encryptedPin = preferences.getString("encryptedPin", null)
             if (encryptedPin != null) {
                 common.hideKeyboard(currentFocus)
@@ -148,10 +151,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doUnlock() {
+        showProgress()
         common.menuType = MenuType.FULL
         common.decryptLogin(preferences)
 
         if (pinSet == null) {
+            hideProgress()
             // binding.unlock.text = getString(R.string.unlock)
             common.openActivity(
                 SettingsActivity::class,
@@ -163,6 +168,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        showProgress()
         if (preferences.getString("token", "").isNullOrEmpty()) {
             common.newLogin(preferences)
         } else {
@@ -171,6 +177,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun tokenLogin() {
+        showProgress()
         common.request(
             "user/valid",
             { responseValid ->
@@ -217,6 +224,7 @@ class MainActivity : AppCompatActivity() {
         onSuccess: (result: BiometricPrompt.AuthenticationResult) -> Unit,
     ) {
         try {
+            showProgress()
             val biometricPrompt =
                 BiometricPrompt(this, ContextCompat.getMainExecutor(this),
                     object : BiometricPrompt.AuthenticationCallback() {
@@ -225,6 +233,7 @@ class MainActivity : AppCompatActivity() {
                             errString: CharSequence,
                         ) {
                             super.onAuthenticationError(errorCode, errString)
+                            hideProgress()
                             binding.pin.editText?.requestFocus()
                             if (errorCode != BiometricPrompt.ERROR_USER_CANCELED && errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON && errorCode != BiometricPrompt.ERROR_CANCELED)
                                 common.toast(
@@ -243,9 +252,11 @@ class MainActivity : AppCompatActivity() {
                         ) {
                             super.onAuthenticationSucceeded(result)
                             try {
+                                showProgress()
                                 onSuccess(result)
                                 always()
                             } catch (ex: Exception) {
+                                hideProgress()
                                 common.toast(R.string.unknown_error)
                             }
                         }
@@ -301,10 +312,31 @@ class MainActivity : AppCompatActivity() {
                 BiometricPrompt.CryptoObject(cipher)
             )
         } catch (ex: Exception) {
+            hideProgress()
             preferences.edit().putBoolean("biometricDisabled", true).apply()
             common.toast(R.string.unknown_error)
             common.toast(R.string.disable_biometric)
         }
+    }
+
+    private fun showProgress() {
+        binding.pin.visibility = View.GONE
+        binding.unlock.visibility = View.GONE
+        binding.fingerprint.visibility = View.GONE
+        binding.progress.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        binding.progress.visibility = View.GONE
+        binding.pin.visibility = View.VISIBLE
+        binding.unlock.visibility = View.VISIBLE
+        if (common.checkSdk(Build.VERSION_CODES.M) && !preferences.getBoolean(
+                "biometricDisabled",
+                false
+            ) &&
+            preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
+        )
+            binding.fingerprint.visibility = View.VISIBLE
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

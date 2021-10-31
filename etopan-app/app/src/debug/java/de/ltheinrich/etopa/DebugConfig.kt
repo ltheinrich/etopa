@@ -1,5 +1,6 @@
 package de.ltheinrich.etopa
 
+import android.annotation.SuppressLint
 import androidx.viewbinding.BuildConfig
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -12,13 +13,16 @@ class DebugConfig {
     init {
         if (BuildConfig.DEBUG) {
             val trustAllCerts: Array<TrustManager> = arrayOf(
+                @SuppressLint("CustomX509TrustManager")
                 object : X509TrustManager {
+                    @SuppressLint("TrustAllX509TrustManager")
                     override fun checkClientTrusted(
                         certs: Array<X509Certificate?>?,
                         authType: String?
                     ) {
                     }
 
+                    @SuppressLint("TrustAllX509TrustManager")
                     override fun checkServerTrusted(
                         certs: Array<X509Certificate?>?,
                         authType: String?
