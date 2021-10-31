@@ -83,5 +83,6 @@ export const lang = {
     sure_to_rename_to: "Geheimnis \"$name\" wirklich in \"$new_name\" umbenennen?",
     source_code: "Quelltext",
     privacy_policy: "Datenschutzerklärung",
-    incorrect_username: "Benutzername inkorrekt"
+    incorrect_username: "Benutzername inkorrekt",
+    username_not_alphanumeric: "Benutzername ist nicht alphanumerisch"
 };

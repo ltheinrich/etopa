@@ -22,6 +22,8 @@ function handle_login(wasm) {
     if (key.value != "" && username.value == "" && password.value == "") {
         sessionStorage.setItem("storage_key", wasm.hash_key(key.value));
         location.href = "./app/";
+    } else if (!username.value.match(/^[0-9a-zA-Z]+$/)) {
+        alert_error(lang.username_not_alphanumeric);
     } else if (username.value != "" && password.value != "") {
         disabled(true);
         const password_hash = wasm.hash_password(password.value);
@@ -46,6 +48,8 @@ function handle_login(wasm) {
 function handle_register(wasm) {
     if (username.value == "" || password.value == "" || key.value == "") {
         return alert_error(lang.empty_username_password);
+    } else if (!username.value.match(/^[0-9a-zA-Z]+$/)) {
+        return alert_error(lang.username_not_alphanumeric);
     }
     disabled(true);
     const argon2_hash = wasm.argon2_hash(password.value);

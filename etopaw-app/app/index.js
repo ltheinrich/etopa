@@ -57,6 +57,10 @@ async function try_init() {
         setInterval(reload_tokens, 1000);
         add_form.onsubmit = function () { add_token(); return false; };
         disable_offline.onsubmit = function () {
+            if (!username.value.match(/^[0-9a-zA-Z]+$/)) {
+                alert_error(lang.username_not_alphanumeric);
+                return false;
+            }
             username.disabled = true;
             password.disabled = true;
             offline_mode.disabled = true;

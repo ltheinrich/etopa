@@ -83,5 +83,6 @@ export const lang = {
     sure_to_rename_to: "Секрет точно переиминовать в \"$name\" \"$new_name\"?",
     source_code: "Исходный текст",
     privacy_policy: "Декларация о защите данных",
-    incorrect_username: "Неправильное имя пользователя"
+    incorrect_username: "Неправильное имя пользователя",
+    username_not_alphanumeric: "Имя пользователя не буквенно-цифровое"
 };
