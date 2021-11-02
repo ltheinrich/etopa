@@ -111,8 +111,8 @@ if ! [ -f "$ANDROID_HOME/bundletool-${BUNDLETOOL_VERSION}.jar" ]; then
   curl -L -o $ANDROID_HOME/bundletool-${BUNDLETOOL_VERSION}.jar https://github.com/google/bundletool/releases/download/${BUNDLETOOL_VERSION}/bundletool-all-${BUNDLETOOL_VERSION}.jar
 fi
 
-if ! [ -f "/usr/local/bin/minify-v${MINIFY_VERSION}" ]; then
-  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/v${MINIFY_VERSION}/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-v${MINIFY_VERSION})
+if ! [ -f "/usr/local/bin/minify-${MINIFY_VERSION}" ]; then
+  (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/${MINIFY_VERSION}/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-${MINIFY_VERSION})
 fi
 
 rm -rf /tmp/etopa-configure

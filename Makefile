@@ -41,7 +41,7 @@ DEBUG_JKS_ALIAS?=androiddebugkey
 # web
 WEB_FILE_NAME?=etopa.tar.xz
 WASM_PACK_EXEC?=wasm-pack
-GOMINIFY_EXEC?=minify-v${MINIFY_VERSION}
+GOMINIFY_EXEC?=minify-${MINIFY_VERSION}
 TEMP_EWM?=/tmp/etopa_ewm
 
 .PHONY: build clean noclean upgrade check api web android
@@ -108,6 +108,10 @@ else
 endif
 
 upgrade:
+	$(eval BUNDLETOOL_VERSION := $(shell curl --silent "https://api.github.com/repos/google/bundletool/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
+	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
+	$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
+	sed -i '/export MINIFY_VERSION=*/c\export MINIFY_VERSION=$(MINIFY_VERSION)' build-config
 	${CARGO_UPGRADE} --workspace
 	${RUST_BUILDER} update
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
