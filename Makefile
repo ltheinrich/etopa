@@ -61,11 +61,14 @@ web:
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${WEB_FILE_NAME} && rm -rf ${TEMP_EWM}
 	${WASM_PACK_EXEC} build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
-	cp -r etopaw-app ${TEMP_EWM}
+	mkdir -p ${TEMP_EWM}
 	${GOMINIFY_EXEC} -r -o ${TEMP_EWM}/ etopaw-app/
-	\cp etopaw-app/config.js ${TEMP_EWM}/config.js
-	cp ${NOTICE_FILE} ${TEMP_EWM}/NOTICE.txt
-	(cd ${TEMP_EWM} && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
+	cp -r -n etopaw-app ${TEMP_EWM}
+	\cp etopaw-app/config.js ${TEMP_EWM}/etopaw-app/config.js
+	\cp etopaw-app/js/vue.min.js ${TEMP_EWM}/etopaw-app/js/vue.min.js
+	\cp etopaw-app/css/bootstrap.min.css ${TEMP_EWM}/etopaw-app/css/bootstrap.min.css
+	cp ${NOTICE_FILE} ${TEMP_EWM}/etopaw-app/NOTICE.txt
+	(cd ${TEMP_EWM}/etopaw-app && tar cfJ ${TARGET_OUTPUT_DIR}/etopa.tar.xz *)
 	rm -rf ${TEMP_EWM}
 
 #android-build: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
