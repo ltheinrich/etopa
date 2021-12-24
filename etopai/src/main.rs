@@ -4,14 +4,13 @@
 extern crate json;
 
 mod common;
-mod data;
 mod utils;
 
 mod api;
 
 use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES, TLS_CERTIFICATE, TLS_KEY};
-use data::StorageFile;
 use etopa::{meta::search, CliBuilder, Config, Fail};
+use kern::data::StorageFile;
 use kern::http::server::{certificate_config, listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;

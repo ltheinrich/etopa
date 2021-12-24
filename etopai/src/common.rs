@@ -2,7 +2,7 @@
 
 pub use crate::utils::*;
 
-use crate::data::StorageFile;
+use kern::data::StorageFile;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 /// Help output
