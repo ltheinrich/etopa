@@ -844,10 +844,10 @@ aead	0.4.3	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0
 aes	0.7.5	RustCrypto Developers	https://github.com/RustCrypto/block-ciphers	Apache-2.0 OR MIT		Pure Rust implementation of the Advanced Encryption Standard (a.k.a. Rijndael) including support for AES in counter mode (a.k.a. AES-CTR)
 aes-gcm	0.9.4	RustCrypto Developers	https://github.com/RustCrypto/AEADs	Apache-2.0 OR MIT		Pure Rust implementation of the AES-GCM (Galois/Counter Mode) Authenticated Encryption with Associated Data (AEAD) Cipher with optional architecture-specific hardware acceleration
 arrayref	0.3.6	David Roundy <roundyd@physics.oregonstate.edu>	https://github.com/droundy/arrayref	BSD-2-Clause		Macros to take array references of slices
-arrayvec	0.5.2	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
+arrayvec	0.7.2	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
 base32	0.4.0	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
 base64	0.13.0	Alice Maz <alice@alicemaz.com>|Marshall Pierce <marshall@mpierce.org>	https://github.com/marshallpierce/rust-base64	Apache-2.0 OR MIT		encodes and decodes base64 as bytes or utf8
-blake2b_simd	0.5.11	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
+blake2b_simd	1.0.0	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
 block-buffer	0.10.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer type for block processing of data
 bumpalo	3.9.1	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.1.0	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
@@ -895,7 +895,7 @@ rand_chacha	0.3.1	The Rand Project Developers|The Rust Project Developers|The Cr
 rand_core	0.6.3	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
 rand_hc	0.3.1	The Rand Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		HC128 random number generator
 ring	0.16.20	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ring's license	Safe, fast, small crypto using Rust.
-rust-argon2	0.8.3	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
+rust-argon2	1.0.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustls	0.20.2	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
 rustls-pemfile	0.2.1	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
 ryu	1.0.9	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion
