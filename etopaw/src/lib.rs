@@ -1,4 +1,5 @@
 //! Etopa for Web
+#![cfg(target_family = "wasm")] // TODO: temporary fix for error: unneeded unit expression
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;

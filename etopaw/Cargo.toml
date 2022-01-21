@@ -13,8 +13,8 @@ homepage = "https://etopa.de"
 etopa = { path = "../etopa" }
 console_error_panic_hook = "0.1.7"
 wee_alloc = "0.4.5"
-serde = "1.0.133"
-serde_derive = "1.0.133"
+serde = "1.0.134"
+serde_derive = "1.0.134"
 wasm-bindgen = { version = "0.2.79", features = ["serde-serialize"] }
 getrandom = { version = "0.2.4", features = ["js"] }
 
