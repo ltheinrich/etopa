@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
     android:layout_width="match_parent"
@@ -43,13 +44,33 @@
                     android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/unlock"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="@dimen/buttonWidth"
-                android:layout_height="@dimen/elemHeight"
-                android:text="@string/unlock"
-                android:layout_marginBottom="50dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp">
+
+                <Button
+                    android:id="@+id/unlock"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="@dimen/buttonWidth"
+                    android:layout_height="@dimen/elemHeight"
+                    android:text="@string/unlock"
+                    android:layout_centerHorizontal="true" />
+
+                <ImageButton
+                    android:id="@+id/passwordType"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="@dimen/elemHeight"
+                    android:layout_height="@dimen/elemHeight"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/pin"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_baseline_text_fields_24"
+                    app:tint="@color/greyButton" />
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/fingerprint"

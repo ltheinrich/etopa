@@ -40,7 +40,7 @@
     <string name="biometric_error">Desbloqueo biométrico: %1$s</string>
     <string name="disable_biometric">Desactivar el inicio de sesión biométrico</string>
     <string name="permission_denied">Permiso denegado</string>
-    <string name="verify_pin">Verificar PIN</string>
+    <string name="verify_pin">Verificar PIN/contraseña</string>
     <string name="change_username">Cambie el nombre de usuario</string>
     <string name="new_username">Nuevo nombre de usuario</string>
     <string name="change_password">Cambiar la contraseña</string>

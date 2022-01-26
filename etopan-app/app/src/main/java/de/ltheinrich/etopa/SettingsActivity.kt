@@ -44,6 +44,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.disableBiometric.isChecked = biometricDisabled
         binding.pin.editText?.setText(emptyPin)
         binding.instance.editText?.setText(common.instance)
+        common.setPasswordType(preferences, binding.pin)
 
         if (common.username.isNotEmpty())
             binding.username.editText?.setText(common.username)

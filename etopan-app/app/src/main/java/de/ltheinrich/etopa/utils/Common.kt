@@ -6,12 +6,14 @@ import android.content.*
 import android.content.Context.POWER_SERVICE
 import android.os.Build
 import android.os.PowerManager
+import android.text.InputType
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
@@ -113,6 +115,20 @@ class Common constructor(activity: Activity) {
         if (offline)
             offlineDisabled.forEach { menu?.findItem(it)?.isVisible = false }
         return true
+    }
+
+    fun setPasswordType(prefs: SharedPreferences, pin: TextInputLayout, type: ImageButton? = null) {
+        if (prefs.getBoolean("textPasswordNoPin", false)) {
+            pin.hint = activity.getString(R.string.password)
+            pin.editText?.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            type?.setImageResource(R.drawable.ic_baseline_fiber_pin_24)
+        } else {
+            pin.hint = activity.getString(R.string.pin)
+            pin.editText?.inputType =
+                InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            type?.setImageResource(R.drawable.ic_baseline_text_fields_24)
+        }
     }
 
     fun lockListener(activity: Activity) {

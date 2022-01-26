@@ -66,6 +66,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        common.setPasswordType(preferences, binding.pin, binding.passwordType)
+        binding.passwordType.setOnClickListener {
+            preferences.edit().putBoolean(
+                "textPasswordNoPin",
+                !preferences.getBoolean("textPasswordNoPin", false)
+            ).apply()
+            common.setPasswordType(preferences, binding.pin, binding.passwordType)
+        }
+
         val exitApp = intent.getBooleanExtra("exitApp", false)
         if (exitApp) {
             finish()
@@ -323,6 +332,7 @@ class MainActivity : AppCompatActivity() {
         binding.pin.visibility = View.GONE
         binding.unlock.visibility = View.GONE
         binding.fingerprint.visibility = View.GONE
+        binding.passwordType.visibility = View.GONE
         binding.progress.visibility = View.VISIBLE
     }
 
@@ -337,6 +347,7 @@ class MainActivity : AppCompatActivity() {
             preferences.getString("encryptedPin", null) != null && common.biometricAvailable()
         )
             binding.fingerprint.visibility = View.VISIBLE
+        binding.passwordType.visibility = View.VISIBLE
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

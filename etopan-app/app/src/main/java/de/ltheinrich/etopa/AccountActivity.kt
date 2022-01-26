@@ -39,6 +39,9 @@ class AccountActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        common.setPasswordType(preferences, binding.verifyPin)
+        binding.verifyPin.hint = getString(R.string.verify_pin)
+
         handleUsername()
         handlePassword()
         handleKey()

@@ -43,7 +43,7 @@
     <string name="biometric_error">Biometric unlock: %1$s</string>
     <string name="disable_biometric">Disable biometric login</string>
     <string name="permission_denied">Permission denied</string>
-    <string name="verify_pin">Verify PIN</string>
+    <string name="verify_pin">Verify PIN/password</string>
     <string name="change_username">Change username</string>
     <string name="new_username">New username</string>
     <string name="change_password">Change password</string>

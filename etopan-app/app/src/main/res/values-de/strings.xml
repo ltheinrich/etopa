@@ -40,7 +40,7 @@
     <string name="biometric_error">Biometrische Anmeldung: %1$s</string>
     <string name="disable_biometric">Biometrische Anmeldung deaktivieren</string>
     <string name="permission_denied">Zugriff abgelehnt</string>
-    <string name="verify_pin">PIN verifizieren</string>
+    <string name="verify_pin">PIN/Passwort verifizieren</string>
     <string name="change_username">Benutzername ändern</string>
     <string name="new_username">Neuer Benutzername</string>
     <string name="change_password">Passwort ändern</string>

@@ -40,7 +40,7 @@
     <string name="biometric_error">Биометрическая разблокировка: %1$s</string>
     <string name="disable_biometric">Отключить биометрический логин</string>
     <string name="permission_denied">Разрешение отказано</string>
-    <string name="verify_pin">Подтвердить PIN-код</string>
+    <string name="verify_pin">Подтвердить PIN-код/пароль</string>
     <string name="change_username">Изменение имени пользователя</string>
     <string name="new_username">Новое имя пользователя</string>
     <string name="change_password">Измени пароль</string>

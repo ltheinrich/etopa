@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/ic_baseline_fiber_pin_24.xml" value="0.147" />
+        <entry key="app/src/main/res/drawable/ic_baseline_text_fields_24.xml" value="0.147" />
+        <entry key="app/src/main/res/layout/activity_account.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/activity_add.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/activity_app.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/activity_edit.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/activity_licenses.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.254981884057971" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.254981884057971" />
+        <entry key="app/src/main/res/layout/layout_toolbar.xml" value="0.17147922998986828" />
+        <entry key="app/src/main/res/layout/secret_item.xml" value="0.17147922998986828" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="android.webkit.JavascriptInterface" />
