@@ -861,9 +861,9 @@ console_error_panic_hook	0.1.7	Nick Fitzgerald <fitzgen@gmail.com>	https://githu
 constant_time_eq	0.1.5	Cesar Eduardo Barros <cesarb@cesarb.eti.br>	https://github.com/cesarb/constant_time_eq	CC0-1.0		Compares two equal-sized byte strings in constant time.
 cpufeatures	0.2.1	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Lightweight and efficient no-std compatible alternative to the is_x86_feature_detected! macro
 crossbeam-utils	0.8.7		https://github.com/crossbeam-rs/crossbeam	Apache-2.0 OR MIT		Utilities for concurrent programming
-crypto-common	0.1.1	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Common cryptographic traits
+crypto-common	0.1.2	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Common cryptographic traits
 ctr	0.8.0	RustCrypto Developers	https://github.com/RustCrypto/stream-ciphers	Apache-2.0 OR MIT		CTR block mode of operation
-digest	0.10.1	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for cryptographic hash functions
+digest	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for cryptographic hash functions
 etopa	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Time-based one-time password authenticator
 etopai	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Etopa HTTPS API
 etopan	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Etopa for Android
