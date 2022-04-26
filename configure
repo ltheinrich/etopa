@@ -113,6 +113,7 @@ fi
 
 if ! [ -f "/usr/local/bin/minify-${MINIFY_VERSION}" ]; then
   (cd /tmp/etopa-configure/ && curl -L https://github.com/tdewolff/minify/releases/download/${MINIFY_VERSION}/minify_linux_amd64.tar.gz | tar -xz minify && sudo mv minify /usr/local/bin/minify-${MINIFY_VERSION})
+  sudo chmod +x /usr/local/bin/minify-${MINIFY_VERSION}
 fi
 
 rm -rf /tmp/etopa-configure
