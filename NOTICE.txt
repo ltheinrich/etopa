@@ -850,7 +850,7 @@ base64	0.13.0	Alice Maz <alice@alicemaz.com>|Marshall Pierce <marshall@mpierce.o
 blake2b_simd	1.0.0	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
 block-buffer	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer type for block processing of data
 bumpalo	3.10.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
-bytes	1.2.0	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
+bytes	1.2.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
 cc	1.0.73	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
 cesu8	1.1.0	Eric Kidd <git@randomhacks.net>	https://github.com/emk/cesu8-rs	Apache-2.0 OR MIT		Convert to and from CESU-8 encoding (similar to UTF-8)
 cfg-if	0.1.10	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/cfg-if	Apache-2.0 OR MIT		A macro to ergonomically define an item depending on a large number of #[cfg] parameters. Structured like an if-else chain, the first matching branch is the item that gets emitted.
@@ -903,7 +903,7 @@ sct	0.7.0	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/sct.rs	A
 serde	1.0.140	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
 serde_derive	1.0.140	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
 serde_json	1.0.82	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
-sha3	0.10.1	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		SHA-3 (Keccak) hash function
+sha3	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		SHA-3 (Keccak) hash function
 spin	0.5.2	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>	https://github.com/mvdnes/spin-rs.git	MIT		Synchronization primitives based on spinning. They may contain data, are usable without `std`, and static initializers are available.
 subtle	2.4.1	Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>	https://github.com/dalek-cryptography/subtle	BSD-3-Clause		Pure-Rust traits and utilities for constant-time cryptographic implementations.
 syn	1.0.98	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
