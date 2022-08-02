@@ -842,7 +842,7 @@ SOFTWARE.
 name	version	authors	repository	license	license_file	description
 aead	0.5.0	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for Authenticated Encryption with Associated Data (AEAD) algorithms, such as AES-GCM as ChaCha20Poly1305, which provide a high-level API
 aes	0.8.1	RustCrypto Developers	https://github.com/RustCrypto/block-ciphers	Apache-2.0 OR MIT		Pure Rust implementation of the Advanced Encryption Standard (a.k.a. Rijndael)
-aes-gcm	0.10.0	RustCrypto Developers	https://github.com/RustCrypto/AEADs	Apache-2.0 OR MIT		Pure Rust implementation of the AES-GCM (Galois/Counter Mode) Authenticated Encryption with Associated Data (AEAD) Cipher with optional architecture-specific hardware acceleration
+aes-gcm	0.10.1	RustCrypto Developers	https://github.com/RustCrypto/AEADs	Apache-2.0 OR MIT		Pure Rust implementation of the AES-GCM (Galois/Counter Mode) Authenticated Encryption with Associated Data (AEAD) Cipher with optional architecture-specific hardware acceleration
 arrayref	0.3.6	David Roundy <roundyd@physics.oregonstate.edu>	https://github.com/droundy/arrayref	BSD-2-Clause		Macros to take array references of slices
 arrayvec	0.7.2	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
 base32	0.4.0	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
@@ -901,8 +901,8 @@ ryu	1.0.10	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apach
 same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/same-file	MIT OR Unlicense		A simple crate for determining whether two file paths point to the same file.
 scoped-tls	1.0.0	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/scoped-tls	Apache-2.0 OR MIT		Library implementation of the standard library's old `scoped_thread_local!` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS.
 sct	0.7.0	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/sct.rs	Apache-2.0 OR ISC OR MIT		Certificate transparency SCT verification library
-serde	1.0.140	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
-serde_derive	1.0.140	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
+serde	1.0.141	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
+serde_derive	1.0.141	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
 serde_json	1.0.82	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		SHA-3 (Keccak) hash function
 spin	0.5.2	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>	https://github.com/mvdnes/spin-rs.git	MIT		Synchronization primitives based on spinning. They may contain data, are usable without `std`, and static initializers are available.
