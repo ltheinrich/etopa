@@ -11,9 +11,9 @@ homepage = "https://etopa.de"
 
 [dependencies]
 kern = "1.4.0"
-aes-gcm = "0.10.0"
+aes-gcm = "0.10.1"
 ring = "0.16.20"
-sha3 = "0.10.1"
+sha3 = "0.10.2"
 hex = "0.4.3"
 rust-argon2 = "1.0.0"
 base32 = "0.4.0"
