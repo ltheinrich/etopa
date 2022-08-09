@@ -1,7 +1,7 @@
 //! Cryptography utils
 
 use aes_gcm::{
-    aead::{generic_array::GenericArray, Aead, NewAead},
+    aead::{generic_array::GenericArray, Aead, KeyInit},
     Aes256Gcm,
 };
 use argon2::{hash_encoded, verify_encoded, Config, Variant};
