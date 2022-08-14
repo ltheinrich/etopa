@@ -85,7 +85,7 @@ fi
 
 if ! [ -f "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
   mkdir -p $ANDROID_HOME/cmdline-tools
-  curl -o /tmp/etopa-configure/android-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
+  curl -o /tmp/etopa-configure/android-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
   unzip /tmp/etopa-configure/android-tools.zip -d /tmp/etopa-configure
   mv /tmp/etopa-configure/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
   rm /tmp/etopa-configure/android-tools.zip

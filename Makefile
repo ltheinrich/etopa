@@ -111,7 +111,6 @@ else
 endif
 
 upgrade:
-	echo Upgrading dependencies...
 	$(eval BUNDLETOOL_VERSION := $(shell curl --silent "https://api.github.com/repos/google/bundletool/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
 	$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
@@ -121,7 +120,6 @@ upgrade:
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
 	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
-	echo Dependencies upgraded!
 
 clean:
 	${RUST_BUILDER} clean
