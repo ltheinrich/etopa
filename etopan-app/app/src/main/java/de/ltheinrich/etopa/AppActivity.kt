@@ -18,7 +18,6 @@ import de.ltheinrich.etopa.utils.MenuType
 import de.ltheinrich.etopa.utils.Storage
 import de.ltheinrich.etopa.utils.TokenAdapter
 
-
 class AppActivity : AppCompatActivity() {
 
     val common: Common = Common.getInstance(this)
@@ -184,5 +183,5 @@ class AppActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = common.createMenu(menu)
 }

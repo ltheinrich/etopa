@@ -2,7 +2,6 @@ package de.ltheinrich.etopa
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -88,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
             preferences.edit().remove("biometricDisabled").apply()
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && pinHash != common.pinHash &&
+        if (pinHash != common.pinHash &&
             !preferences.getBoolean("biometricDisabled", false)
         ) {
             preferences.edit().remove("encryptedPin").apply()
@@ -131,5 +130,5 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = common.createMenu(menu)
 }

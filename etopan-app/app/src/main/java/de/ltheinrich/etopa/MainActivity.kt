@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun requestBiometric() {
         biometricLogin { result ->
             showProgress()
@@ -203,7 +202,6 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun encryptBiometric(cipher: Cipher, plain: String): String? {
         return try {
             val enc = cipher.doFinal(plain.toByteArray(Charset.defaultCharset()))
@@ -227,7 +225,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun biometricLogin(
         always: () -> Unit = {},
         onSuccess: (result: BiometricPrompt.AuthenticationResult) -> Unit,
@@ -350,7 +347,6 @@ class MainActivity : AppCompatActivity() {
         binding.passwordType.visibility = View.VISIBLE
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun generateSecretKey(keyGenParameterSpec: KeyGenParameterSpec) {
         val keyGenerator = KeyGenerator.getInstance(
             KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore"
@@ -359,19 +355,16 @@ class MainActivity : AppCompatActivity() {
         keyGenerator.generateKey()
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun getSecretKey(keyStore: KeyStore): SecretKey {
         return keyStore.getKey("etopan_pin", null) as SecretKey
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun getKeyStore(): KeyStore {
         val keyStore = KeyStore.getInstance("AndroidKeyStore")
         keyStore?.load(null)
         return keyStore
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun getCipher(): Cipher {
         return Cipher.getInstance(
             KeyProperties.KEY_ALGORITHM_AES + "/"
@@ -382,5 +375,5 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = common.createMenu(menu)
 }

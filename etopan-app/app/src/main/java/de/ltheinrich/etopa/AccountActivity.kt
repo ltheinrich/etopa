@@ -327,5 +327,5 @@ class AccountActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = common.createMenu(menu)
 }

@@ -54,11 +54,11 @@ jobs:
           ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/tools/bin/sdkmanager
         run: |
           ./configure
-          cd /usr/local/lib/android/sdk/build-tools && cp 30.0.3/dx 31.0.0/ && cp 30.0.3/lib/dx.jar 31.0.0/lib/
+          find -L /usr/local/lib/android/sdk/ndk/24.0.8215888 -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
 
       - name: Make
         env:
           DEBUG_SIGN: y
-          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/linux-x86_64/bin
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
           make noclean

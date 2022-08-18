@@ -2,7 +2,6 @@ package de.ltheinrich.etopa
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,9 +13,10 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import de.ltheinrich.etopa.databinding.ActivityAddBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.MenuType
@@ -27,7 +27,7 @@ class AddActivity : AppCompatActivity() {
     private val common: Common = Common.getInstance(this)
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: ActivityAddBinding
-    private lateinit var qrCodeLauncher: ActivityResultLauncher<Intent>
+    private lateinit var qrCodeLauncher: ActivityResultLauncher<ScanOptions>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,15 +53,15 @@ class AddActivity : AppCompatActivity() {
             addSecret()
         }
 
-        qrCodeLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                val result = IntentIntegrator.parseActivityResult(it.resultCode, it.data)
-                if (result != null && result.contents != null) {
-                    val secret = common.parseSecretUri(result.contents)
-                    binding.secretValue.editText?.setText(secret.first)
-                    binding.secretName.editText?.setText(secret.second)
-                }
+        qrCodeLauncher = registerForActivityResult(
+            ScanContract()
+        ) { result: ScanIntentResult ->
+            if (result.contents != null) {
+                val secret = common.parseSecretUri(result.contents)
+                binding.secretValue.editText?.setText(secret.first)
+                binding.secretName.editText?.setText(secret.second)
             }
+        }
 
         binding.qrCode.setOnClickListener {
             scanQRCode()
@@ -72,12 +72,7 @@ class AddActivity : AppCompatActivity() {
         if (common.checkSdk(Build.VERSION_CODES.M) && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
             requestPermissions(arrayOf(Manifest.permission.CAMERA), 1540)
         else {
-            val integrator = IntentIntegrator(this).apply {
-                setOrientationLocked(false)
-                setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                setBeepEnabled(false)
-            }
-            qrCodeLauncher.launch(integrator.createScanIntent())
+            qrCodeLauncher.launch(ScanOptions().setOrientationLocked(true).setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES).setBeepEnabled(false))
         }
     }
 
@@ -134,5 +129,5 @@ class AddActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = common.backKey(keyCode)
     override fun onOptionsItemSelected(item: MenuItem) = common.handleMenu(item)
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean = common.createMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = common.createMenu(menu)
 }

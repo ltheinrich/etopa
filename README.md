@@ -37,7 +37,6 @@ Android APK: `target/build/etopa.apk`
 Web archive: `target/build/etopa.tar.xz`
 
 ### Known errors
-Fix *Installed Build Tools revision 31.0.0 is corrupted. Remove and install again using the SDK Manager.*
-> \# Install build-tools 30.0.3 additionally, then copy both files:<br>
-> cp $ANDROID_HOME/build-tools/30.0.3/dx $ANDROID_HOME/build-tools/31.0.0/dx<br>
-> cp $ANDROID_HOME/build-tools/30.0.3/lib/dx.jar $ANDROID_HOME/build-tools/31.0.0/lib/dx.jar
+Fix Android cross-compilation error<br>
+Create an libgcc.a with the content "INPUT(-lunwind)" in every folder with a libunwind.a file (fix for newer Android NDK)<br>
+> find -L ~/.android/sdk/ndk/24.0.8215888 -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;<br>

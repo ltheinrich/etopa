@@ -446,5 +446,5 @@ class Common constructor(activity: Activity) {
     external fun encrypt(key: String, data: String): String
     external fun decrypt(key: String, data: String): String
     external fun generateToken(secret: String): String
-    external fun decodeUrl(encodedUrl: String): String
+    private external fun decodeUrl(encodedUrl: String): String
 }
