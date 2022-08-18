@@ -95,7 +95,7 @@ android-build:
 
 android: android-build
 ifndef DEBUG_SIGN
-	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled false --v2-signing-enabled true --ks ${ANDROID_KEYSTORE} \
+	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} \
 	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \
 	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 	${JAVA_EXEC} -jar ${BUNDLETOOL_JAR} build-bundle \
