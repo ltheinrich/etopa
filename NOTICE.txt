@@ -848,7 +848,7 @@ arrayvec	0.7.2	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vect
 base32	0.4.0	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
 base64	0.13.0	Alice Maz <alice@alicemaz.com>|Marshall Pierce <marshall@mpierce.org>	https://github.com/marshallpierce/rust-base64	Apache-2.0 OR MIT		encodes and decodes base64 as bytes or utf8
 blake2b_simd	1.0.0	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
-block-buffer	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer type for block processing of data
+block-buffer	0.10.3	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer type for block processing of data
 bumpalo	3.11.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.2.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
 cc	1.0.73	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
@@ -859,7 +859,7 @@ cipher	0.4.3	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2
 combine	4.6.6	Markus Westerlind <marwes91@gmail.com>	https://github.com/Marwes/combine	MIT		Fast parser combinators on arbitrary streams with zero-copy support.
 console_error_panic_hook	0.1.7	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/rustwasm/console_error_panic_hook	Apache-2.0 OR MIT		A panic hook for `wasm32-unknown-unknown` that logs panics to `console.error`
 constant_time_eq	0.1.5	Cesar Eduardo Barros <cesarb@cesarb.eti.br>	https://github.com/cesarb/constant_time_eq	CC0-1.0		Compares two equal-sized byte strings in constant time.
-cpufeatures	0.2.4	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Lightweight runtime CPU feature detection for x86/x86_64 and aarch64 with no_std support and support for mobile targets including Android and iOS
+cpufeatures	0.2.5	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Lightweight runtime CPU feature detection for x86/x86_64 and aarch64 with no_std support and support for mobile targets including Android and iOS
 crossbeam-utils	0.8.11		https://github.com/crossbeam-rs/crossbeam	Apache-2.0 OR MIT		Utilities for concurrent programming
 crypto-common	0.1.6	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Common cryptographic traits
 ctr	0.9.1	RustCrypto Developers	https://github.com/RustCrypto/block-modes	Apache-2.0 OR MIT		CTR block modes of operation
@@ -908,8 +908,8 @@ sha3	0.10.4	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.
 spin	0.5.2	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>	https://github.com/mvdnes/spin-rs.git	MIT		Synchronization primitives based on spinning. They may contain data, are usable without `std`, and static initializers are available.
 subtle	2.4.1	Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>	https://github.com/dalek-cryptography/subtle	BSD-3-Clause		Pure-Rust traits and utilities for constant-time cryptographic implementations.
 syn	1.0.99	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
-thiserror	1.0.33	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		derive(Error)
-thiserror-impl	1.0.33	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		Implementation detail of the `thiserror` crate
+thiserror	1.0.34	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		derive(Error)
+thiserror-impl	1.0.34	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		Implementation detail of the `thiserror` crate
 typenum	1.15.0	Paho Lurie-Gregg <paho@paholg.com>|Andre Bogus <bogusandre@gmail.com>	https://github.com/paholg/typenum	Apache-2.0 OR MIT		Typenum is a Rust library for type-level numbers evaluated at     compile time. It currently supports bits, unsigned integers, and signed     integers. It also provides a type-level array of type-level numbers, but its     implementation is incomplete.
 unicode-ident	1.0.3	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/unicode-ident	(MIT OR Apache-2.0) AND Unicode-DFS-2016		Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31
 universal-hash	0.5.0	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits which describe the functionality of universal hash functions (UHFs)
