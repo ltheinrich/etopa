@@ -58,7 +58,7 @@ api:
 	cp target/${API_TARGET_TRIPLE}/release/etopai ${TARGET_OUTPUT_DIR}/${API_FILE_NAME}
 
 web:
-	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
+	mkdir -p ${TARGET_OUTPUT_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${WEB_FILE_NAME} && rm -rf ${TEMP_EWM}
 	${WASM_PACK_EXEC} build --release --no-typescript -t web -d ../etopaw-app/pkg etopaw
 	mkdir -p ${TEMP_EWM}
