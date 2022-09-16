@@ -56,20 +56,20 @@ export async function load_secrets(wasm) {
         try {
             const storage = wasm.parse_storage(storage_data(), storage_key());
             let secrets = {};
-            const sortedKeys = storage["secrets_sort"];
+            const sortedKeys = storage.get("secrets_sort");
             if (sortedKeys != null) {
                 const splitKeys = sortedKeys.split(',');
                 for (let i = 0; i < splitKeys.length; i++) {
-                    const name = storage[splitKeys[i] + "_secret_name"];
-                    const secret = storage[splitKeys[i] + "_secret"];
+                    const name = storage.get(splitKeys[i] + "_secret_name");
+                    const secret = storage.get(splitKeys[i] + "_secret");
                     if (name != null && secret != null) {
                         secrets[name] = secret;
                     }
                 }
             }
-            for (const key in storage) {
+            for (const [key, value] of storage) {
                 if ((sortedKeys == null || !sortedKeys.includes(key)) && key.endsWith("_secret")) {
-                    secrets[storage[key + "_name"]] = storage[key];
+                    secrets[storage.get(key + "_name")] = value;
                 }
             }
             return secrets;

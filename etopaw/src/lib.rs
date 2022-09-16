@@ -1,8 +1,5 @@
 //! Etopa for Web
-#![cfg(target_family = "wasm")] // TODO: temporary fix for error: unneeded unit expression
-
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+//#![cfg(target_family = "wasm")] // TODO: temporary fix for error: unneeded unit expression
 
 #[macro_use]
 extern crate serde_derive;
@@ -12,6 +9,7 @@ use etopa::{
     data::{parse, serialize},
     totp::Generator,
 };
+use serde_wasm_bindgen::{from_value, to_value};
 use std::collections::BTreeMap;
 use wasm_bindgen::{self, prelude::*};
 
@@ -121,14 +119,14 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
     map.insert("data".to_owned(), data);
 
     // return to JS
-    JsValue::from_serde(&StringMap(map)).unwrap()
+    to_value(&StringMap(map)).unwrap()
 }
 
 /// Encrypt secrets and serialize map
 #[wasm_bindgen]
 pub fn serialize_storage(storage: JsValue, sort: &str, key: &str) -> String {
     // deserialize from JS
-    let storage: StringMap = storage.into_serde().unwrap();
+    let storage: StringMap = from_value(storage).unwrap();
 
     // new map and iterate through storage entries
     let mut map = BTreeMap::new();
