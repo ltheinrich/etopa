@@ -1,12 +1,12 @@
 //! Data API handlers
 
 use crate::common::*;
-use etopa::Fail;
+use etopa::{Fail, Result};
 use kern::http::server::{respond, HttpRequest};
 use std::sync::RwLockReadGuard;
 
 /// Get storage file handler
-pub fn get_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn get_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -41,7 +41,7 @@ pub fn get_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Resu
 }
 
 /// Set storage file handler
-pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -70,7 +70,7 @@ pub fn set_secure(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Resu
 }
 
 /// Update storage file secrets_sort handler
-pub fn update_sort(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn update_sort(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -103,7 +103,7 @@ pub fn update_sort(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Res
 }
 
 /// Update storage file handler
-pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -142,7 +142,7 @@ pub fn update(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
 }
 
 /// Rename storage file entry handler
-pub fn rename(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn rename(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -187,7 +187,7 @@ pub fn rename(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
 }
 
 /// Delete from storage file handler
-pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;

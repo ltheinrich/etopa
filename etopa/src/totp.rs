@@ -1,7 +1,7 @@
 //! Time-based one-time password
 
 use base32::Alphabet::{self, RFC4648};
-use kern::Fail;
+use kern::{Fail, Result};
 use ring::hmac::{sign, Algorithm, Key};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -26,7 +26,7 @@ pub struct Generator {
 
 impl Generator {
     /// Create new TOTP generator
-    pub fn new(secret: impl AsRef<str>) -> Result<Self, Fail> {
+    pub fn new(secret: impl AsRef<str>) -> Result<Self> {
         // decode base32 secret
         let decoded = base32::decode(ALPHABET, secret.as_ref());
         let secret = decoded.ok_or_else(|| Fail::new("invalid base32 secret"))?;
@@ -54,15 +54,13 @@ impl Generator {
     }
 
     /// Generate new token
-    pub fn token(&self) -> Result<String, Fail> {
-        let elapsed_time = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .or_else(Fail::from)?;
+    pub fn token(&self) -> Result<String> {
+        let elapsed_time = SystemTime::now().duration_since(UNIX_EPOCH)?;
         self.token_at(elapsed_time.as_secs())
     }
 
     /// Generate new token at time (in secs)
-    pub fn token_at(&self, time: u64) -> Result<String, Fail> {
+    pub fn token_at(&self, time: u64) -> Result<String> {
         let signed = sign(&self.key, &(time / 30).to_be_bytes());
         let sr = signed.as_ref();
         let offset = (sr[sr.len() - 1] & 0xf) as usize;

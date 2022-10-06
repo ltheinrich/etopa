@@ -878,7 +878,7 @@ jni-sys	0.3.0	Steven Fackler <sfackler@gmail.com>	https://github.com/sfackler/ru
 js-sys	0.3.60	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
 json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/json-rust	Apache-2.0 OR MIT		JSON implementation in Rust
 keccak	0.1.2	RustCrypto Developers	https://github.com/RustCrypto/sponges/tree/master/keccak	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge function including the keccak-f and keccak-p variants
-kern	1.4.1	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
+kern	1.5.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
 libc	0.2.134	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 log	0.4.17	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
 memchr	2.5.0	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/memchr	MIT OR Unlicense		Safe interface to memchr.

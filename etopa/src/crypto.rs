@@ -6,7 +6,7 @@ use aes_gcm::{
 };
 use argon2::{hash_encoded, verify_encoded, Config, Variant};
 pub use hex::{decode as hex_decode, encode as hex_encode};
-use kern::Fail;
+use kern::{Fail, Result};
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use sha3::{Digest, Sha3_256};
 
@@ -134,7 +134,7 @@ fn init_aes(raw_key: impl AsRef<[u8]>) -> Aes256Gcm {
 }
 
 /// Decrypt secure storage
-pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<String, Fail> {
+pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<String> {
     // init
     let raw_data = raw_data.as_ref();
     let aead = init_aes(raw_key);
@@ -157,7 +157,7 @@ pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<
 }
 
 /// Encrypt secure storage
-pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<u8>, Fail> {
+pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<u8>> {
     // init
     let aead = init_aes(raw_key);
     let mut rng = thread_rng();
@@ -177,7 +177,7 @@ pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<
 }
 
 /// Generate Argon2 password hash
-pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<String, Fail> {
+pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<String> {
     let config = Config {
         variant: Variant::Argon2id,
         ..Config::default()

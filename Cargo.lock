@@ -337,9 +337,9 @@ checksum = "f9b7d56ba4a8344d6be9729995e6b06f928af29998cdf79fe390cbf6b1fee838"
 
 [[package]]
 name = "kern"
-version = "1.4.1"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0aead3af9e3a85706be1661183b00eb321cc8618b2a8c5b100b996ee90c7f46b"
+checksum = "87da6698429921b3c19982c588c4440982081d52a34cdfb224028a03f8bea052"
 dependencies = [
  "rustls",
  "rustls-pemfile",

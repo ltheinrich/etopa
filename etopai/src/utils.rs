@@ -1,7 +1,7 @@
 //! API utils
 
 use etopa::crypto::random_an;
-use etopa::Fail;
+use etopa::{Fail, Result};
 use json::JsonValue;
 use kern::data::delete_file;
 use kern::data::StorageFile;
@@ -12,7 +12,7 @@ use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 use std::time::{Duration, SystemTime};
 
 /// Get value as string or fail
-pub fn get_str<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str, Fail> {
+pub fn get_str<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str> {
     Ok(*data
         .get(key)
         .ok_or_else(|| Fail::new(format!("{} required", key)))?)
@@ -20,7 +20,7 @@ pub fn get_str<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a st
 
 /*
 /// Get value or fail
-pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T, Fail> {
+pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T> {
     get_str(data, key)?
         .parse()
         .or_else(|_| Fail::from(format!("{} is not correct type", key)))
@@ -28,7 +28,7 @@ pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T, Fa
 */
 
 /// Get alphanumeric value as string or fail
-pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str, Fail> {
+pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str> {
     // get string
     let an = get_str(data, key)?;
 
@@ -42,7 +42,7 @@ pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str
 }
 
 /// Get username string and check if alphanumeric
-pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str, Fail> {
+pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str> {
     get_an(data, "username")
 }
 
@@ -173,7 +173,7 @@ impl UserFiles {
     }
 
     /// Create storage file
-    pub fn create(&mut self, name: &str) -> Result<(), Fail> {
+    pub fn create(&mut self, name: &str) -> Result<()> {
         // check if alphanumeric
         if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
@@ -186,7 +186,7 @@ impl UserFiles {
     }
 
     /// Rename storage file
-    pub fn rename(&mut self, name: &str, new_name: &str) -> Result<(), Fail> {
+    pub fn rename(&mut self, name: &str, new_name: &str) -> Result<()> {
         // check if already exists
         if self.exists(new_name) {
             return Fail::from("name already exists");
@@ -200,7 +200,7 @@ impl UserFiles {
     }
 
     /// Read access on existing storage file
-    pub fn read(&self, name: &str) -> Result<RwLockReadGuard<StorageFile>, Fail> {
+    pub fn read(&self, name: &str) -> Result<RwLockReadGuard<StorageFile>> {
         // check if alphanumeric
         if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
@@ -214,7 +214,7 @@ impl UserFiles {
     }
 
     /// Write access on storage file (create if not existent)
-    pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<StorageFile>, Fail> {
+    pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<StorageFile>> {
         // check if alphanumeric
         if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");
@@ -228,7 +228,7 @@ impl UserFiles {
     }
 
     /// Delete storage file
-    pub fn delete(&mut self, name: &str) -> Result<(), Fail> {
+    pub fn delete(&mut self, name: &str) -> Result<()> {
         // check if alphanumeric
         if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
             return Fail::from("name not alphanumeric");

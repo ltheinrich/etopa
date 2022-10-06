@@ -2,12 +2,12 @@
 
 use crate::common::*;
 use etopa::crypto::argon2_verify;
-use etopa::Fail;
+use etopa::{Fail, Result};
 use kern::http::server::HttpRequest;
 use std::sync::RwLockReadGuard;
 
 /// Token validation handler
-pub fn valid(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn valid(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -24,7 +24,7 @@ pub fn valid(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Ve
 }
 
 /// Account logout handler
-pub fn logout(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn logout(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -45,7 +45,7 @@ pub fn logout(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
 }
 
 /// Account deletion handler
-pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -73,7 +73,7 @@ pub fn delete(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<V
 }
 
 /// Login handler
-pub fn login(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn login(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -100,7 +100,7 @@ pub fn login(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Ve
 }
 
 /// Account registration handler
-pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>, Fail> {
+pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // check ip address before registration
     if !shared
         .security
@@ -134,10 +134,7 @@ pub fn register(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result
 }
 
 /// Change username handler
-pub fn change_username(
-    req: HttpRequest,
-    shared: RwLockReadGuard<SharedData>,
-) -> Result<Vec<u8>, Fail> {
+pub fn change_username(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;
@@ -190,10 +187,7 @@ pub fn change_username(
 }
 
 /// Change password handler
-pub fn change_password(
-    req: HttpRequest,
-    shared: RwLockReadGuard<SharedData>,
-) -> Result<Vec<u8>, Fail> {
+pub fn change_password(req: HttpRequest, shared: RwLockReadGuard<SharedData>) -> Result<Vec<u8>> {
     // get values
     let headers = req.headers();
     let username = get_username(headers)?;

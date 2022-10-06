@@ -9,7 +9,7 @@ mod utils;
 mod api;
 
 use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES, TLS_CERTIFICATE, TLS_KEY};
-use etopa::{meta::search, CliBuilder, Config, Fail};
+use etopa::{meta::search, CliBuilder, Config, Result};
 use kern::data::StorageFile;
 use kern::http::server::{certificate_config, listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
@@ -95,10 +95,7 @@ fn main() {
 }
 
 /// Assigning requests to handlers
-fn handle(
-    req: Result<HttpRequest, Fail>,
-    shared: Arc<RwLock<SharedData>>,
-) -> Result<Vec<u8>, Fail> {
+fn handle(req: Result<HttpRequest>, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>> {
     // unwrap and match url
     let req: HttpRequest = req?;
     let handler = match req.url() {
