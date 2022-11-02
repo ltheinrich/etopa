@@ -873,7 +873,7 @@ ghash	0.5.0	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes
 hex	0.4.3	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
 inout	0.1.3	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Custom reference types for code generic over in-place and buffer-to-buffer modes of operation.
 itoa	1.0.4	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/itoa	Apache-2.0 OR MIT		Fast integer primitive to string conversion
-jni	0.19.0	Josh Chase <josh@prevoty.com>	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bindings to the JNI
+jni	0.20.0	Josh Chase <josh@prevoty.com>	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bindings to the JNI
 jni-sys	0.3.0	Steven Fackler <sfackler@gmail.com>	https://github.com/sfackler/rust-jni-sys	Apache-2.0 OR MIT		Rust definitions corresponding to jni.h
 js-sys	0.3.60	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
 json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/json-rust	Apache-2.0 OR MIT		JSON implementation in Rust
