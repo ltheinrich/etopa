@@ -25,7 +25,7 @@ pub fn recv_string(env: &JNIEnv, input: JString) -> String {
 /// Make string for Java
 pub fn make_string(env: &JNIEnv, string: impl Into<JNIString>) -> jstring {
     let output = env.new_string(string).unwrap();
-    output.into_inner()
+    output.into_raw()
 }
 
 /// Empty string for Java
