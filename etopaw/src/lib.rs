@@ -148,7 +148,7 @@ pub fn serialize_storage(storage: JsValue, sort: &str, key: &str) -> String {
     }
 
     // encrypt sort
-    let enc_sort = crypto::encrypt(&sort, key).unwrap();
+    let enc_sort = crypto::encrypt(sort, key).unwrap();
     let hex_sort = crypto::hex_encode(enc_sort);
     map.insert("secrets_sort".to_owned(), hex_sort);
 
