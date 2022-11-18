@@ -39,6 +39,7 @@ load(async function (temp_wasm) {
             return false;
         };
         decryption.hidden = false;
+        key.select();
     }
     loading.hidden = true;
 });

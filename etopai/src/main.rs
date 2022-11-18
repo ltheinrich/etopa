@@ -45,7 +45,7 @@ fn main() {
     let port = cmd.param("port", config.value("port", "4490"));
     let addr = cmd.param("addr", config.value("addr", "[::]"));
     let threads = cmd.parameter("threads", config.get("threads", 2));
-    let vlt: u64 = cmd.parameter("vlt", config.get("vlt", 604_800));
+    let vlt: u64 = cmd.parameter("vlt", config.get("vlt", 7_776_000)); // 90 days
     let ban_time: u64 = cmd.parameter("bantime", config.get("bantime", 3600));
     let login_fails: u32 = cmd.parameter("loginfails", config.get("loginfails", 50));
     let login_time: u64 = cmd.parameter("logintime", config.get("logintime", 60));

@@ -101,7 +101,7 @@ impl UserLogins {
     /// Generate login token for user
     pub fn add(&mut self, user: &str) -> &str {
         // generate random token and get logins
-        let token = random_an(32);
+        let token = random_an(64);
         match self.logins.get_mut(user) {
             Some(logins) => {
                 // remove expired logins and return logins
@@ -399,7 +399,7 @@ impl SecurityManager {
     /// Generate login token for user
     pub fn add(&mut self, user: &str) -> &str {
         // generate random token and get logins
-        let token = random_an(32);
+        let token = random_an(64);
         match self.logins.get_mut(user) {
             Some(logins) => {
                 // remove expired logins and return logins

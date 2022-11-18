@@ -1,4 +1,4 @@
-import { load, api_fetch, load_secrets, alert_error, storage_data, lang } from "./js/common.js";
+import { load, api_fetch, load_secrets, alert_error, storage_data, lang, username as getUsername, token } from "./js/common.js";
 
 const username = document.getElementById("username");
 const password = document.getElementById("password");
@@ -16,6 +16,9 @@ load(async function (wasm) {
     } catch (err) { }
     login.onsubmit = function () { handle_login(wasm); return false; };
     register.onclick = function () { handle_register(wasm); return false; };
+    if (getUsername() != null && token() != null) {
+        key.select();
+    }
 }, false);
 
 function handle_login(wasm) {
