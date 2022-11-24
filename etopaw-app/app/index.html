@@ -99,8 +99,8 @@
             <form id="decryption" autocomplete="off" hidden>
                 <div class="row">
                     <div class="col-12 col-lg-8 text-center">
-                        <input id="key" type="password" autocomplete="new-password" class="form-control"
-                            v-bind:placeholder="lang.key">
+                        <!-- TODO: option to add autocomplete="new-password" if password manager does not support disabling autocomplete -->
+                        <input id="key" type="password" class="form-control" v-bind:placeholder="lang.key">
                     </div>
                     <div class="col-12 col-lg-4 text-center">
                         <button type="submit" id="decrypt" class="btn btn-primary">{{ lang.decrypt }}</button>
