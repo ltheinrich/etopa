@@ -11,7 +11,7 @@ homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
-jni = { version = "0.20.0", default-features = false }
+jni = { version = "0.21.0", default-features = false }
 
 [lib]
 name = "etopan"
