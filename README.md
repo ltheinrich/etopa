@@ -39,4 +39,4 @@ Web archive: `target/build/etopa.tar.xz`
 ### Known errors
 Fix Android cross-compilation error<br>
 Create an libgcc.a with the content "INPUT(-lunwind)" in every folder with a libunwind.a file (fix for newer Android NDK)<br>
-> find -L ~/.android/sdk/ndk/24.0.8215888 -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;<br>
+> find -L ~/.android/sdk/ndk/24.0.8215888 -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \\;<br>

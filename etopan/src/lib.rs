@@ -18,8 +18,8 @@ use jni::sys::jstring;
 use jni::JNIEnv;
 
 /// Receive string from Java
-pub fn recv_string(env: &JNIEnv, input: JString) -> String {
-    env.get_string(input).unwrap().into()
+pub fn recv_string(env: &mut JNIEnv, input: JString) -> String {
+    env.get_string(&input).unwrap().into()
 }
 
 /// Make string for Java
@@ -36,60 +36,60 @@ pub fn empty_string(env: &JNIEnv) -> jstring {
 /// Hash key
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashKey(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jkey: JString,
 ) -> jstring {
     // receive and hash key
-    let key = recv_string(&env, jkey);
+    let key = recv_string(&mut env, jkey);
     make_string(&env, hash_key(key))
 }
 
 /// Hash password
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPassword(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jpassword: JString,
 ) -> jstring {
     // receive and hash password
-    let password = recv_string(&env, jpassword);
+    let password = recv_string(&mut env, jpassword);
     make_string(&env, hash_password(password))
 }
 
 /// Hash pin
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPin(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jpin: JString,
 ) -> jstring {
     // receive and hash pin
-    let pin = recv_string(&env, jpin);
+    let pin = recv_string(&mut env, jpin);
     make_string(&env, hash_pin(pin))
 }
 
 /// Hash name
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashName(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jname: JString,
 ) -> jstring {
     // receive and hash secret name
-    let name = recv_string(&env, jname);
+    let name = recv_string(&mut env, jname);
     make_string(&env, hash_name(name))
 }
 
 /// Hash hashed password using Argon2
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashArgon2Hashed(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jpassword_hash: JString,
 ) -> jstring {
     // receive password
-    let password_hash = recv_string(&env, jpassword_hash);
+    let password_hash = recv_string(&mut env, jpassword_hash);
 
     // generate salt and hash password
     let salt = random(16);
@@ -101,13 +101,13 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashArgon2Hashed(
 /// Encrypt
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jkey: JString,
     jdata: JString,
 ) -> jstring {
-    let key = recv_string(&env, jkey);
-    let data = recv_string(&env, jdata);
+    let key = recv_string(&mut env, jkey);
+    let data = recv_string(&mut env, jdata);
 
     // encrypt
     let encrypted = encrypt(data, key);
@@ -124,13 +124,13 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
 /// Decrypt
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jkey: JString,
     jdata: JString,
 ) -> jstring {
-    let key = recv_string(&env, jkey);
-    let data = recv_string(&env, jdata);
+    let key = recv_string(&mut env, jkey);
+    let data = recv_string(&mut env, jdata);
 
     // decode
     let decoded = match hex_decode(data) {
@@ -150,12 +150,12 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
 /// Generate token
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jsecret: JString,
 ) -> jstring {
     // receive secret
-    let secret = recv_string(&env, jsecret);
+    let secret = recv_string(&mut env, jsecret);
 
     // create token generator
     let token = match Generator::new(secret) {
@@ -171,12 +171,12 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
 /// Decode URL
 #[no_mangle]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decodeUrl(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JObject,
     jencoded_url: JString,
 ) -> jstring {
     // receive encoded url
-    let encoded_url = recv_string(&env, jencoded_url);
+    let encoded_url = recv_string(&mut env, jencoded_url);
 
     let url = encoded_url
         .replace("%20", " ")
