@@ -19,7 +19,6 @@ NATIVE_TARGET_CPU?=native
 
 # android
 NDK_TOOLCHAIN_BIN?=$(ANDROID_NDK_ROOT)/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/bin
-export PATH := ${NDK_TOOLCHAIN_BIN}:$(PATH)
 ANDROID_BT_PATH?=$(ANDROID_HOME)/build-tools/${BUILDTOOLS_VERSION}
 JNI_LIBS_PATH?=etopan-app/app/src/main/jniLibs
 BUNDLETOOL_JAR?=$(ANDROID_HOME)/bundletool-${BUNDLETOOL_VERSION}.jar
@@ -72,17 +71,22 @@ web:
 	rm -rf ${TEMP_EWM}
 
 #android-build: export RUSTFLAGS = -Clink-arg=-Wl,--hash-style=both
-android-build: export CC_aarch64-linux-android = aarch64-linux-android24-clang
-android-build: export CC_armv7-linux-androideabi = armv7a-linux-androideabi24-clang
-android-build: export CC_x86_64-linux-android = x86_64-linux-android24-clang
-android-build: export CC_i686-linux-android = i686-linux-android24-clang
-android-build: export TARGET_AR = llvm-ar
+android-build: export CC_aarch64-linux-android = ${NDK_TOOLCHAIN_BIN}/aarch64-linux-android24-clang
+android-build: export CC_armv7-linux-androideabi = ${NDK_TOOLCHAIN_BIN}/armv7a-linux-androideabi24-clang
+android-build: export CC_x86_64-linux-android = ${NDK_TOOLCHAIN_BIN}/x86_64-linux-android24-clang
+android-build: export CC_i686-linux-android = ${NDK_TOOLCHAIN_BIN}/i686-linux-android24-clang
+android-build: export TARGET_AR = ${NDK_TOOLCHAIN_BIN}/llvm-ar
 android-build:
+	export PATH=$(PATH):${NDK_TOOLCHAIN_BIN}
 	mkdir -p ${TARGET_OUTPUT_DIR} && mkdir -p ${TARGET_OUTPUT_DIR}/${EXTRA_DIR}
 	rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} && rm -f ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE}
+	export TARGET_CC=CC_aarch64-linux-android
 	${RUST_BUILDER} rustc -p etopan --release --target aarch64-linux-android -v -- -C linker=$(CC_aarch64-linux-android)
+	export TARGET_CC=CC_armv7-linux-androideabi
 	${RUST_BUILDER} rustc -p etopan --release --target armv7-linux-androideabi -v -- -C linker=$(CC_armv7-linux-androideabi)
+	export TARGET_CC=CC_x86_64-linux-android 
 	${RUST_BUILDER} rustc -p etopan --release --target x86_64-linux-android -v -- -C linker=$(CC_x86_64-linux-android)
+	export TARGET_CC=CC_i686-linux-android
 	${RUST_BUILDER} rustc -p etopan --release --target i686-linux-android -v -- -C linker=$(CC_i686-linux-android)
 	rm -rf ${JNI_LIBS_PATH} && mkdir -p ${JNI_LIBS_PATH}/arm64-v8a && mkdir -p ${JNI_LIBS_PATH}/armeabi-v7a \
 	  && mkdir -p ${JNI_LIBS_PATH}/x86_64 && mkdir -p ${JNI_LIBS_PATH}/x86
