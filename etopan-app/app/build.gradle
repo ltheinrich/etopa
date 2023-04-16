@@ -11,7 +11,7 @@ android {
         applicationId "de.ltheinrich.etopa"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 25
+        versionCode 26
         versionName "1.0.2"
         resourceConfigurations += ['en', 'de', 'ru', 'es', 'pt', 'fr']
     }
