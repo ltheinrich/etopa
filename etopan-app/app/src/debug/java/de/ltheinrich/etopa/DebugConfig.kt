@@ -1,7 +1,6 @@
 package de.ltheinrich.etopa
 
 import android.annotation.SuppressLint
-import androidx.viewbinding.BuildConfig
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.HttpsURLConnection

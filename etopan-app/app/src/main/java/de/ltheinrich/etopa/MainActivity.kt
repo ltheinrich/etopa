@@ -11,11 +11,9 @@ import android.util.Base64
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.viewbinding.BuildConfig
 import de.ltheinrich.etopa.databinding.ActivityMainBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.MenuType
