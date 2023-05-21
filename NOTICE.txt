@@ -842,7 +842,7 @@ SOFTWARE.
 name	version	authors	repository	license	license_file	description
 aead	0.5.2	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for Authenticated Encryption with Associated Data (AEAD) algorithms, such as AES-GCM as ChaCha20Poly1305, which provide a high-level API
 aes	0.8.2	RustCrypto Developers	https://github.com/RustCrypto/block-ciphers	Apache-2.0 OR MIT		Pure Rust implementation of the Advanced Encryption Standard (a.k.a. Rijndael)
-aes-gcm	0.10.1	RustCrypto Developers	https://github.com/RustCrypto/AEADs	Apache-2.0 OR MIT		Pure Rust implementation of the AES-GCM (Galois/Counter Mode) Authenticated Encryption with Associated Data (AEAD) Cipher with optional architecture-specific hardware acceleration
+aes-gcm	0.10.2	RustCrypto Developers	https://github.com/RustCrypto/AEADs	Apache-2.0 OR MIT		Pure Rust implementation of the AES-GCM (Galois/Counter Mode) Authenticated Encryption with Associated Data (AEAD) Cipher with optional architecture-specific hardware acceleration
 arrayref	0.3.7	David Roundy <roundyd@physics.oregonstate.edu>	https://github.com/droundy/arrayref	BSD-2-Clause		Macros to take array references of slices
 arrayvec	0.7.2	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
 base32	0.4.0	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
