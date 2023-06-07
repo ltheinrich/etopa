@@ -6,13 +6,13 @@ use json::JsonValue;
 use kern::data::delete_file;
 use kern::data::StorageFile;
 use kern::http::server::{respond, ResponseData};
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 use std::fmt::Display;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 use std::time::{Duration, SystemTime};
 
 /// Get value as string or fail
-pub fn get_str<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str> {
+pub fn get_str<'a>(data: &HashMap<String, &'a str>, key: &str) -> Result<&'a str> {
     Ok(*data
         .get(key)
         .ok_or_else(|| Fail::new(format!("{} required", key)))?)
@@ -20,7 +20,7 @@ pub fn get_str<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a st
 
 /*
 /// Get value or fail
-pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T> {
+pub fn get<T: FromStr>(data: &HashMap<String, &str>, key: &str) -> Result<T> {
     get_str(data, key)?
         .parse()
         .or_else(|_| Fail::from(format!("{} is not correct type", key)))
@@ -28,7 +28,7 @@ pub fn get<T: FromStr>(data: &BTreeMap<String, &str>, key: &str) -> Result<T> {
 */
 
 /// Get alphanumeric value as string or fail
-pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str> {
+pub fn get_an<'a>(data: &HashMap<String, &'a str>, key: &str) -> Result<&'a str> {
     // get string
     let an = get_str(data, key)?;
 
@@ -42,7 +42,7 @@ pub fn get_an<'a>(data: &BTreeMap<String, &'a str>, key: &str) -> Result<&'a str
 }
 
 /// Get username string and check if alphanumeric
-pub fn get_username<'a>(data: &BTreeMap<String, &'a str>) -> Result<&'a str> {
+pub fn get_username<'a>(data: &HashMap<String, &'a str>) -> Result<&'a str> {
     get_an(data, "username")
 }
 
@@ -72,7 +72,7 @@ pub fn cors_headers() -> Option<ResponseData<'static>> {
 #[derive(Clone, Debug)]
 pub struct UserLogins {
     valid_login: u64,
-    logins: BTreeMap<String, Vec<(String, SystemTime)>>,
+    logins: HashMap<String, Vec<(String, SystemTime)>>,
 }
 
 impl UserLogins {
@@ -80,7 +80,7 @@ impl UserLogins {
     pub fn new(valid_login: u64) -> Self {
         Self {
             valid_login,
-            logins: BTreeMap::new(),
+            logins: HashMap::new(),
         }
     }
 
@@ -155,7 +155,7 @@ impl UserLogins {
 #[derive(Debug)]
 pub struct UserFiles {
     data_dir: String,
-    files: BTreeMap<String, RwLock<StorageFile>>,
+    files: HashMap<String, RwLock<StorageFile>>,
 }
 
 impl UserFiles {
@@ -163,7 +163,7 @@ impl UserFiles {
     pub fn new(data_dir: String) -> Self {
         Self {
             data_dir,
-            files: BTreeMap::new(),
+            files: HashMap::new(),
         }
     }
 
@@ -249,9 +249,9 @@ pub enum ApiAction {
 /// Security management (rate limiting, banning)
 #[derive(Debug)]
 pub struct SecurityManager {
-    bans: RwLock<BTreeMap<String, SystemTime>>,
-    fail_counter: RwLock<BTreeMap<String, (u32, SystemTime)>>,
-    register_counter: RwLock<BTreeMap<String, (u32, SystemTime)>>,
+    bans: RwLock<HashMap<String, SystemTime>>,
+    fail_counter: RwLock<HashMap<String, (u32, SystemTime)>>,
+    register_counter: RwLock<HashMap<String, (u32, SystemTime)>>,
     ban_time: u64,
     login_fails: u32,
     login_time: u64,
@@ -269,9 +269,9 @@ impl SecurityManager {
         log: bool,
     ) -> Self {
         Self {
-            bans: RwLock::new(BTreeMap::new()),
-            fail_counter: RwLock::new(BTreeMap::new()),
-            register_counter: RwLock::new(BTreeMap::new()),
+            bans: RwLock::new(HashMap::new()),
+            fail_counter: RwLock::new(HashMap::new()),
+            register_counter: RwLock::new(HashMap::new()),
             ban_time,
             login_fails,
             login_time,

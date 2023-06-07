@@ -10,7 +10,7 @@ use etopa::{
     totp::Generator,
 };
 use serde_wasm_bindgen::{from_value, to_value};
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 use wasm_bindgen::{self, prelude::*};
 
 /// Better panic messages
@@ -90,7 +90,7 @@ pub fn gen_token(secret: &str, time_millis: u64) -> String {
 }
 
 #[derive(Serialize, Deserialize)]
-struct StringMap(BTreeMap<String, String>);
+struct StringMap(HashMap<String, String>);
 
 #[derive(Serialize, Deserialize)]
 struct StringVec(Vec<String>);
@@ -129,7 +129,7 @@ pub fn serialize_storage(storage: JsValue, sort: &str, key: &str) -> String {
     let storage: StringMap = from_value(storage).unwrap();
 
     // new map and iterate through storage entries
-    let mut map = BTreeMap::new();
+    let mut map = HashMap::new();
     for (k, v) in storage.0 {
         // hash secret name
         let name = crypto::hash_name(&k);
