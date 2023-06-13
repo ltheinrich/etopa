@@ -85,5 +85,13 @@ export const lang = {
     source_code: "Source code",
     privacy_policy: "Privacy policy",
     incorrect_username: "Incorrect username",
-    username_not_alphanumeric: "Username is not alphanumeric"
+    username_not_alphanumeric: "Username is not alphanumeric",
+    export_database: "Export database",
+    import_database: "Import database",
+    import_overwrites_database: "Importing overwrites the current database and existing data is irrevocably lost!",
+    import_database_qm: "Import database?",
+    no_file_selected: "No file selected",
+    database_imported: "Database successfully imported",
+    import_key: "Import key",
+    invalid_import_key: "Invalid import key"
 };

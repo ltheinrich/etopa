@@ -64,7 +64,6 @@ export async function load_secrets(wasm) {
 
 export function parse_storage_data(wasm, custom_storage_data, custom_storage_key) {
     const storage = wasm.parse_storage(custom_storage_data, custom_storage_key);
-    console.log(storage);
     let secrets = {};
     const sortedKeys = storage.get("secrets_sort");
     if (sortedKeys != null) {

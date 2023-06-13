@@ -84,5 +84,13 @@ export const lang = {
     source_code: "Исходный текст",
     privacy_policy: "Декларация о защите данных",
     incorrect_username: "Неправильное имя пользователя",
-    username_not_alphanumeric: "Имя пользователя не буквенно-цифровое"
+    username_not_alphanumeric: "Имя пользователя не буквенно-цифровое",
+    export_database: "Экспорт базы данных",
+    import_database: "импорт базы данных",
+    import_overwrites_database: "При импорте предыдущая база данных затирается, а существующие данные безвозвратно теряются!",
+    import_database_qm: "Действительно импортировать базу данных?",
+    no_file_selected: "Файл не выбран",
+    database_imported: "База данных успешно импортирована",
+    import_key: "ключ импорта",
+    invalid_import_key: "Недействительный ключ импорта"
 };

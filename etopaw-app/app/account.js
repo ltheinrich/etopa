@@ -1,8 +1,9 @@
-import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout, lang, vue, reload_storage_data, storage_data, parse_storage_data } from "../js/common.js";
+import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout, lang, reload_storage_data, parse_storage_data } from "../js/common.js";
 
 let wasm;
+let selected_import_file;
 
-const key = document.getElementById("key")
+const key = document.getElementById("key");
 const new_username = document.getElementById("new_username");
 const new_password = document.getElementById("new_password");
 const repeat_new_password = document.getElementById("repeat_new_password");
@@ -18,8 +19,6 @@ const export_database_btn = document.getElementById("export_database_btn");
 const download_export = document.getElementById("download_export");
 const import_database_btn = document.getElementById("import_database_btn");
 const import_file = document.getElementById("import_file");
-
-let selected_import_file;
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -60,21 +59,41 @@ load(async function (temp_wasm) {
     import_database_btn.addEventListener("click", function () {
         if (!selected_import_file)
             return alert_error(lang.no_file_selected);
+        else if (wasm.hash_key(key.value) != storage_key())
+            return alert_error(lang.invalid_key);
+
         confirm(lang.import_database_qm + "\n" + lang.import_overwrites_database, import_database, "<input autocomplete=\"off\" id=\"import_key\" class=\"form-control ten-top-margin\" type=\"password\" placeholder=\"" + lang.key + "\">");
         return false;
     });
 }, true);
 
 async function import_database() {
-    let buffer = await selected_import_file.arrayBuffer();
-    let import_key = document.getElementById("import_key").value;
     try {
-        let import_data = selected_import_file.text();
-        let secrets = parse_storage_data(wasm, import_data, import_key);
-        console.log(secrets);
+        const import_data = new Uint8Array(await selected_import_file.arrayBuffer());
+        const import_key = wasm.hash_key(document.getElementById("import_key").value);
+        const secrets = parse_storage_data(wasm, import_data, import_key);
+
+        let sort = "";
+        for (const key in secrets) {
+            sort += wasm.hash_name(key) + ',';
+        }
+        const hashed_key = wasm.hash_key(key.value);
+        const import_storage = wasm.serialize_storage(secrets, sort, hashed_key);
+
+        await api_fetch(json => {
+            if (json.error == false) {
+                localStorage.setItem("storage_data", import_storage);
+                sessionStorage.setItem("storage_key", hashed_key);
+                clear_inputs();
+                alert(lang.database_imported);
+            } else {
+                alert_error(lang.api_error_cs + json.error);
+            }
+            disabled(false);
+        }, "data/set_secure", login_data(), import_storage);
     } catch (err) {
         console.log(err);
-        alert_error(lang.invalid_key);
+        alert_error(lang.invalid_import_key);
     }
 }
 
@@ -174,6 +193,9 @@ function clear_inputs() {
     repeat_new_password.value = "";
     new_key.value = "";
     repeat_new_key.value = "";
+    import_file.value = null;
+    if (delete_user_check.checked)
+        delete_user_check.click();
 }
 
 function disabled(disable) {

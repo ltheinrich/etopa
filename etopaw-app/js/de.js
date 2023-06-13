@@ -89,5 +89,8 @@ export const lang = {
     import_database: "Datenbank importieren",
     import_overwrites_database: "Beim Importieren wird die bisherige Datenbank überschrieben und vorhandene Daten gehen dabei unwiderruflich verloren!",
     import_database_qm: "Datenbank wirklich importieren?",
-    no_file_selected: "Keine Datei ausgewählt"
+    no_file_selected: "Keine Datei ausgewählt",
+    database_imported: "Datenbank erfolgreich importiert",
+    import_key: "Import-Schlüssel",
+    invalid_import_key: "Ungültiger Import-Schlüssel"
 };
