@@ -27,8 +27,9 @@
                 <div class="navbar-collapse">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-item nav-link active" href="./account.html" id="userbtn">{{ lang.account
-                                }}</a>
+                            <a class="nav-item nav-link active" href="./account.html" id="userbtn">
+                                {{ lang.account }}
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-item nav-link" href="./help.html">{{ lang.help }}</a>
@@ -57,59 +58,87 @@
                     </div>
                 </div>
                 <br>
-                <form id="change_username" class="form-row row" autocomplete="off">
+                <form id="change_username" class="form-row row">
                     <div class="col-12 col-lg-4 text-center">
                         <input type="text" autocomplete="off" class="form-control" id="new_username"
                             v-bind:placeholder="lang.new_username">
                     </div>
                     <div class="col-lg-4"></div>
                     <div class="col-12 col-lg-4 text-center">
-                        <button id="change_username_btn" type="submit" class="btn btn-outline-warning">{{
-                            lang.change_username }}</button>
+                        <button id="change_username_btn" type="submit" class="btn btn-outline-warning">
+                            {{ lang.change_username }}
+                        </button>
                     </div>
                 </form>
                 <br>
-                <form id="change_password" class="form-row row" autocomplete="off">
+                <form id="change_password" class="form-row row">
                     <div class="col-12 col-lg-4 text-center">
-                        <input type="password" autocomplete="off" class="form-control" id="new_password"
+                        <input type="password" autocomplete="new-password" class="form-control" id="new_password"
                             v-bind:placeholder="lang.new_password">
                     </div>
                     <div class="col-12 col-lg-4 text-center">
-                        <input type="password" autocomplete="off" class="form-control" id="repeat_new_password"
+                        <input type="password" autocomplete="new-password" class="form-control" id="repeat_new_password"
                             v-bind:placeholder="lang.repeat_new_password">
                     </div>
                     <div class="col-12 col-lg-4 text-center">
-                        <button id="change_password_btn" type="submit" class="btn btn-outline-warning">{{
-                            lang.change_password }}</button>
+                        <button id="change_password_btn" type="submit" class="btn btn-outline-warning">
+                            {{ lang.change_password }}
+                        </button>
                     </div>
                 </form>
                 <br>
-                <form id="change_key" class="form-row row" autocomplete="off">
+                <form id="change_key" class="form-row row">
                     <div class="col-12 col-lg-4 text-center">
-                        <input type="password" autocomplete="off" class="form-control" id="new_key"
+                        <input type="password" autocomplete="new-password" class="form-control" id="new_key"
                             v-bind:placeholder="lang.new_key">
                     </div>
                     <div class="col-12 col-lg-4 text-center">
-                        <input type="password" autocomplete="off" class="form-control" id="repeat_new_key"
+                        <input type="password" autocomplete="new-password" class="form-control" id="repeat_new_key"
                             v-bind:placeholder="lang.repeat_new_key">
                     </div>
                     <div class="col-12 col-lg-4 text-center">
-                        <button id="change_key_btn" type="submit" class="btn btn-outline-warning">{{ lang.change_key
-                            }}</button>
+                        <button id="change_key_btn" type="submit" class="btn btn-outline-warning">
+                            {{ lang.change_key }}
+                        </button>
                     </div>
                 </form>
+                <br><br>
+                <div id="import_database" class="row">
+                    <div class="col-12 col-lg-4 text-center">
+                        <input type="file" class="form-control" id="import_file" accept=".edb">
+                    </div>
+                    <div class="col-lg-4"></div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <button id="import_database_btn" class="btn btn-outline-warning" disabled>
+                            {{ lang.import_database }}
+                        </button>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <p>{{ lang.import_overwrites_database }}</p>
+                </div>
+                <div id="export_database" class="row">
+                    <div class="col text-center">
+                        <button id="export_database_btn" class="btn btn-outline-info">
+                            {{ lang.export_database }}
+                        </button>
+                        <a id="download_export" hidden></a>
+                    </div>
+                </div>
                 <br>
                 <hr>
                 <div id="delete_user" class="row">
                     <div class="col text-center">
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             <input type="checkbox" class="custom-control-input" id="delete_user_check">
-                            <label class="custom-control-label" for="delete_user_check">&nbsp;{{ lang.delete_user
-                                }}</label>
+                            <label class="custom-control-label" for="delete_user_check">
+                                &nbsp;{{ lang.delete_user }}
+                            </label>
                         </div>
                         <br>
-                        <button id="delete_user_btn" type="submit" class="btn btn-danger" hidden>{{ lang.delete_user
-                            }}</button>
+                        <button id="delete_user_btn" type="submit" class="btn btn-danger" hidden>
+                            {{ lang.delete_user }}
+                        </button>
                     </div>
                 </div>
             </div>

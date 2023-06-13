@@ -84,5 +84,10 @@ export const lang = {
     source_code: "Quelltext",
     privacy_policy: "Datenschutzerklärung",
     incorrect_username: "Benutzername inkorrekt",
-    username_not_alphanumeric: "Benutzername ist nicht alphanumerisch"
+    username_not_alphanumeric: "Benutzername ist nicht alphanumerisch",
+    export_database: "Datenbank exportieren",
+    import_database: "Datenbank importieren",
+    import_overwrites_database: "Beim Importieren wird die bisherige Datenbank überschrieben und vorhandene Daten gehen dabei unwiderruflich verloren!",
+    import_database_qm: "Datenbank wirklich importieren?",
+    no_file_selected: "Keine Datei ausgewählt"
 };

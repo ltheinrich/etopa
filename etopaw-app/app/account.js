@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout, lang } from "../js/common.js";
+import { load, api_fetch, login_data, storage_key, load_secrets, confirm, alert, alert_error, username, logout, lang, vue, reload_storage_data, storage_data, parse_storage_data } from "../js/common.js";
 
 let wasm;
 
@@ -14,6 +14,12 @@ const change_key_btn = document.getElementById("change_key_btn");
 const delete_user_btn = document.getElementById("delete_user_btn");
 const logout_el = document.getElementById("logout");
 const delete_user_check = document.getElementById("delete_user_check");
+const export_database_btn = document.getElementById("export_database_btn");
+const download_export = document.getElementById("download_export");
+const import_database_btn = document.getElementById("import_database_btn");
+const import_file = document.getElementById("import_file");
+
+let selected_import_file;
 
 load(async function (temp_wasm) {
     wasm = temp_wasm;
@@ -36,7 +42,41 @@ load(async function (temp_wasm) {
     delete_user_check.addEventListener("click", function () {
         delete_user_btn.hidden = !delete_user_check.checked;
     });
+    export_database_btn.addEventListener("click", function () {
+        reload_storage_data(wasm)
+            .catch(err => alert_error(err))
+            .then(_ => {
+                download_export.setAttribute("href", "data:application/etopa-database;charset=utf-8," + encodeURIComponent(localStorage.getItem("storage_data")));
+                download_export.setAttribute("download", username() + ".edb");
+                download_export.click();
+            });
+        return false;
+    });
+    import_file.addEventListener("change", event => {
+        selected_import_file = event.target.files[0];
+        if (selected_import_file)
+            import_database_btn.disabled = false;
+    });
+    import_database_btn.addEventListener("click", function () {
+        if (!selected_import_file)
+            return alert_error(lang.no_file_selected);
+        confirm(lang.import_database_qm + "\n" + lang.import_overwrites_database, import_database, "<input autocomplete=\"off\" id=\"import_key\" class=\"form-control ten-top-margin\" type=\"password\" placeholder=\"" + lang.key + "\">");
+        return false;
+    });
 }, true);
+
+async function import_database() {
+    let buffer = await selected_import_file.arrayBuffer();
+    let import_key = document.getElementById("import_key").value;
+    try {
+        let import_data = selected_import_file.text();
+        let secrets = parse_storage_data(wasm, import_data, import_key);
+        console.log(secrets);
+    } catch (err) {
+        console.log(err);
+        alert_error(lang.invalid_key);
+    }
+}
 
 async function change_username() {
     if (wasm.hash_key(key.value) != storage_key()) {

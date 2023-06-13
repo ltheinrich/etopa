@@ -54,30 +54,35 @@ export async function load_secrets(wasm) {
         await reload_storage_data(wasm);
     } finally {
         try {
-            const storage = wasm.parse_storage(storage_data(), storage_key());
-            let secrets = {};
-            const sortedKeys = storage.get("secrets_sort");
-            if (sortedKeys != null) {
-                const splitKeys = sortedKeys.split(',');
-                for (let i = 0; i < splitKeys.length; i++) {
-                    const name = storage.get(splitKeys[i] + "_secret_name");
-                    const secret = storage.get(splitKeys[i] + "_secret");
-                    if (name != null && secret != null) {
-                        secrets[name] = secret;
-                    }
-                }
-            }
-            for (const [key, value] of storage) {
-                if ((sortedKeys == null || !sortedKeys.includes(key)) && key.endsWith("_secret")) {
-                    secrets[storage.get(key + "_name")] = value;
-                }
-            }
-            return secrets;
+            return parse_storage_data(wasm, storage_data(), storage_key());
         } catch (err) {
             console.log(err);
             throw lang.invalid_key;
         }
     }
+}
+
+export function parse_storage_data(wasm, custom_storage_data, custom_storage_key) {
+    const storage = wasm.parse_storage(custom_storage_data, custom_storage_key);
+    console.log(storage);
+    let secrets = {};
+    const sortedKeys = storage.get("secrets_sort");
+    if (sortedKeys != null) {
+        const splitKeys = sortedKeys.split(',');
+        for (let i = 0; i < splitKeys.length; i++) {
+            const name = storage.get(splitKeys[i] + "_secret_name");
+            const secret = storage.get(splitKeys[i] + "_secret");
+            if (name != null && secret != null) {
+                secrets[name] = secret;
+            }
+        }
+    }
+    for (const [key, value] of storage) {
+        if ((sortedKeys == null || !sortedKeys.includes(key)) && key.endsWith("_secret")) {
+            secrets[storage.get(key + "_name")] = value;
+        }
+    }
+    return secrets;
 }
 
 export function logout(logout_el) {
@@ -255,6 +260,6 @@ export const vue = new Vue({
     data: {
         lang,
         config,
-        username: username()
+        username: username(),
     }
 });
