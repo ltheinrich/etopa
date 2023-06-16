@@ -860,7 +860,7 @@ combine	4.6.6	Markus Westerlind <marwes91@gmail.com>	https://github.com/Marwes/c
 console_error_panic_hook	0.1.7	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/rustwasm/console_error_panic_hook	Apache-2.0 OR MIT		A panic hook for `wasm32-unknown-unknown` that logs panics to `console.error`
 constant_time_eq	0.1.5	Cesar Eduardo Barros <cesarb@cesarb.eti.br>	https://github.com/cesarb/constant_time_eq	CC0-1.0		Compares two equal-sized byte strings in constant time.
 constant_time_eq	0.2.6	Cesar Eduardo Barros <cesarb@cesarb.eti.br>	https://github.com/cesarb/constant_time_eq	Apache-2.0 OR CC0-1.0 OR MIT-0		Compares two equal-sized byte strings in constant time.
-cpufeatures	0.2.7	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Lightweight runtime CPU feature detection for x86/x86_64 and aarch64 with no_std support and support for mobile targets including Android and iOS
+cpufeatures	0.2.8	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Lightweight runtime CPU feature detection for x86/x86_64 and aarch64 with no_std support and support for mobile targets including Android and iOS
 crossbeam-utils	0.8.16		https://github.com/crossbeam-rs/crossbeam	Apache-2.0 OR MIT		Utilities for concurrent programming
 crypto-common	0.1.6	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Common cryptographic traits
 ctr	0.9.2	RustCrypto Developers	https://github.com/RustCrypto/block-modes	Apache-2.0 OR MIT		CTR block modes of operation
