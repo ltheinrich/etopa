@@ -878,14 +878,14 @@ js-sys	0.3.64	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindg
 json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/json-rust	Apache-2.0 OR MIT		JSON implementation in Rust
 keccak	0.1.4	RustCrypto Developers	https://github.com/RustCrypto/sponges/tree/master/keccak	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge function including the keccak-f and keccak-p variants
 kern	1.6.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
-libc	0.2.147	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
+libc	0.2.148	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 log	0.4.20	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
 memchr	2.6.3	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/memchr	MIT OR Unlicense		Safe interface to memchr.
 once_cell	1.18.0	Aleksey Kladov <aleksey.kladov@gmail.com>	https://github.com/matklad/once_cell	Apache-2.0 OR MIT		Single assignment cells and lazy values.
 opaque-debug	0.3.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Macro for opaque Debug trait implementation
 polyval	0.6.1	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		POLYVAL is a GHASH-like universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC)
 ppv-lite86	0.2.17	The CryptoCorrosion Contributors	https://github.com/cryptocorrosion/cryptocorrosion	Apache-2.0 OR MIT		Implementation of the crypto-simd API for x86
-proc-macro2	1.0.66	David Tolnay <dtolnay@gmail.com>|Alex Crichton <alex@alexcrichton.com>	https://github.com/dtolnay/proc-macro2	Apache-2.0 OR MIT		A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.
+proc-macro2	1.0.67	David Tolnay <dtolnay@gmail.com>|Alex Crichton <alex@alexcrichton.com>	https://github.com/dtolnay/proc-macro2	Apache-2.0 OR MIT		A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.
 quote	1.0.33	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/quote	Apache-2.0 OR MIT		Quasi-quoting macro quote!(...)
 rand	0.8.5	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Random number generators and other randomness functionality.
 rand_chacha	0.3.1	The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors	https://github.com/rust-random/rand	Apache-2.0 OR MIT		ChaCha random number generator
@@ -900,17 +900,17 @@ same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi
 scoped-tls	1.0.1	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/scoped-tls	Apache-2.0 OR MIT		Library implementation of the standard library's old `scoped_thread_local!` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS.
 sct	0.7.0	Joseph Birr-Pixton <jpixton@gmail.com>	https://github.com/ctz/sct.rs	Apache-2.0 OR ISC OR MIT		Certificate transparency SCT verification library
 serde	1.0.188	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
-serde-wasm-bindgen	0.5.0	Ingvar Stepanyan <me@rreverser.com>	https://github.com/cloudflare/serde-wasm-bindgen	MIT		Native Serde adapter for wasm-bindgen
+serde-wasm-bindgen	0.6.0	Ingvar Stepanyan <me@rreverser.com>	https://github.com/cloudflare/serde-wasm-bindgen	MIT		Native Serde adapter for wasm-bindgen
 serde_derive	1.0.188	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
-serde_json	1.0.106	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
+serde_json	1.0.107	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.10.8	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Pure Rust implementation of SHA-3, a family of Keccak-based hash functions including the SHAKE family of eXtendable-Output Functions (XOFs), as well as the accelerated variant TurboSHAKE
 spin	0.5.2	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>	https://github.com/mvdnes/spin-rs.git	MIT		Synchronization primitives based on spinning. They may contain data, are usable without `std`, and static initializers are available.
 subtle	2.5.0	Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>	https://github.com/dalek-cryptography/subtle	BSD-3-Clause		Pure-Rust traits and utilities for constant-time cryptographic implementations.
-syn	2.0.32	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
+syn	2.0.33	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
 thiserror	1.0.48	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		derive(Error)
 thiserror-impl	1.0.48	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		Implementation detail of the `thiserror` crate
 typenum	1.16.0	Paho Lurie-Gregg <paho@paholg.com>|Andre Bogus <bogusandre@gmail.com>	https://github.com/paholg/typenum	Apache-2.0 OR MIT		Typenum is a Rust library for type-level numbers evaluated at     compile time. It currently supports bits, unsigned integers, and signed     integers. It also provides a type-level array of type-level numbers, but its     implementation is incomplete.
-unicode-ident	1.0.11	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/unicode-ident	(MIT OR Apache-2.0) AND Unicode-DFS-2016		Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31
+unicode-ident	1.0.12	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/unicode-ident	(MIT OR Apache-2.0) AND Unicode-DFS-2016		Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31
 universal-hash	0.5.1	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits which describe the functionality of universal hash functions (UHFs)
 untrusted	0.7.1	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/untrusted	ISC		Safe, fast, zero-panic, zero-crashing, zero-allocation parsing of untrusted inputs in Rust.
 version_check	0.9.4	Sergio Benitez <sb@sergio.bz>	https://github.com/SergioBenitez/version_check	Apache-2.0 OR MIT		Tiny crate to check the version of the installed/running rustc.
