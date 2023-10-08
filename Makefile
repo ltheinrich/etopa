@@ -117,7 +117,8 @@ endif
 upgrade:
 	$(eval BUNDLETOOL_VERSION := $(shell curl --silent "https://api.github.com/repos/google/bundletool/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
-	$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
+	#$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
+	$(eval MINIFY_VERSION := $(echo "v2.12.8")) # temporary fix (missing binaries)
 	sed -i '/export MINIFY_VERSION=*/c\export MINIFY_VERSION=$(MINIFY_VERSION)' build-config
 	${CARGO_UPGRADE} --incompatible
 	${RUST_BUILDER} update
