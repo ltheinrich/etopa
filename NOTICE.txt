@@ -894,7 +894,7 @@ ring	0.16.20	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ri
 ring	0.17.5	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ring's license	Safe, fast, small crypto using Rust.
 rust-argon2	2.0.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustls	0.21.8		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
-rustls-pemfile	1.0.3		https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
+rustls-pemfile	1.0.4		https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
 rustls-webpki	0.101.7		https://github.com/rustls/webpki	ISC		Web PKI X.509 Certificate Verification.
 ryu	1.0.15	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion
 same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/same-file	MIT OR Unlicense		A simple crate for determining whether two file paths point to the same file.
