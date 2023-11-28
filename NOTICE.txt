@@ -874,7 +874,7 @@ inout	0.1.3	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0
 itoa	1.0.9	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/itoa	Apache-2.0 OR MIT		Fast integer primitive to string conversion
 jni	0.21.1	Josh Chase <josh@prevoty.com>	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bindings to the JNI
 jni-sys	0.3.0	Steven Fackler <sfackler@gmail.com>	https://github.com/sfackler/rust-jni-sys	Apache-2.0 OR MIT		Rust definitions corresponding to jni.h
-js-sys	0.3.65	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
+js-sys	0.3.66	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
 json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/json-rust	Apache-2.0 OR MIT		JSON implementation in Rust
 keccak	0.1.4	RustCrypto Developers	https://github.com/RustCrypto/sponges/tree/master/keccak	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge function including the keccak-f and keccak-p variants
 kern	1.6.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
@@ -919,14 +919,14 @@ untrusted	0.9.0	Brian Smith <brian@briansmith.org>	https://github.com/briansmith
 version_check	0.9.4	Sergio Benitez <sb@sergio.bz>	https://github.com/SergioBenitez/version_check	Apache-2.0 OR MIT		Tiny crate to check the version of the installed/running rustc.
 walkdir	2.4.0	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/walkdir	MIT OR Unlicense		Recursively walk a directory.
 wasi	0.11.0+wasi-snapshot-preview1	The Cranelift Project Developers	https://github.com/bytecodealliance/wasi	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Experimental WASI API bindings for Rust
-wasm-bindgen	0.2.88	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Easy support for interacting between JS and Rust.
-wasm-bindgen-backend	0.2.88	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/backend	Apache-2.0 OR MIT		Backend code generation of the wasm-bindgen tool
-wasm-bindgen-futures	0.4.38	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/futures	Apache-2.0 OR MIT		Bridging the gap between Rust Futures and JavaScript Promises
-wasm-bindgen-macro	0.2.88	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/macro	Apache-2.0 OR MIT		Definition of the `#[wasm_bindgen]` attribute, an internal dependency
-wasm-bindgen-macro-support	0.2.88	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/macro-support	Apache-2.0 OR MIT		The part of the implementation of the `#[wasm_bindgen]` attribute that is not in the shared backend crate
-wasm-bindgen-shared	0.2.88	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
-wasm-bindgen-test	0.3.38	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Internal testing crate for wasm-bindgen
-wasm-bindgen-test-macro	0.3.38	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Internal testing macro for wasm-bindgen
+wasm-bindgen	0.2.89	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Easy support for interacting between JS and Rust.
+wasm-bindgen-backend	0.2.89	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/backend	Apache-2.0 OR MIT		Backend code generation of the wasm-bindgen tool
+wasm-bindgen-futures	0.4.39	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/futures	Apache-2.0 OR MIT		Bridging the gap between Rust Futures and JavaScript Promises
+wasm-bindgen-macro	0.2.89	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/macro	Apache-2.0 OR MIT		Definition of the `#[wasm_bindgen]` attribute, an internal dependency
+wasm-bindgen-macro-support	0.2.89	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/macro-support	Apache-2.0 OR MIT		The part of the implementation of the `#[wasm_bindgen]` attribute that is not in the shared backend crate
+wasm-bindgen-shared	0.2.89	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
+wasm-bindgen-test	0.3.39	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Internal testing crate for wasm-bindgen
+wasm-bindgen-test-macro	0.3.39	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen	Apache-2.0 OR MIT		Internal testing macro for wasm-bindgen
 web-sys	0.3.65	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/web-sys	Apache-2.0 OR MIT		Bindings for all Web APIs, a procedurally generated crate from WebIDL
 winapi	0.3.9	Peter Atashian <retep998@gmail.com>	https://github.com/retep998/winapi-rs	Apache-2.0 OR MIT		Raw FFI bindings for all of Windows API.
 winapi-i686-pc-windows-gnu	0.4.0	Peter Atashian <retep998@gmail.com>	https://github.com/retep998/winapi-rs	Apache-2.0 OR MIT		Import libraries for the i686-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.
