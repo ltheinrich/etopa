@@ -11,5 +11,5 @@ homepage = "https://etopa.de"
 
 [dependencies]
 etopa = { path = "../etopa" }
-kern = { version = "1.6.0", features = ["http"] }
+kern = { version = "1.6.1", features = ["http"] }
 json = "0.12.4"
