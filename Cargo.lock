@@ -336,9 +336,9 @@ dependencies = [
 
 [[package]]
 name = "kern"
-version = "1.6.1"
+version = "1.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "753cef469b522c79f915fe911c20dd923bc1b1efba3bd8d63264688d49061bb3"
+checksum = "168d5358351ddd00fd434986451394d019ac104e27f4e26cbdabdb1b87d9a25f"
 dependencies = [
  "rustls",
  "rustls-pemfile",
