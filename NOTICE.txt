@@ -895,7 +895,7 @@ ring	0.17.7	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/rin
 rust-argon2	2.0.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustls	0.22.1		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
 rustls-pemfile	2.0.0		https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
-rustls-pki-types	1.0.1		https://github.com/rustls/pki-types	Apache-2.0 OR MIT		Shared types for the rustls PKI ecosystem
+rustls-pki-types	1.1.0		https://github.com/rustls/pki-types	Apache-2.0 OR MIT		Shared types for the rustls PKI ecosystem
 rustls-webpki	0.102.0		https://github.com/rustls/webpki	ISC		Web PKI X.509 Certificate Verification.
 ryu	1.0.16	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion
 same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/same-file	MIT OR Unlicense		A simple crate for determining whether two file paths point to the same file.
