@@ -7,7 +7,7 @@ export NDK_VERSION=$(sed -n '8p' etopan-app/app/build.gradle | grep -oE "[^ ]+$"
 
 # versions
 export BUNDLETOOL_VERSION=1.15.6
-export MINIFY_VERSION=v2.20.10
+export MINIFY_VERSION=v2.20.11
 
 if [ $# -eq 0 ]; then
   return
