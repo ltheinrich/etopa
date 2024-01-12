@@ -57,7 +57,7 @@ jobs:
 
       - name: Configure
         env:
-          ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/tools/bin/sdkmanager
+          ANDROID_SDK_MANAGER: ${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/latest/bin/sdkmanager
         run: |
           ./configure
 
