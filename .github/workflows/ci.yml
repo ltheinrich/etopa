@@ -57,13 +57,13 @@ jobs:
 
       - name: Configure
         env:
-          ANDROID_SDK_MANAGER: ${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/latest/bin/sdkmanager
+          ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager
         run: |
           ./configure
 
       - name: Make
         env:
           DEBUG_SIGN: y
-          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/24.0.8215888/toolchains/llvm/prebuilt/linux-x86_64/bin
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
           make noclean
