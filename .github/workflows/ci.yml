@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Configure Cache
         uses: actions/cache@v3
@@ -60,7 +60,6 @@ jobs:
           ANDROID_SDK_MANAGER: /usr/local/lib/android/sdk/tools/bin/sdkmanager
         run: |
           ./configure
-          find -L /usr/local/lib/android/sdk/ndk/24.0.8215888 -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
 
       - name: Make
         env:
