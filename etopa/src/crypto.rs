@@ -4,7 +4,7 @@ use aes_gcm::{
     aead::{generic_array::GenericArray, Aead, KeyInit},
     Aes256Gcm,
 };
-use argon2::{hash_encoded, verify_encoded, Config, Variant};
+use argon2::{hash_encoded, verify_encoded, Config, Variant, Version};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
@@ -180,7 +180,14 @@ pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<
 pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<String> {
     let config = Config {
         variant: Variant::Argon2id,
-        ..Config::default()
+        // original config ..Config::original()
+        ad: &[],
+        hash_length: 32,
+        lanes: 1,
+        mem_cost: 4096,
+        secret: &[],
+        time_cost: 3,
+        version: Version::Version13,
     };
     hash_encoded(pwd.as_ref(), salt.as_ref(), &config).or_else(Fail::from)
 }

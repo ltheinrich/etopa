@@ -6,6 +6,7 @@ use json::JsonValue;
 use kern::data::delete_file;
 use kern::data::StorageFile;
 use kern::http::server::{respond, ResponseData};
+use kern::string::is_alphanumeric;
 use std::collections::HashMap;
 use std::fmt::Display;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
@@ -33,7 +34,7 @@ pub fn get_an<'a>(data: &HashMap<String, &'a str>, key: &str) -> Result<&'a str>
     let an = get_str(data, key)?;
 
     // check if alphanumeric
-    if an.is_empty() || !an.chars().all(char::is_alphanumeric) {
+    if an.is_empty() || !is_alphanumeric(an) {
         return Fail::from(format!("{} is not alphanumeric", key));
     }
 
@@ -175,7 +176,7 @@ impl UserFiles {
     /// Create storage file
     pub fn create(&mut self, name: &str) -> Result<()> {
         // check if alphanumeric
-        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -202,7 +203,7 @@ impl UserFiles {
     /// Read access on existing storage file
     pub fn read(&self, name: &str) -> Result<RwLockReadGuard<StorageFile>> {
         // check if alphanumeric
-        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -216,7 +217,7 @@ impl UserFiles {
     /// Write access on storage file (create if not existent)
     pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<StorageFile>> {
         // check if alphanumeric
-        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");
         }
 
@@ -230,7 +231,7 @@ impl UserFiles {
     /// Delete storage file
     pub fn delete(&mut self, name: &str) -> Result<()> {
         // check if alphanumeric
-        if name.is_empty() || !name.chars().all(char::is_alphanumeric) {
+        if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");
         }
 

@@ -3,7 +3,6 @@ name = "etopaw"
 version = "0.0.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
 edition = "2021"
-rust-version = "1.56"
 license = "ISC"
 repository = "https://ltheinrich.de/etopa"
 description = "Etopa for Web"
@@ -15,7 +14,7 @@ console_error_panic_hook = "0.1.7"
 serde = "1.0.196"
 serde_derive = "1.0.196"
 serde-wasm-bindgen = "0.6.3"
-wasm-bindgen = { version = "0.2.87", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.90", features = ["serde-serialize"] }
 getrandom = { version = "0.2.12", features = ["js"] }
 
 [lib]
@@ -25,4 +24,4 @@ crate-type = ["cdylib", "rlib"]
 wasm-opt = false #["-Oz", "--enable-mutable-globals"]
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.37"
+wasm-bindgen-test = "0.3.40"

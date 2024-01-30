@@ -15,14 +15,21 @@ use kern::http::server::{certificate_config, listen, load_certificate, HttpReque
 use std::env::args;
 use std::fs::create_dir_all;
 use std::sync::{Arc, RwLock};
+use std::time::SystemTime;
 use utils::{ApiAction, SecurityManager};
 
 /// Main function
 fn main() {
     // init
     println!(
-        "Etopa {} (c) 2020 Lennart Heinrich\n",
-        search(BUILD_GRADLE, "versionName").unwrap_or("0.0.0")
+        "Etopa {version} (c) {year} Lennart Heinrich\n",
+        version = search(BUILD_GRADLE, "versionName").unwrap_or("0.0.0"),
+        year = 1970
+            + SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs()
+                / 31557600
     );
 
     // parse arguments
@@ -71,22 +78,24 @@ fn main() {
             certificate_config(TLS_CERTIFICATE, TLS_KEY).unwrap()
         }
     };
+
+    let shared = Arc::new(RwLock::new(SharedData::new(
+        users,
+        security,
+        vlt,
+        data.to_string(),
+        log,
+    )));
+
     let listeners = listen(
         &format!("{}:{}", addr, port),
         threads,
         HttpSettings::new(),
         tls_config,
         handle,
-        Arc::new(RwLock::new(SharedData::new(
-            users,
-            security,
-            vlt,
-            data.to_string(),
-            log,
-        ))),
+        shared,
     )
     .unwrap();
-
     // print info message and join threads
     println!("HTTPS server available on {}:{}", addr, port);
     for listener in listeners {
