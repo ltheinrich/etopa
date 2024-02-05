@@ -33,6 +33,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: gradle
 
       - name: Cargo Cache
         uses: Swatinem/rust-cache@v2
