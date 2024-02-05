@@ -114,14 +114,15 @@ else
 	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 endif
 
+upgrade: export CARGO_REGISTRIES_CRATES_IO_PROTOCOL = git
 upgrade:
 	$(eval BUNDLETOOL_VERSION := $(shell curl --silent "https://api.github.com/repos/google/bundletool/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
 	$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export MINIFY_VERSION=*/c\export MINIFY_VERSION=$(MINIFY_VERSION)' build-config
+	${RUST_BUILDER} fetch
 	${RUST_BUILDER} update
-	${CARGO_UPGRADE} --offline --incompatible
-	${RUST_BUILDER} update
+	${CARGO_UPGRADE} --incompatible
 	head -841 ${NOTICE_FILE} > ${NOTICE_FILE}.tmp && mv ${NOTICE_FILE}.tmp ${NOTICE_FILE}
 	${CARGO_LICENSE} -t | sed "s/ring\t\tLICENSE/ring\t\tring's license/g" | sed "s/webpki\t\tLICENSE/ring\t\tISC AND BSD-3-Clause/g" >> ${NOTICE_FILE}
 	mkdir -p etopan-app/app/src/main/assets && \cp ${NOTICE_FILE} etopan-app/app/src/main/assets/NOTICE.txt
