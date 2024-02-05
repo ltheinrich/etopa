@@ -41,8 +41,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ${{ env.ANDROID_HOME }}
-            /usr/share/rust/.cargo
+            /usr/local/lib/android/sdk
           key: ${{ runner.os }}-configure-cache
 
       - name: Cargo Cache
