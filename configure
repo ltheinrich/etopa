@@ -14,25 +14,24 @@ normal=$(TERM=xterm-256color tput sgr0)
 
 if [ $distro == "Fedora" ] || [ $distro == "CentOS" ]; then
   sudo dnf -y groupinstall "Development Tools"
-  sudo dnf -y install python java-latest-openjdk-devel gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config unzip perl-FindBin perl-File-Compare
+  sudo dnf -y install python java-latest-openjdk-devel gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config unzip perl-FindBin perl-File-Compare clang
   installed=`sudo dnf list installed`
   if ! grep -q "aarch64-linux-gnu-gcc" <<< "$installed"; then
     sudo dnf -y install gcc-aarch64-linux-gnu
   fi
 elif [ $distro == "Debian" ] || [ $distro == "Ubuntu" ]; then
   sudo apt update
-  sudo apt -y install build-essential python2 default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config unzip libfindbin-libs-perl
+  sudo apt -y install build-essential default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config unzip libfindbin-libs-perl clang
 else
   echo "${underline}Unsupported distribution, assuming packages already installed:${normal}"
   echo "${bold}Fedora:${normal}"
   echo "  ${italic}sudo dnf groupinstall \"Development Tools\""
-  echo "  sudo dnf install python java-latest-openjdk-devel gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config unzip perl-FindBin perl-File-Compare${normal}"
+  echo "  sudo dnf install python java-latest-openjdk-devel gcc-aarch64-linux-gnu gcc-arm-linux-gnu musl-gcc curl git openssl-devel pkg-config unzip perl-FindBin perl-File-Compare clang${normal}"
   echo "${bold}Debian:${normal}"
-  echo -e "  ${italic}sudo apt install build-essential python2 default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config unzip libfindbin-libs-perl${normal}\n"
+  echo -e "  ${italic}sudo apt install build-essential default-jdk gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf musl-tools curl git libssl-dev pkg-config unzip libfindbin-libs-perl clang{normal}\n"
 fi
 
-which rustup > /dev/null 2>&1
-if ! [ $? -eq 0 ]; then
+if ! command -v rustup &> /dev/null; then
   curl --proto '=https' --tlsv1.2 -sSf -o /tmp/etopa-configure/rustup.sh https://sh.rustup.rs
   chmod +x /tmp/etopa-configure/rustup.sh
   /tmp/etopa-configure/rustup.sh -y
