@@ -2,8 +2,8 @@
 
 use crate::common::*;
 use etopa::crypto::argon2_verify;
+use etopa::http::server::HttpRequest;
 use etopa::{Fail, Result};
-use kern::http::server::HttpRequest;
 use std::sync::RwLockReadGuard;
 
 /// Token validation handler

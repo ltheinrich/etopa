@@ -8,10 +8,10 @@ mod utils;
 
 mod api;
 
-use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES, TLS_CERTIFICATE, TLS_KEY};
+use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
+use etopa::data::StorageFile;
+use etopa::http::server::{load_certificate, HttpRequest, HttpServerBuilder};
 use etopa::{meta::search, CliBuilder, Config, Result};
-use kern::data::StorageFile;
-use kern::http::server::{certificate_config, listen, load_certificate, HttpRequest, HttpSettings};
 use std::env::args;
 use std::fs::create_dir_all;
 use std::sync::{Arc, RwLock};
@@ -66,19 +66,9 @@ fn main() {
     create_dir_all(data).ok();
     let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
 
-    // start server
+    // server configuration
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
-    let tls_config = match load_certificate(&cert, &key) {
-        Ok(config) => config,
-        Err(err) => {
-            eprintln!(
-                "Could not load TLS certificate or key:\n{}\nWARNING! Default certificate and key\n",
-                err
-            );
-            certificate_config(TLS_CERTIFICATE, TLS_KEY).unwrap()
-        }
-    };
-
+    let tls_config = load_certificate(cert, key).ok();
     let shared = Arc::new(RwLock::new(SharedData::new(
         users,
         security,
@@ -87,26 +77,23 @@ fn main() {
         log,
     )));
 
-    let listeners = listen(
-        &format!("{}:{}", addr, port),
-        threads,
-        HttpSettings::new(),
-        tls_config,
-        handle,
-        shared,
-    )
-    .unwrap();
+    // start http server
+    let server = HttpServerBuilder::new()
+        .addr(format!("{}:{}", addr, port))
+        .threads(threads)
+        .handler(handle)
+        .tls(tls_config)
+        .build(shared)
+        .unwrap();
+
     // print info message and join threads
     println!("HTTPS server available on {}:{}", addr, port);
-    for listener in listeners {
-        listener.join().expect("listener thread crashed");
-    }
+    server.block().unwrap();
 }
 
 /// Assigning requests to handlers
-fn handle(req: Result<HttpRequest>, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>> {
+fn handle(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>> {
     // unwrap and match url
-    let req: HttpRequest = req?;
     let handler = match req.url() {
         // user
         "/user/register" => api::user::register,
