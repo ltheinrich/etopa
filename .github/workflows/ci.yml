@@ -49,6 +49,6 @@ jobs:
       - name: Make
         env:
           DEBUG_SIGN: y
-          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin
+          NDK_TOOLCHAIN_BIN: /usr/local/lib/android/sdk/ndk/26.2.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
           make noclean
