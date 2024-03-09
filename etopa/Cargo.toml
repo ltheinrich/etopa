@@ -9,7 +9,7 @@ description = "Time-based one-time password authenticator"
 homepage = "https://etopa.de"
 
 [dependencies]
-kern = "1.7.0"
+kern = "1.7.1"
 aes-gcm = "0.10.3"
 ring = "0.17.8"
 sha3 = "0.10.8"
