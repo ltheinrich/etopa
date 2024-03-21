@@ -921,7 +921,7 @@ ring	0.17.8	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/rin
 rust-argon2	2.1.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustc-hash	1.1.0	The Rust Project Developers	https://github.com/rust-lang-nursery/rustc-hash	Apache-2.0 OR MIT		speed, non-cryptographic hash used in rustc
 rustix	0.38.32	Dan Gohman <dev@sunfishcode.online>|Jakub Konka <kubkon@jakubkonka.com>	https://github.com/bytecodealliance/rustix	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls
-rustls	0.23.2		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
+rustls	0.23.3		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
 rustls-pemfile	2.1.1		https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
 rustls-pki-types	1.3.1		https://github.com/rustls/pki-types	Apache-2.0 OR MIT		Shared types for the rustls PKI ecosystem
 rustls-webpki	0.102.2		https://github.com/rustls/webpki	ISC		Web PKI X.509 Certificate Verification.
