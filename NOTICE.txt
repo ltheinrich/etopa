@@ -908,7 +908,7 @@ opaque-debug	0.3.1	RustCrypto Developers	https://github.com/RustCrypto/utils	Apa
 paste	1.0.14	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/paste	Apache-2.0 OR MIT		Macros for all your token pasting needs
 polyval	0.6.2	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		POLYVAL is a GHASH-like universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC)
 ppv-lite86	0.2.17	The CryptoCorrosion Contributors	https://github.com/cryptocorrosion/cryptocorrosion	Apache-2.0 OR MIT		Implementation of the crypto-simd API for x86
-prettyplease	0.2.16	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/prettyplease	Apache-2.0 OR MIT		A minimal `syn` syntax tree pretty-printer
+prettyplease	0.2.17	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/prettyplease	Apache-2.0 OR MIT		A minimal `syn` syntax tree pretty-printer
 proc-macro2	1.0.79	David Tolnay <dtolnay@gmail.com>|Alex Crichton <alex@alexcrichton.com>	https://github.com/dtolnay/proc-macro2	Apache-2.0 OR MIT		A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.
 quote	1.0.35	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/quote	Apache-2.0 OR MIT		Quasi-quoting macro quote!(...)
 rand	0.8.5	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Random number generators and other randomness functionality.
@@ -921,7 +921,7 @@ ring	0.17.8	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/rin
 rust-argon2	2.1.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustc-hash	1.1.0	The Rust Project Developers	https://github.com/rust-lang-nursery/rustc-hash	Apache-2.0 OR MIT		speed, non-cryptographic hash used in rustc
 rustix	0.38.32	Dan Gohman <dev@sunfishcode.online>|Jakub Konka <kubkon@jakubkonka.com>	https://github.com/bytecodealliance/rustix	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls
-rustls	0.23.3		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
+rustls	0.23.4		https://github.com/rustls/rustls	Apache-2.0 OR ISC OR MIT		Rustls is a modern TLS library written in Rust.
 rustls-pemfile	2.1.1		https://github.com/rustls/pemfile	Apache-2.0 OR ISC OR MIT		Basic .pem file parser for keys and certificates
 rustls-pki-types	1.4.0		https://github.com/rustls/pki-types	Apache-2.0 OR MIT		Shared types for the rustls PKI ecosystem
 rustls-webpki	0.102.2		https://github.com/rustls/webpki	ISC		Web PKI X.509 Certificate Verification.
