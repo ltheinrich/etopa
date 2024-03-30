@@ -11,7 +11,8 @@ MINIFY_VERSION=$(shell ./build-config MINIFY_VERSION)
 
 # api
 API_FILE_NAME?=etopa
-API_TARGET_TRIPLE?=x86_64-unknown-linux-gnu # TODO: change back to musl; temporary fix for aws-lc-sys build failure
+# TODO (API_TARGET_TRIPLE): change back to musl; temporary fix for aws-lc-sys build failure
+API_TARGET_TRIPLE?=x86_64-unknown-linux-gnu
 API_STRIP?=strip
 CARGO_LICENSE?=cargo-license
 CARGO_UPGRADE?=cargo upgrade
