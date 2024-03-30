@@ -11,7 +11,7 @@ MINIFY_VERSION=$(shell ./build-config MINIFY_VERSION)
 
 # api
 API_FILE_NAME?=etopa
-API_TARGET_TRIPLE?=x86_64-unknown-linux-musl
+API_TARGET_TRIPLE?=x86_64-unknown-linux-gnu # TODO: change back to musl; temporary fix for aws-lc-sys build failure
 API_STRIP?=strip
 CARGO_LICENSE?=cargo-license
 CARGO_UPGRADE?=cargo upgrade
@@ -102,10 +102,9 @@ ifndef DEBUG_SIGN
 	${APKSIGNER_EXEC} sign --v4-signing-enabled false --v3-signing-enabled true --ks ${ANDROID_KEYSTORE} \
 	  --ks-key-alias ${JKS_ALIAS} --ks-pass pass:${JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \
 	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
-	${JAVA_EXEC} -jar ${BUNDLETOOL_JAR} build-bundle \
-	  --modules=etopan-app/app/build/intermediates/module_bundle/release/base.zip --output=${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE}
 	${JARSIGNER_EXEC} -keystore ${ANDROID_KEYSTORE} -storepass ${JKS_PASSWORD} -sigalg SHA256withRSA \
-	  -digest-alg SHA-256 ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE} etopa
+	  -digest-alg SHA-256 etopan-app/app/build/outputs/bundle/release/app-release.aab etopa
+	cp etopan-app/app/build/outputs/bundle/release/app-release.aab ${TARGET_OUTPUT_DIR}/${ANDROID_AAB_FILE}
 	cp etopan-app/app/build/outputs/mapping/release/mapping.txt ${TARGET_OUTPUT_DIR}/${ANDROID_MAPPING}
 	cp etopan-app/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip ${TARGET_OUTPUT_DIR}/${ANDROID_DEBUG_SYMBOLS}
 else
