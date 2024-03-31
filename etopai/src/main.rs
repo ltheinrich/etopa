@@ -10,7 +10,7 @@ mod api;
 
 use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
 use etopa::data::StorageFile;
-use etopa::http::server::{load_certificate, HttpRequest, HttpServerBuilder};
+use etopa::http::server::{HttpRequest, HttpServerBuilder};
 use etopa::{meta::search, CliBuilder, Config, Result};
 use std::env::args;
 use std::fs::create_dir_all;
@@ -58,8 +58,6 @@ fn main() {
     let login_time: u64 = cmd.parameter("logintime", config.get("logintime", 60));
     let account_limit: u32 = cmd.parameter("acclimit", config.get("acclimit", 10));
     let data = cmd.param("data", config.value("data", "data"));
-    let cert = cmd.parameter("cert", config.get("cert", format!("{}/cert.pem", data)));
-    let key = cmd.parameter("key", config.get("key", format!("{}/key.pem", data)));
     let log = !cmd.option("nolog") && !config.get("nolog", false);
 
     // open username/password storage
@@ -68,7 +66,6 @@ fn main() {
 
     // server configuration
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
-    let tls_config = load_certificate(cert, key).ok();
     let shared = Arc::new(RwLock::new(SharedData::new(
         users,
         security,
@@ -82,12 +79,11 @@ fn main() {
         .addr(format!("{}:{}", addr, port))
         .threads(threads)
         .handler(handle)
-        .tls(tls_config)
         .build(shared)
         .unwrap();
 
     // print info message and join threads
-    println!("HTTPS server available on {}:{}", addr, port);
+    println!("HTTP server available on {}:{}", addr, port);
     server.block().unwrap();
 }
 

@@ -19,8 +19,6 @@ Options:
   --logintime  I       Login fails cleanup time in seconds (60)
   --acclimit   I       Account registration limit per hour (10)
   --data       S       Data directory (data)
-  --cert       S       Path to TLS certificate (DATA_DIR/cert.pem)
-  --key        S       Path to TLS certificate key (DATA_DIR/key.pem)
   --licenses           List licenses of project and libraries
   --nolog              Print no log messages";
 
