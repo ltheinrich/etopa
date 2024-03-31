@@ -18,7 +18,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                optimizeCode false
+                obfuscate false
+            }
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
@@ -37,7 +43,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_11
     }
     
     namespace 'de.ltheinrich.etopa'
