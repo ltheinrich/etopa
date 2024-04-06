@@ -867,7 +867,7 @@ etopai	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etop
 etopan	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Etopa for Android
 etopaw	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Etopa for Web
 generic-array	0.14.7	Bartłomiej Kamiński <fizyk20@gmail.com>|Aaron Trent <novacrazy@gmail.com>	https://github.com/fizyk20/generic-array.git	MIT		Generic types implementing functionality of arrays
-getrandom	0.2.12	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
+getrandom	0.2.13	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
 ghash	0.5.1	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		Universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC), as in the AES-GCM authenticated encryption cipher.
 hex	0.4.3	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
 inout	0.1.3	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Custom reference types for code generic over in-place and buffer-to-buffer modes of operation.
