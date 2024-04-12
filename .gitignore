@@ -4,3 +4,4 @@
 /data/*.esdb
 /data/*.edb
 /etopan-app/.idea/deploymentTargetDropDown.xml
+/docker/etopa

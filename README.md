@@ -1,4 +1,4 @@
-[![Build Status](https://ltheinrich.de/etopa/workflows/CI/badge.svg)](https://ltheinrich.de/etopa/actions?query=workflow%3ACI)
+[![CI](https://github.com/ltheinrich/etopa/actions/workflows/ci.yml/badge.svg)](https://github.com/ltheinrich/etopa/actions/workflows/ci.yml)
 
 # Etopa
 ### Time-based one-time password authenticator (2FA)
@@ -35,3 +35,34 @@ API server: `target/build/etopa`
 Android APK: `target/build/etopa.apk`
 
 Web archive: `target/build/etopa.tar.xz`
+
+### Docker
+
+#### Configuration
+
+You can expose the container ports `80`, `443` and `4490`.
+On port `80`/`443` (HTTP/HTTPS) nginx serves as a reverse proxy for the backend and as a web server for the frontend.
+If you only need the Etopa backend, you can instead use port `4490` (HTTP).
+
+Configuration file paths relative to the volume directory for `/etopa/`
+<br>Etopa server/backend: `etopa.conf`
+<br>Etopa frontend: `config.js`
+<br>nginx: `nginx.conf`
+<br>TLS certificate/key/fullchain/dhparam: `cert.pem`/`privkey.pem`/`fullchain.pem`/`dhparam.pem`
+<br>If there are no configuration files provided, the default will be used.
+
+#### Docker Compose
+Download `docker-compose.yml`
+> curl -o docker-compose.yml https://raw.githubusercontent.com/ltheinrich/etopa/master/docker/docker-compose.yml
+
+Start Etopa
+> docker compose up -d
+
+Unless you modify the `docker-compose.yml` the directory `./etopa/` will be created. User data will be stored in `./etopa/data/` and configuration files (`etopa.conf` for the backend and `config.js` for the frontend) can be placed directly in `./etopa/` (using no/default configuration files works as well).
+
+#### Manually
+Pull image `ltheinrich/etopa:latest`
+> docker pull ltheinrich/etopa:latest
+
+Start Etopa
+> docker run -d --name etopa -v ./etopa/:/etopa/ --restart always -p 127.0.0.1:8080:80 -p 127.0.0.1:8443:443 -p 127.0.0.1:4490:4490 ltheinrich/etopa:latest

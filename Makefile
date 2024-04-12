@@ -43,6 +43,9 @@ WASM_PACK_EXEC?=wasm-pack
 GOMINIFY_EXEC?=minify-${MINIFY_VERSION}
 TEMP_EWM?=/tmp/etopa_ewm
 
+# docker
+DOCKER_TAG=ltheinrich/etopa:latest
+
 .PHONY: build clean noclean upgrade check api web android
 
 build: clean noclean
@@ -112,6 +115,10 @@ else
 	  --ks-key-alias ${DEBUG_JKS_ALIAS} --ks-pass pass:${DEBUG_JKS_PASSWORD} --out ${TARGET_OUTPUT_DIR}/${ANDROID_APK_FILE} \
 	  etopan-app/app/build/outputs/apk/release/app-release-unsigned.apk
 endif
+
+docker-only:
+	sudo chown -R -f $(shell whoami):$(shell whoami) docker/etopa || :
+	docker build -t ${DOCKER_TAG} .
 
 upgrade: export CARGO_REGISTRIES_CRATES_IO_PROTOCOL = git
 upgrade:
