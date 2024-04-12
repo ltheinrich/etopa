@@ -1,4 +1,4 @@
-import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error, logout, set_valid_login, storage_data, confirm, username as get_username, vue, alert } from "../js/common.js";
+import { load, api_fetch, login_data, lang, load_secrets, storage_key, online, alert_error, logout, set_valid_login, storage_data, confirm, username as get_username, username_ref, alert } from "../js/common.js";
 
 let wasm;
 let secrets;
@@ -72,7 +72,7 @@ async function try_init() {
                     localStorage.setItem("token", json.token);
                     set_valid_login(true);
                     await reload_secrets();
-                    vue.username = get_username();
+                    username_ref.value = get_username();
                     add_form.hidden = !online;
                     user_btn.hidden = !online;
                     disable_offline.hidden = online;

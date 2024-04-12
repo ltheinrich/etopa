@@ -1,3 +1,5 @@
+const { createApp, ref } = Vue;
+
 import * as config_import from "../config.js";
 import init, * as wasm from "../pkg/etopaw.js";
 
@@ -7,6 +9,8 @@ export let online = false;
 export function username() {
     return localStorage.getItem("username");
 }
+
+export let username_ref = ref(username());
 
 export function token() {
     return localStorage.getItem("token");
@@ -36,7 +40,7 @@ export async function reload_storage_data(wasm) {
         }
         try {
             JSON.parse(dec).error;
-            vue.username = lang.offline_mode;
+            username_ref.value = lang.offline_mode;
             return false;
         } catch (err) {
             const old_storage_data = localStorage.getItem("storage_data");
@@ -145,7 +149,7 @@ export async function raw_fetch(exec = async function (data = new Uint8Array(0))
         body
     };
     try {
-        const apiUrl = config.API_URL == "/" ? window.location.protocol + "//" + window.location.hostname + window.location.port : config.API_URL;
+        const apiUrl = config.API_URL == "/" ? window.location.protocol + "//" + window.location.hostname + ":" + window.location.port : config.API_URL;
         const resp = await fetch(`${apiUrl}/${url}`, req);
         const data = new Uint8Array(await resp.arrayBuffer());
         online = valid_login;
@@ -243,7 +247,8 @@ export function confirm(text = "", exec_fn = async function () { }, custom_body)
 
 export const config = config_import;
 export let lang = { help_qa: { download: {}, what_is: {}, usage: {}, questions: {} } };
-import("./" + (localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")) + ".js").then((module) => { lang = module.lang; vue.lang = lang; });
+let lang_ref = ref(lang);
+import("./" + (localStorage.getItem("lang") == null ? config.LANG : localStorage.getItem("lang")) + ".js").then((module) => { lang = module.lang; lang_ref.value = module.lang; });
 
 export function set_lang(lang) {
     if (lang == undefined) {
@@ -254,11 +259,12 @@ export function set_lang(lang) {
     location.reload();
 }
 
-export const vue = new Vue({
-    el: "#vue",
-    data: {
-        lang,
-        config,
-        username: username(),
-    }
-});
+createApp({
+    setup() {
+        return {
+            lang: lang_ref,
+            config: config,
+            username: username_ref,
+        }
+    },
+}).mount('#vue');
