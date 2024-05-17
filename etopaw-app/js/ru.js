@@ -11,6 +11,7 @@ export const lang = {
     add: "Добавить",
     new_password: "Новий пароль",
     repeat_new_password: "Повторите новый пароль",
+    user: "пользаватель",
     new_username: "Новый пользаватель",
     delete_user: "Удалить пользавателя",
     key: "Ключ",
