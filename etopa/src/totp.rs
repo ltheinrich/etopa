@@ -1,6 +1,6 @@
 //! Time-based one-time password
 
-use base32::Alphabet::{self, RFC4648};
+use base32::Alphabet::{self, Rfc4648};
 use kern::{Fail, Result};
 use ring::hmac::{sign, Algorithm, Key};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -14,7 +14,7 @@ pub mod algorithms {
 }
 
 /// Alphabet for Base32 secret decoding
-static ALPHABET: Alphabet = RFC4648 { padding: false };
+static ALPHABET: Alphabet = Rfc4648 { padding: false };
 
 /// TOTP generator
 #[derive(Clone, Debug)]
