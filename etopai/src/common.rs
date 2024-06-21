@@ -35,8 +35,8 @@ pub struct SharedData {
     pub logins: RwLock<UserLogins>,
     pub files: RwLock<UserFiles>,
     pub security: RwLock<SecurityManager>,
-    pub data_dir: String,
-    pub log: bool,
+    /*pub data_dir: String,
+    pub log: bool,*/
 }
 
 impl SharedData {
@@ -46,7 +46,7 @@ impl SharedData {
         security: SecurityManager,
         valid_login: u64,
         data_dir: String,
-        log: bool,
+        _log: bool,
     ) -> Self {
         // return default with provided users storage
         Self {
@@ -54,8 +54,8 @@ impl SharedData {
             logins: RwLock::new(UserLogins::new(valid_login)),
             files: RwLock::new(UserFiles::new(data_dir.clone())),
             security: RwLock::new(security),
-            data_dir,
-            log,
+            /*data_dir,
+            log,*/
         }
     }
 

@@ -451,7 +451,7 @@ impl SecurityManager {
 fn check_unexpired(expiration: &SystemTime, time: u64) -> bool {
     expiration
         .elapsed()
-        .unwrap_or_else(|_| Duration::from_secs(u64::max_value()))
+        .unwrap_or_else(|_| Duration::from_secs(u64::MAX))
         .as_secs()
         < time
 }
