@@ -50,5 +50,5 @@ jobs:
         env:
           DEBUG_SIGN: y
         run: |
-          export NDK_TOOLCHAIN_BIN="$ANDROID_NDK_LATEST_HOME"
+          export NDK_TOOLCHAIN_BIN="$ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin"
           make noclean
