@@ -110,7 +110,7 @@ pub fn parse_storage(mut data: Vec<u8>, key: &str) -> JsValue {
         // check if secret or secret name
         if k.ends_with("_secret") || k.ends_with("_secret_name") || k == "secrets_sort" {
             // decode hex
-            let dec = crypto::hex_decode(&v).unwrap();
+            let dec = crypto::hex_decode(v.as_bytes()).unwrap();
 
             // decrypt secret and modify
             *v = crypto::decrypt(dec, key).unwrap()
