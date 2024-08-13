@@ -11,10 +11,10 @@ homepage = "https://etopa.de"
 [dependencies]
 etopa = { path = "../etopa" }
 console_error_panic_hook = "0.1.7"
-serde = "1.0.206"
-serde_derive = "1.0.206"
+serde = "1.0.207"
+serde_derive = "1.0.207"
 serde-wasm-bindgen = "0.6.5"
-wasm-bindgen = { version = "0.2.92", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.93", features = ["serde-serialize"] }
 getrandom = { version = "0.2.15", features = ["js"] }
 
 [lib]
@@ -24,4 +24,4 @@ crate-type = ["cdylib", "rlib"]
 wasm-opt = false #["-Oz", "--enable-mutable-globals"]
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.42"
+wasm-bindgen-test = "0.3.43"
