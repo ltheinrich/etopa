@@ -852,7 +852,7 @@ block-buffer	0.10.4	RustCrypto Developers	https://github.com/RustCrypto/utils	Ap
 bumpalo	3.16.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 byteorder	1.5.0	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/byteorder	MIT OR Unlicense		Library for reading/writing numbers in big-endian and little-endian.
 bytes	1.7.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
-cc	1.1.11	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
+cc	1.1.12	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
 cesu8	1.1.0	Eric Kidd <git@randomhacks.net>	https://github.com/emk/cesu8-rs	Apache-2.0 OR MIT		Convert to and from CESU-8 encoding (similar to UTF-8)
 cfg-if	1.0.0	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/cfg-if	Apache-2.0 OR MIT		A macro to ergonomically define an item depending on a large number of #[cfg] parameters. Structured like an if-else chain, the first matching branch is the item that gets emitted.
 cipher	0.4.4	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for describing block ciphers and stream ciphers
@@ -879,7 +879,7 @@ js-sys	0.3.70	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindg
 json	0.12.4	Maciej Hirsz <hello@maciej.codes>	https://github.com/maciejhirsz/json-rust	Apache-2.0 OR MIT		JSON implementation in Rust
 keccak	0.1.5	RustCrypto Developers	https://github.com/RustCrypto/sponges/tree/master/keccak	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge function including the keccak-f and keccak-p variants
 kern	1.7.1	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
-libc	0.2.155	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
+libc	0.2.156	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 log	0.4.22	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
 memchr	2.7.4	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/memchr	MIT OR Unlicense		Provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32) routines for 1, 2 or 3 byte search and single substring search.
 minicov	0.3.5	Amanieu d'Antras <amanieu@gmail.com>	https://github.com/Amanieu/minicov	Apache-2.0 OR MIT		Code coverage and profile-guided optimization support for no_std and embedded programs
@@ -897,10 +897,10 @@ rust-argon2	2.1.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru
 ryu	1.0.18	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/ryu	Apache-2.0 OR BSL-1.0		Fast floating point to string conversion
 same-file	1.0.6	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/same-file	MIT OR Unlicense		A simple crate for determining whether two file paths point to the same file.
 scoped-tls	1.0.1	Alex Crichton <alex@alexcrichton.com>	https://github.com/alexcrichton/scoped-tls	Apache-2.0 OR MIT		Library implementation of the standard library's old `scoped_thread_local!` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS.
-serde	1.0.207	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
+serde	1.0.208	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		A generic serialization/deserialization framework
 serde-wasm-bindgen	0.6.5	Ingvar Stepanyan <me@rreverser.com>	https://github.com/RReverser/serde-wasm-bindgen	MIT		Native Serde adapter for wasm-bindgen
-serde_derive	1.0.207	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
-serde_json	1.0.124	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
+serde_derive	1.0.208	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
+serde_json	1.0.125	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.10.8	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Pure Rust implementation of SHA-3, a family of Keccak-based hash functions including the SHAKE family of eXtendable-Output Functions (XOFs), as well as the accelerated variant TurboSHAKE
 shlex	1.3.0	comex <comexk@gmail.com>|Fenhl <fenhl@fenhl.net>|Adrian Taylor <adetaylor@chromium.org>|Alex Touchet <alextouchet@outlook.com>|Daniel Parks <dp+git@oxidized.org>|Garrett Berg <googberg@gmail.com>	https://github.com/comex/rust-shlex	Apache-2.0 OR MIT		Split a string into shell words, like Python's shlex.
 spin	0.9.8	Mathijs van de Nes <git@mathijs.vd-nes.nl>|John Ericson <git@JohnEricson.me>|Joshua Barretto <joshua.s.barretto@gmail.com>	https://github.com/mvdnes/spin-rs.git	MIT		Spin-based synchronization primitives
