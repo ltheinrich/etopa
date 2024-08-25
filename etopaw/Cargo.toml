@@ -11,8 +11,8 @@ homepage = "https://etopa.de"
 [dependencies]
 etopa = { path = "../etopa" }
 console_error_panic_hook = "0.1.7"
-serde = "1.0.208"
-serde_derive = "1.0.208"
+serde = "1.0.209"
+serde_derive = "1.0.209"
 serde-wasm-bindgen = "0.6.5"
 wasm-bindgen = { version = "0.2.93", features = ["serde-serialize"] }
 getrandom = { version = "0.2.15", features = ["js"] }
