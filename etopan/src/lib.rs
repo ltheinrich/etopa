@@ -139,10 +139,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
     };
 
     // decrypt
-    let decrypted = match decrypt(decoded, key) {
-        Ok(decrypted) => decrypted,
-        _ => String::new(),
-    };
+    let decrypted = decrypt(decoded, key).unwrap_or_default();
 
     make_string(&env, decrypted)
 }

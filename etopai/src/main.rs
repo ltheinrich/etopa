@@ -62,7 +62,7 @@ fn main() {
 
     // open username/password storage
     create_dir_all(data).ok();
-    let users = StorageFile::new(&format!("{}/users.esdb", data)).unwrap();
+    let users = StorageFile::new(format!("{}/users.esdb", data)).unwrap();
 
     // server configuration
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
