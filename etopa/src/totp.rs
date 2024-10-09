@@ -28,7 +28,7 @@ impl Generator {
     /// Create new TOTP generator
     pub fn new(secret: impl AsRef<str>) -> Result<Self> {
         // decode base32 secret
-        let decoded = base32::decode(ALPHABET, secret.as_ref());
+        let decoded = base32::decode(ALPHABET, &secret.as_ref().to_uppercase());
         let secret = decoded.ok_or_else(|| Fail::new("invalid base32 secret"))?;
 
         // generate key with algorithm
