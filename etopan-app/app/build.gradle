@@ -5,7 +5,7 @@ android {
     // WARNING! CHANGING THE ORDER OF LINES BREAKS build-config
     compileSdk 35
     buildToolsVersion = "35.0.0"
-    ndkVersion "27.0.12077973"
+    ndkVersion "28.0.12433566"
 
     defaultConfig {
         applicationId "de.ltheinrich.etopa"
