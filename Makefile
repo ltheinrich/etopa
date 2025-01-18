@@ -126,6 +126,8 @@ upgrade:
 	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
 	$(eval MINIFY_VERSION := $(shell curl --silent "https://api.github.com/repos/tdewolff/minify/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export MINIFY_VERSION=*/c\export MINIFY_VERSION=$(MINIFY_VERSION)' build-config
+	$(eval NDK_VERSION := $(shell curl --silent "https://api.github.com/repos/android/ndk/releases/latest" | grep '"body":' | grep -o 'ndkVersion \\"[0-9]*\.[0-9]*\.[0-9]*\\"' | grep -o '[0-9]*\.[0-9]*\.[0-9]*'))
+	sed -i '/ndkVersion "*"/c\    ndkVersion "$(NDK_VERSION)"' etopan-app/app/build.gradle
 	${RUST_BUILDER} fetch
 	${RUST_BUILDER} update
 	${CARGO_UPGRADE} --incompatible
