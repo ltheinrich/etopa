@@ -56,11 +56,11 @@ impl Generator {
     /// Generate new token
     pub fn token(&self) -> Result<String> {
         let elapsed_time = SystemTime::now().duration_since(UNIX_EPOCH)?;
-        self.token_at(elapsed_time.as_secs())
+        Ok(self.token_at(elapsed_time.as_secs()))
     }
 
     /// Generate new token at time (in secs)
-    pub fn token_at(&self, time: u64) -> Result<String> {
+    pub fn token_at(&self, time: u64) -> String {
         let signed = sign(&self.key, &(time / 30).to_be_bytes());
         let sr = signed.as_ref();
         let offset = (sr[sr.len() - 1] & 0xf) as usize;
@@ -73,8 +73,30 @@ impl Generator {
         while token.len() < self.digits {
             token.insert(0, '0');
         }
-        Ok(token)
+        token
     }
 }
 
-// TODO: add tests
+#[test]
+fn test_token_at() {
+    let token1 = Generator::new("JBSWY3DPEHPK3PXP")
+        .unwrap()
+        .token_at(1737289933);
+    assert_eq!("880121", token1);
+
+    let token2 = Generator::new("mr6FAijp7noNGd3f4iZZfnUHi5MF2mts")
+        .unwrap()
+        .token_at(1737290803);
+    assert_eq!("721002", token2);
+
+    let token3 = Generator::new("C7G3JBj2hO").unwrap().token_at(1737290921);
+    assert_eq!("957794", token3);
+
+    let token4 = Generator::new("nysy2x64es").unwrap().token_at(1737290964);
+    assert_eq!("971040", token4);
+
+    let token5 = Generator::new("QWERTZUIOPASDFGHJKLYXCVBNM234567")
+        .unwrap()
+        .token_at(1737291065);
+    assert_eq!("505744", token5);
+}

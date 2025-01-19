@@ -13,6 +13,9 @@ use serde_wasm_bindgen::{from_value, to_value};
 use std::collections::HashMap;
 use wasm_bindgen::{self, prelude::*};
 
+#[cfg(test)]
+use wasm_bindgen_test::wasm_bindgen_test;
+
 /// Better panic messages
 #[wasm_bindgen]
 pub fn set_panic_hook() {
@@ -82,11 +85,28 @@ pub fn hex_encode(data: &[u8]) -> String {
 #[wasm_bindgen]
 pub fn gen_token(secret: &str, time_millis: u64) -> String {
     match Generator::new(secret) {
-        Ok(gen) => gen
-            .token_at(time_millis / 1000)
-            .unwrap_or_else(|_| "invalid secret".to_string()),
+        Ok(gen) => gen.token_at(time_millis / 1000),
         _ => "invalid secret".to_string(),
     }
+}
+
+#[test]
+#[wasm_bindgen_test]
+fn test_gen_token() {
+    let token1 = gen_token("JBSWY3DPEHPK3PXP", 1737289933123);
+    assert_eq!("880121", token1);
+
+    let token2 = gen_token("mr6FAijp7noNGd3f4iZZfnUHi5MF2mts", 1737290803000);
+    assert_eq!("721002", token2);
+
+    let token3 = gen_token("C7G3JBj2hO", 1737290921789);
+    assert_eq!("957794", token3);
+
+    let token4 = gen_token("nysy2x64es", 1737290964999);
+    assert_eq!("971040", token4);
+
+    let token5 = gen_token("QWERTZUIOPASDFGHJKLYXCVBNM234567", 1737291065111);
+    assert_eq!("505744", token5);
 }
 
 #[derive(Serialize, Deserialize)]
