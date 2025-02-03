@@ -1,7 +1,7 @@
 //! Etopa HTTPS API
 
 #[macro_use]
-extern crate json;
+extern crate jzon;
 
 mod common;
 mod utils;

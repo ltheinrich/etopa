@@ -6,7 +6,7 @@ use etopa::data::StorageFile;
 use etopa::http::server::{respond, ResponseData};
 use etopa::string::is_alphanumeric;
 use etopa::{Fail, Result};
-use json::JsonValue;
+use jzon::JsonValue;
 use std::collections::HashMap;
 use std::fmt::Display;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};

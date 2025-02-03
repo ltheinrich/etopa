@@ -7,7 +7,7 @@ use aes_gcm::{
 use argon2::{hash_encoded, verify_encoded, Config, Variant, Version};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
-use rand::{distributions::Alphanumeric, thread_rng, Rng};
+use rand::{distr::Alphanumeric, rng, Rng};
 use sha3::{Digest, Sha3_256};
 
 /// Generate password hash for API usage -> sha3-256(etopa + sha3-256(password))
@@ -160,10 +160,10 @@ pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<
 pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<u8>> {
     // init
     let aead = init_aes(raw_key);
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     // generate random nonce
-    let mut raw_data: Vec<u8> = (0..12).map(|_| rng.gen()).collect();
+    let mut raw_data: Vec<u8> = (0..12).map(|_| rng.random()).collect();
     let nonce = GenericArray::clone_from_slice(&raw_data);
 
     // encrypt data
@@ -199,12 +199,12 @@ pub fn argon2_verify(encoded: impl AsRef<str>, pwd: impl AsRef<[u8]>) -> bool {
 
 /// Generate random vector
 pub fn random(size: usize) -> Vec<u8> {
-    let mut rng = thread_rng();
-    (0..size).map(|_| rng.gen()).collect()
+    let mut rng = rng();
+    (0..size).map(|_| rng.random()).collect()
 }
 
 /// Generate random alphanumeric string
 pub fn random_an(len: usize) -> String {
-    let rand_an = thread_rng().sample_iter(&Alphanumeric).take(len).collect();
+    let rand_an = rng().sample_iter(&Alphanumeric).take(len).collect();
     String::from_utf8(rand_an).unwrap()
 }
