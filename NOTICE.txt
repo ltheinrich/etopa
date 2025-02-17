@@ -894,7 +894,7 @@ quote	1.0.38	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/quote	A
 rand	0.9.0	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Random number generators and other randomness functionality.
 rand_chacha	0.9.0	The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors	https://github.com/rust-random/rand	Apache-2.0 OR MIT		ChaCha random number generator
 rand_core	0.6.4	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
-rand_core	0.9.0	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
+rand_core	0.9.1	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
 ring	0.17.9	Brian Smith <brian@briansmith.org>	https://github.com/briansmith/ring		ring's license	Safe, fast, small crypto using Rust.
 rust-argon2	2.1.0	Martijn Rijkeboer <mrr@sru-systems.com>	https://github.com/sru-systems/rust-argon2	Apache-2.0 OR MIT		Rust implementation of the Argon2 password hashing function.
 rustversion	1.0.19	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/rustversion	Apache-2.0 OR MIT		Conditional compilation according to rustc compiler version
