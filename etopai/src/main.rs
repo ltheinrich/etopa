@@ -10,13 +10,19 @@ mod api;
 
 use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
 use etopa::data::StorageFile;
-use etopa::http::server::{HttpRequest, HttpServerBuilder};
+use etopa::http::server::{HttpRequest, HttpServerBuilder, HttpSettings};
 use etopa::{meta::search, CliBuilder, Config, Result};
 use std::env::args;
 use std::fs::create_dir_all;
-use std::sync::{Arc, RwLock};
+use std::sync::OnceLock;
 use std::time::SystemTime;
 use utils::{ApiAction, SecurityManager};
+
+static SHARED: OnceLock<SharedData> = OnceLock::new();
+
+pub fn get_share() -> &'static SharedData {
+    SHARED.get().unwrap()
+}
 
 /// Main function
 fn main() {
@@ -66,20 +72,16 @@ fn main() {
 
     // server configuration
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
-    let shared = Arc::new(RwLock::new(SharedData::new(
-        users,
-        security,
-        vlt,
-        data.to_string(),
-        log,
-    )));
+    let shared = SharedData::new(users, security, vlt, data.to_string(), log);
+    SHARED.set(shared).unwrap();
 
     // start http server
+    let settings = HttpSettings::new().threads_num(threads);
     let server = HttpServerBuilder::new()
         .addr(format!("{}:{}", addr, port))
-        .threads(threads)
+        .settings(settings)
         .handler(handle)
-        .build(shared)
+        .build()
         .unwrap();
 
     // print info message and join threads
@@ -88,7 +90,7 @@ fn main() {
 }
 
 /// Assigning requests to handlers
-fn handle(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>> {
+fn handle(req: HttpRequest) -> Result<Vec<u8>> {
     // unwrap and match url
     let handler = match req.url() {
         // user
@@ -111,17 +113,13 @@ fn handle(req: HttpRequest, shared: Arc<RwLock<SharedData>>) -> Result<Vec<u8>> 
     };
 
     // check ip address
-    if !shared
-        .read()
-        .unwrap()
-        .security()
-        .check(req.ip(), ApiAction::Simple)
-    {
+    let share = get_share();
+    if !share.security().check(req.ip(), ApiAction::Simple) {
         return Ok(json_error("blocked ip address"));
     }
 
     // handle request
-    Ok(match handler(req, shared.read().unwrap()) {
+    Ok(match handler(req, share) {
         Ok(resp) => resp,
         Err(err) => json_error(err),
     })
