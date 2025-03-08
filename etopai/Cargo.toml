@@ -2,7 +2,7 @@
 name = "etopai"
 version = "0.0.0"
 authors = ["Lennart Heinrich <lennart@ltheinrich.de>"]
-edition = "2021"
+edition = "2024"
 license = "ISC"
 repository = "https://ltheinrich.de/etopa"
 description = "Etopa HTTPS API"

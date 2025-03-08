@@ -85,7 +85,7 @@ pub fn hex_encode(data: &[u8]) -> String {
 #[wasm_bindgen]
 pub fn gen_token(secret: &str, time_millis: u64) -> String {
     match Generator::new(secret) {
-        Ok(gen) => gen.token_at(time_millis / 1000),
+        Ok(generator) => generator.token_at(time_millis / 1000),
         _ => "invalid secret".to_string(),
     }
 }

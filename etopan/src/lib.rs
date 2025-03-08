@@ -34,7 +34,7 @@ pub fn empty_string(env: &JNIEnv) -> jstring {
 }
 
 /// Hash key
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashKey(
     mut env: JNIEnv,
     _: JObject,
@@ -46,7 +46,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashKey(
 }
 
 /// Hash password
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPassword(
     mut env: JNIEnv,
     _: JObject,
@@ -58,7 +58,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPassword(
 }
 
 /// Hash pin
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPin(
     mut env: JNIEnv,
     _: JObject,
@@ -70,7 +70,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashPin(
 }
 
 /// Hash name
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashName(
     mut env: JNIEnv,
     _: JObject,
@@ -82,7 +82,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashName(
 }
 
 /// Hash hashed password using Argon2
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashArgon2Hashed(
     mut env: JNIEnv,
     _: JObject,
@@ -99,7 +99,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_hashArgon2Hashed(
 }
 
 /// Encrypt
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
     mut env: JNIEnv,
     _: JObject,
@@ -122,7 +122,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_encrypt(
 }
 
 /// Decrypt
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
     mut env: JNIEnv,
     _: JObject,
@@ -145,7 +145,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decrypt(
 }
 
 /// Generate token
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
     mut env: JNIEnv,
     _: JObject,
@@ -157,7 +157,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
     // create token generator
     let token = match Generator::new(secret) {
         // generate token
-        Ok(gen) => gen.token().unwrap_or_else(|_| "invalid".to_string()),
+        Ok(r#gen) => r#gen.token().unwrap_or_else(|_| "invalid".to_string()),
         _ => "invalid".to_string(),
     };
 
@@ -166,7 +166,7 @@ pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_generateToken(
 }
 
 /// Decode URL
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn Java_de_ltheinrich_etopa_utils_Common_decodeUrl(
     mut env: JNIEnv,
     _: JObject,
