@@ -12,10 +12,10 @@ use etopa::crypto::hex_decode;
 use etopa::crypto::hex_encode;
 use etopa::crypto::random;
 use etopa::{crypto::decrypt, totp::Generator};
+use jni::JNIEnv;
 use jni::objects::{JObject, JString};
 use jni::strings::JNIString;
 use jni::sys::jstring;
-use jni::JNIEnv;
 
 /// Receive string from Java
 pub fn recv_string(env: &mut JNIEnv, input: JString) -> String {

@@ -2,7 +2,7 @@
 
 use base32::Alphabet::{self, Rfc4648};
 use kern::{Fail, Result};
-use ring::hmac::{sign, Algorithm, Key};
+use ring::hmac::{Algorithm, Key, sign};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Hashing algorithms

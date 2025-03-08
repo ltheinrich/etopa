@@ -1,11 +1,11 @@
 //! Commons
 
 use aes_gcm::aead::generic_array::{
+    GenericArray,
     typenum::{
         bit::{B0, B1},
         uint::{UInt, UTerm},
     },
-    GenericArray,
 };
 
 /// AES 256-bit key representation

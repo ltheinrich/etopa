@@ -1,9 +1,9 @@
 //! API utils
 
 use etopa::crypto::random_an;
-use etopa::data::delete_file;
 use etopa::data::StorageFile;
-use etopa::http::server::{respond, ResponseData};
+use etopa::data::delete_file;
+use etopa::http::server::{ResponseData, respond};
 use etopa::string::is_alphanumeric;
 use etopa::{Fail, Result};
 use jzon::JsonValue;

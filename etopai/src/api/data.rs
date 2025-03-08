@@ -1,7 +1,7 @@
 //! Data API handlers
 
 use crate::common::*;
-use etopa::http::server::{respond, HttpRequest};
+use etopa::http::server::{HttpRequest, respond};
 use etopa::{Fail, Result};
 
 /// Get storage file handler

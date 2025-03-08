@@ -8,10 +8,10 @@ mod utils;
 
 mod api;
 
-use common::{json_error, SharedData, BUILD_GRADLE, HELP, LICENSES};
+use common::{BUILD_GRADLE, HELP, LICENSES, SharedData, json_error};
 use etopa::data::StorageFile;
 use etopa::http::server::{HttpRequest, HttpServerBuilder, HttpSettings};
-use etopa::{meta::search, CliBuilder, Config, Result};
+use etopa::{CliBuilder, Config, Result, meta::search};
 use std::env::args;
 use std::fs::create_dir_all;
 use std::sync::OnceLock;

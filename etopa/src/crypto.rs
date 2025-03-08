@@ -1,13 +1,13 @@
 //! Cryptography utils
 
 use aes_gcm::{
-    aead::{generic_array::GenericArray, Aead, KeyInit},
     Aes256Gcm,
+    aead::{Aead, KeyInit, generic_array::GenericArray},
 };
-use argon2::{hash_encoded, verify_encoded, Config, Variant, Version};
+use argon2::{Config, Variant, Version, hash_encoded, verify_encoded};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
-use rand::{distr::Alphanumeric, rng, Rng};
+use rand::{Rng, distr::Alphanumeric, rng};
 use sha3::{Digest, Sha3_256};
 
 /// Generate password hash for API usage -> sha3-256(etopa + sha3-256(password))
