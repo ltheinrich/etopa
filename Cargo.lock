@@ -357,9 +357,9 @@ dependencies = [
 
 [[package]]
 name = "kern"
-version = "1.8.2"
+version = "1.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9c355acb1cd21c77dc02effbad1db943cdc06f4a6061ff82adcdd30e5b70e31"
+checksum = "6ba93d0912e185067766169168eb0dece7d6e746b3cb72213ed7685e4f97242c"
 
 [[package]]
 name = "libc"
