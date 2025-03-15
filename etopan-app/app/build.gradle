@@ -3,15 +3,15 @@ apply plugin: 'kotlin-android'
 
 android {
     // WARNING! CHANGING THE ORDER OF LINES BREAKS build-config
-    compileSdk 35
-    buildToolsVersion = "35.0.0"
+    compileSdk 36
+    buildToolsVersion = "36.0.0"
     ndkVersion "28.0.13004108"
     // use LTS (not RC) version for ndkVersion!
 
     defaultConfig {
         applicationId "de.ltheinrich.etopa"
         minSdkVersion 24
-        targetSdk 35
+        targetSdk 36
         versionCode 29
         versionName "1.2.0"
         resourceConfigurations += ['en', 'de', 'ru', 'es', 'pt', 'fr', 'zh-rCN']
