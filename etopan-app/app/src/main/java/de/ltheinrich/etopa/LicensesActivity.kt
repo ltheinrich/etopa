@@ -18,6 +18,7 @@ class LicensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLicensesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.DISABLED
         binding.licenses.text = assets.open("NOTICE.txt").bufferedReader().use { it.readText() }
         common.backActivity = AppActivity::class.java

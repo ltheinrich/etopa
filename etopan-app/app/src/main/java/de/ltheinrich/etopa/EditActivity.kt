@@ -27,6 +27,7 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.DISABLED
         val secretName = intent.getStringExtra("secretName").orEmpty()
         binding.toolbar.root.title = String.format(getString(R.string.edit_var), secretName)
@@ -89,7 +90,7 @@ class EditActivity : AppCompatActivity() {
                 Pair("secretname", common.hashName(secretName)),
                 Pair("username", common.username),
                 Pair("token", common.token),
-                error_handler = { common.toast(R.string.network_unreachable) }
+                errorHandler = { common.toast(R.string.network_unreachable) }
             )
         }
 
@@ -115,8 +116,8 @@ class EditActivity : AppCompatActivity() {
                         common.storage!!.renameSecretKey(secretName, secretNewName)
                         common.request(
                             "data/update_sort",
-                            { sort_error ->
-                                val errorSort = sort_error.getString("error")
+                            { sortError ->
+                                val errorSort = sortError.getString("error")
                                 if (errorSort == "false") {
                                     common.toast(R.string.success)
                                     common.openActivity(AppActivity::class)
@@ -139,7 +140,7 @@ class EditActivity : AppCompatActivity() {
                 Pair("secretnameencrypted", common.encrypt(common.keyHash, secretNewName)),
                 Pair("username", common.username),
                 Pair("token", common.token),
-                error_handler = { common.toast(R.string.network_unreachable) }
+                errorHandler = { common.toast(R.string.network_unreachable) }
             )
         }
     }

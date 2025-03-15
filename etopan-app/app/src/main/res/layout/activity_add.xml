@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".AddActivity">
 
     <include
         android:id="@id/toolbar"
         layout="@layout/layout_toolbar" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -8,12 +8,17 @@ import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import android.view.*
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import de.ltheinrich.etopa.databinding.ActivityMainBinding
 import de.ltheinrich.etopa.utils.Common
 import de.ltheinrich.etopa.utils.MenuType
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             DebugConfig()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.SIMPLE
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.unlock)
@@ -66,10 +72,12 @@ class MainActivity : AppCompatActivity() {
 
         common.setPasswordType(preferences, binding.pin, binding.passwordType)
         binding.passwordType.setOnClickListener {
-            preferences.edit().putBoolean(
-                "textPasswordNoPin",
-                !preferences.getBoolean("textPasswordNoPin", false)
-            ).apply()
+            preferences.edit {
+                putBoolean(
+                    "textPasswordNoPin",
+                    !preferences.getBoolean("textPasswordNoPin", false)
+                )
+            }
             common.setPasswordType(preferences, binding.pin, binding.passwordType)
         }
 
@@ -149,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             biometricLogin({ doUnlock() }) { result ->
                 val encryptedPin =
                     result.cryptoObject?.cipher?.let { encryptBiometric(it, pinHash) }
-                preferences.edit().putString("encryptedPin", encryptedPin).apply()
+                preferences.edit { putString("encryptedPin", encryptedPin) }
             }
         } else {
             doUnlock()
@@ -195,7 +203,7 @@ class MainActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = {
+            errorHandler = {
                 common.offlineLogin(preferences)
             })
     }
@@ -230,7 +238,8 @@ class MainActivity : AppCompatActivity() {
         try {
             showProgress()
             val biometricPrompt =
-                BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                BiometricPrompt(
+                    this, ContextCompat.getMainExecutor(this),
                     object : BiometricPrompt.AuthenticationCallback() {
                         override fun onAuthenticationError(
                             errorCode: Int,
@@ -317,7 +326,7 @@ class MainActivity : AppCompatActivity() {
             )
         } catch (ex: Exception) {
             hideProgress()
-            preferences.edit().putBoolean("biometricDisabled", true).apply()
+            preferences.edit { putBoolean("biometricDisabled", true) }
             common.toast(R.string.unknown_error)
             common.toast(R.string.disable_biometric)
         }

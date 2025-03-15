@@ -2,8 +2,14 @@ package de.ltheinrich.etopa.utils
 
 import android.app.Activity
 import android.app.ActivityManager
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.POWER_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.PowerManager
 import android.text.InputType
@@ -12,11 +18,15 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.iterator
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -25,9 +35,16 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
-import de.ltheinrich.etopa.*
+import de.ltheinrich.etopa.AccountActivity
+import de.ltheinrich.etopa.AddActivity
+import de.ltheinrich.etopa.AppActivity
+import de.ltheinrich.etopa.LicensesActivity
+import de.ltheinrich.etopa.MainActivity
+import de.ltheinrich.etopa.R
+import de.ltheinrich.etopa.SettingsActivity
 import org.json.JSONObject
-import java.util.*
+import java.util.Random
+import java.util.UUID
 import kotlin.reflect.KClass
 
 typealias Handler = (response: JSONObject) -> Unit
@@ -51,7 +68,7 @@ enum class MenuType {
     DISABLED, SIMPLE, FULL
 }
 
-class Common constructor(activity: Activity) {
+class Common(activity: Activity) {
 
     var instance: String? = null
     var username: String = ""
@@ -63,28 +80,34 @@ class Common constructor(activity: Activity) {
     var backActivity: Class<*> = MainActivity::class.java
     var offline: Boolean = false
     var menuType: MenuType = MenuType.SIMPLE
+    private var insets: WindowInsetsCompat? = null
 
     fun handleMenu(item: MenuItem) = when (item.itemId) {
         R.id.action_add -> {
             openActivity(AddActivity::class)
             true
         }
+
         R.id.action_account -> {
             openActivity(AccountActivity::class)
             true
         }
+
         R.id.action_settings -> {
             openActivity(SettingsActivity::class)
             true
         }
+
         R.id.action_licenses -> {
             openActivity(LicensesActivity::class)
             true
         }
+
         android.R.id.home -> {
             backKey(KeyEvent.KEYCODE_BACK)
             true
         }
+
         else -> {
             false
         }
@@ -251,13 +274,14 @@ class Common constructor(activity: Activity) {
     }
 
     fun newLogin(preferences: SharedPreferences) {
-        request("user/login",
+        request(
+            "user/login",
             { response ->
                 if (response.has("token")) {
                     token = response.getString("token")
-                    val editor = preferences.edit()
-                    editor.putString("token", encrypt(pinHash, token))
-                    editor.apply()
+                    preferences.edit {
+                        putString("token", encrypt(pinHash, token))
+                    }
                     openActivity(AppActivity::class)
                 } else {
                     toast(R.string.incorrect_login)
@@ -266,7 +290,7 @@ class Common constructor(activity: Activity) {
             },
             Pair("username", username),
             Pair("password", passwordHash),
-            error_handler = { offlineLogin(preferences) })
+            errorHandler = { offlineLogin(preferences) })
     }
 
     fun offlineLogin(preferences: SharedPreferences) {
@@ -280,7 +304,7 @@ class Common constructor(activity: Activity) {
         url: String,
         handler: Handler,
         vararg data: Pair<String, String>,
-        error_handler: ErrorHandler = { error: VolleyError ->
+        errorHandler: ErrorHandler = { error: VolleyError ->
             Log.e(
                 "HTTP Request",
                 error.toString()
@@ -297,7 +321,7 @@ class Common constructor(activity: Activity) {
             Response.ErrorListener { error ->
                 offline = true
                 Log.e("Network error", error.toString())
-                error_handler(error)
+                errorHandler(error)
             }
         ) {
             override fun getHeaders(): Map<String, String> {
@@ -317,7 +341,7 @@ class Common constructor(activity: Activity) {
         url: String,
         handler: StringHandler,
         vararg data: Pair<String, String>,
-        error_handler: ErrorHandler = { error: VolleyError ->
+        errorHandler: ErrorHandler = { error: VolleyError ->
             Log.e(
                 "HTTP Request",
                 error.toString()
@@ -333,7 +357,7 @@ class Common constructor(activity: Activity) {
             },
             Response.ErrorListener { error ->
                 offline = true
-                error_handler(error)
+                errorHandler(error)
             }
         ) {
             override fun getHeaders(): Map<String, String> {
@@ -387,8 +411,7 @@ class Common constructor(activity: Activity) {
         val appProcessInfo = ActivityManager.RunningAppProcessInfo()
         ActivityManager.getMyMemoryState(appProcessInfo)
         val powerManager = activity.getSystemService(POWER_SERVICE) as PowerManager
-        @Suppress("DEPRECATION")
-        return !(if (checkSdk(Build.VERSION_CODES.KITKAT_WATCH)) powerManager.isInteractive else powerManager.isScreenOn)
+        return !powerManager.isInteractive
     }
 
     fun biometricAvailable(): Boolean {
@@ -410,6 +433,22 @@ class Common constructor(activity: Activity) {
         )
         val clip = ClipData.newPlainText(toCopy, toCopy)
         clipboard?.setPrimaryClip(clip)
+    }
+
+    fun fixEdgeToEdge(toolbar: View, firstElement: View) {
+        insets?.let {
+            val innerPadding =
+                it.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+            toolbar.setPadding(0, innerPadding.top, 0, 0)
+            toolbar.layoutParams.height += innerPadding.top
+            (firstElement.layoutParams as MarginLayoutParams).topMargin += innerPadding.top
+        } ?: run {
+            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
+                this.insets = insets
+                fixEdgeToEdge(toolbar, firstElement)
+                insets
+            }
+        }
     }
 
     companion object {

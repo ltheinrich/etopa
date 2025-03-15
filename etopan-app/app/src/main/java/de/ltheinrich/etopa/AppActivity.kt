@@ -7,9 +7,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.ContextMenu
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.ltheinrich.etopa.databinding.ActivityAppBinding
@@ -31,6 +37,7 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.top_tokens_layout))
         common.menuType = MenuType.FULL
         binding.toolbar.root.title = getString(R.string.app_name)
         setSupportActionBar(binding.toolbar.root)
@@ -44,13 +51,14 @@ class AppActivity : AppCompatActivity() {
         binding.rvTokens.adapter = TokenAdapter(tokens, this)
         binding.rvTokens.layoutManager = LinearLayoutManager(this)
 
-        common.requestString("data/get_secure",
+        common.requestString(
+            "data/get_secure",
             { secureStorage ->
                 handleStorage(secureStorage)
             },
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
                 preferences.getString("secretStorage", null)?.let {
                     val secureStorage =
@@ -65,8 +73,9 @@ class AppActivity : AppCompatActivity() {
         if (common.storage!!.map.containsValue(""))
             common.toast(R.string.decryption_failed)
         else if (update)
-            preferences.edit()
-                .putString("secretStorage", common.encrypt(common.pinHash, secureStorage)).apply()
+            preferences.edit {
+                putString("secretStorage", common.encrypt(common.pinHash, secureStorage))
+            }
         handleTokens()
     }
 
@@ -129,6 +138,7 @@ class AppActivity : AppCompatActivity() {
             common.openActivity(EditActivity::class, Pair("secretName", selectedSecretName))
             true
         }
+
         Menu.FIRST + 1 -> {
             if (common.storage == null) {
                 common.toast(R.string.unknown_error)
@@ -147,13 +157,14 @@ class AppActivity : AppCompatActivity() {
                     Pair("username", common.username),
                     Pair("token", common.token),
                     Pair("secretssort", common.storage!!.encryptSort()),
-                    error_handler = {
+                    errorHandler = {
                         common.toast(R.string.network_unreachable)
                     }
                 )
             }
             true
         }
+
         Menu.FIRST + 2 -> {
             if (common.storage == null) {
                 common.toast(R.string.unknown_error)
@@ -176,6 +187,7 @@ class AppActivity : AppCompatActivity() {
             }
             true
         }
+
         else -> {
             false
         }

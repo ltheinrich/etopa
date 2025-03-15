@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.google.android.material.textfield.TextInputLayout
 import de.ltheinrich.etopa.databinding.ActivityAccountBinding
 import de.ltheinrich.etopa.utils.Common
@@ -28,6 +29,7 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.DISABLED
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.account)
@@ -97,13 +99,14 @@ class AccountActivity : AppCompatActivity() {
         else if (!binding.confirmAccountDeletion.isChecked || common.hashKey(binding.keyAccountDeletion.editText?.text.toString()) != common.keyHash)
             return common.toast(R.string.invalid_key)
 
-        common.request("user/delete",
+        common.request(
+            "user/delete",
             { response ->
                 if (!response.optBoolean("error", true)) {
-                    val editor = preferences.edit()
-                    editor.clear()
-                    common.setPin(editor, common.pinHash)
-                    editor.apply()
+                    preferences.edit {
+                        clear()
+                        common.setPin(this, common.pinHash)
+                    }
                     common.toast(R.string.account_deleted)
                     common.openActivity(MainActivity::class)
                 } else {
@@ -113,7 +116,7 @@ class AccountActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             })
     }
@@ -157,7 +160,8 @@ class AccountActivity : AppCompatActivity() {
         binding.newKey.editText?.text?.clear()
         binding.newKeyRepeat.editText?.text?.clear()
 
-        common.requestString("data/get_secure",
+        common.requestString(
+            "data/get_secure",
             { secureStorage ->
                 val storage = Storage(common, secureStorage)
                 if (storage.map.containsValue(""))
@@ -169,16 +173,16 @@ class AccountActivity : AppCompatActivity() {
                     { response ->
                         if (!response.optBoolean("error", true)) {
                             common.keyHash = newKeyHash
-                            val editor = preferences.edit()
-                            editor.putString(
-                                "secretStorage",
-                                common.encrypt(common.pinHash, encryptedStorage)
-                            )
-                            editor.putString(
-                                "keyHash",
-                                common.encrypt(common.pinHash, common.keyHash)
-                            )
-                            editor.apply()
+                            preferences.edit {
+                                putString(
+                                    "secretStorage",
+                                    common.encrypt(common.pinHash, encryptedStorage)
+                                )
+                                putString(
+                                    "keyHash",
+                                    common.encrypt(common.pinHash, common.keyHash)
+                                )
+                            }
                             common.toast(R.string.key_changed)
                             common.backKey(KeyEvent.KEYCODE_BACK)
                         } else {
@@ -188,7 +192,7 @@ class AccountActivity : AppCompatActivity() {
                     },
                     Pair("username", common.username),
                     Pair("token", common.token),
-                    error_handler = {
+                    errorHandler = {
                         common.toast(R.string.network_unreachable)
                     },
                     body = encryptedStorage
@@ -196,7 +200,7 @@ class AccountActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             })
     }
@@ -240,16 +244,17 @@ class AccountActivity : AppCompatActivity() {
             common.hashArgon2Hashed(common.hashPassword(binding.newPassword.editText?.text.toString()))
         binding.newPassword.editText?.text?.clear()
         binding.newPasswordRepeat.editText?.text?.clear()
-        common.request("user/change_password",
+        common.request(
+            "user/change_password",
             { response ->
                 if (!response.optBoolean("error", true)) {
                     common.passwordHash = newPasswordHash
-                    val editor = preferences.edit()
-                    editor.putString(
-                        "passwordHash",
-                        common.encrypt(common.pinHash, common.passwordHash)
-                    )
-                    editor.apply()
+                    preferences.edit {
+                        putString(
+                            "passwordHash",
+                            common.encrypt(common.pinHash, common.passwordHash)
+                        )
+                    }
                     common.toast(R.string.password_changed)
                     common.backKey(KeyEvent.KEYCODE_BACK)
                 } else {
@@ -260,7 +265,7 @@ class AccountActivity : AppCompatActivity() {
             Pair("username", common.username),
             Pair("token", common.token),
             Pair("newpassword", newPasswordHash),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             })
     }
@@ -290,16 +295,17 @@ class AccountActivity : AppCompatActivity() {
 
         val newUsername = binding.newUsername.editText?.text.toString()
         binding.newUsername.editText?.text?.clear()
-        common.request("user/change_username",
+        common.request(
+            "user/change_username",
             { response ->
                 if (!response.optBoolean("error", true)) {
                     common.username = newUsername
-                    val editor = preferences.edit()
-                    editor.putString(
-                        "username",
-                        common.encrypt(common.pinHash, common.username)
-                    )
-                    editor.apply()
+                    preferences.edit {
+                        putString(
+                            "username",
+                            common.encrypt(common.pinHash, common.username)
+                        )
+                    }
                     common.toast(R.string.username_changed)
                     common.backKey(KeyEvent.KEYCODE_BACK)
                 } else {
@@ -310,7 +316,7 @@ class AccountActivity : AppCompatActivity() {
             Pair("username", common.username),
             Pair("token", common.token),
             Pair("newusername", newUsername),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             })
     }

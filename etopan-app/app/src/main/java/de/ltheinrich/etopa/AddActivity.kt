@@ -33,6 +33,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.DISABLED
         binding.toolbar.root.title = getString(R.string.app_name) + ": " + getString(R.string.add)
         setSupportActionBar(binding.toolbar.root)
@@ -72,7 +73,10 @@ class AddActivity : AppCompatActivity() {
         if (common.checkSdk(Build.VERSION_CODES.M) && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
             requestPermissions(arrayOf(Manifest.permission.CAMERA), 1540)
         else {
-            qrCodeLauncher.launch(ScanOptions().setOrientationLocked(true).setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES).setBeepEnabled(false))
+            qrCodeLauncher.launch(
+                ScanOptions().setOrientationLocked(true)
+                    .setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES).setBeepEnabled(false)
+            )
         }
     }
 
@@ -121,7 +125,7 @@ class AddActivity : AppCompatActivity() {
             Pair("secretnameencrypted", common.encrypt(common.keyHash, secretName)),
             Pair("username", common.username),
             Pair("token", common.token),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             }
         )

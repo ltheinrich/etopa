@@ -10,8 +10,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import de.ltheinrich.etopa.databinding.ActivitySettingsBinding
-import de.ltheinrich.etopa.utils.*
+import de.ltheinrich.etopa.utils.Common
+import de.ltheinrich.etopa.utils.MenuType
+import de.ltheinrich.etopa.utils.emptyPassword
+import de.ltheinrich.etopa.utils.emptyPin
+import de.ltheinrich.etopa.utils.emptyPinHash
+import de.ltheinrich.etopa.utils.inputString
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -24,6 +30,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        common.fixEdgeToEdge(findViewById(R.id.toolbar), findViewById(R.id.scrollview))
         common.menuType = MenuType.DISABLED
         binding.toolbar.root.title =
             getString(R.string.app_name) + ": " + getString(R.string.settings)
@@ -82,15 +89,15 @@ class SettingsActivity : AppCompatActivity() {
             }
 
         if (binding.disableBiometric.isChecked && !biometricDisabled) {
-            preferences.edit().putBoolean("biometricDisabled", true).remove("encryptedPin").apply()
+            preferences.edit { putBoolean("biometricDisabled", true).remove("encryptedPin") }
         } else if (!binding.disableBiometric.isChecked && biometricDisabled) {
-            preferences.edit().remove("biometricDisabled").apply()
+            preferences.edit { remove("biometricDisabled") }
         }
 
         if (pinHash != common.pinHash &&
             !preferences.getBoolean("biometricDisabled", false)
         ) {
-            preferences.edit().remove("encryptedPin").apply()
+            preferences.edit { remove("encryptedPin") }
         }
 
         common.instance = instance
@@ -107,13 +114,14 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun register() {
-        common.request("user/register",
+        common.request(
+            "user/register",
             { response ->
                 if (response.has("token")) {
                     common.token = response.getString("token")
-                    val editor = preferences.edit()
-                    editor.putString("token", common.encrypt(common.pinHash, common.token))
-                    editor.apply()
+                    preferences.edit {
+                        putString("token", common.encrypt(common.pinHash, common.token))
+                    }
                     common.toast(R.string.settings_saved)
                     common.newLogin(preferences)
                 } else {
@@ -123,7 +131,7 @@ class SettingsActivity : AppCompatActivity() {
             },
             Pair("username", common.username),
             Pair("password", common.hashArgon2Hashed(common.passwordHash)),
-            error_handler = {
+            errorHandler = {
                 common.toast(R.string.network_unreachable)
             })
     }
