@@ -124,9 +124,9 @@ pub fn update(req: HttpRequest, shared: &SharedData) -> Result<Vec<u8>> {
         let cache = storage.cache_mut();
 
         // update in storage file
-        cache.insert(format!("{}_secret", secret_name), secret_value.to_string());
+        cache.insert(format!("{secret_name}_secret"), secret_value.to_string());
         cache.insert(
-            format!("{}_secret_name", secret_name),
+            format!("{secret_name}_secret_name"),
             secret_name_encrypted.to_string(),
         );
         storage.write()?;
@@ -164,14 +164,14 @@ pub fn rename(req: HttpRequest, shared: &SharedData) -> Result<Vec<u8>> {
 
         // update in storage file
         let secret = cache
-            .remove(&format!("{}_secret", secret_name))
+            .remove(&format!("{secret_name}_secret"))
             .ok_or_else(|| Fail::new(""))?;
         cache
-            .remove(&format!("{}_secret_name", secret_name))
+            .remove(&format!("{secret_name}_secret_name"))
             .ok_or_else(|| Fail::new(""))?;
-        cache.insert(format!("{}_secret", new_secret_name), secret);
+        cache.insert(format!("{new_secret_name}_secret"), secret);
         cache.insert(
-            format!("{}_secret_name", new_secret_name),
+            format!("{new_secret_name}_secret_name"),
             secret_name_encrypted.to_string(),
         );
         storage.write()?;
@@ -206,8 +206,8 @@ pub fn delete(req: HttpRequest, shared: &SharedData) -> Result<Vec<u8>> {
         let cache = storage.cache_mut();
 
         // update in storage file
-        cache.remove(&format!("{}_secret", secret_name));
-        cache.remove(&format!("{}_secret_name", secret_name));
+        cache.remove(&format!("{secret_name}_secret"));
+        cache.remove(&format!("{secret_name}_secret_name"));
         storage.write()?;
 
         // return success

@@ -16,7 +16,7 @@ use std::time::{Duration, SystemTime};
 pub fn get_str<'a>(data: &HashMap<String, &'a str>, key: &str) -> Result<&'a str> {
     Ok(*data
         .get(key)
-        .ok_or_else(|| Fail::new(format!("{} required", key)))?)
+        .ok_or_else(|| Fail::new(format!("{key} required")))?)
 }
 
 /*
@@ -35,7 +35,7 @@ pub fn get_an<'a>(data: &HashMap<String, &'a str>, key: &str) -> Result<&'a str>
 
     // check if alphanumeric
     if an.is_empty() || !is_alphanumeric(an) {
-        return Fail::from(format!("{} is not alphanumeric", key));
+        return Fail::from(format!("{key} is not alphanumeric"));
     }
 
     // return string
@@ -346,7 +346,7 @@ impl SecurityManager {
                         .unwrap()
                         .insert(ip.to_string(), SystemTime::now());
                     if self.log {
-                        println!("Banned IP address: {}", ip);
+                        println!("Banned IP address: {ip}");
                     }
                 }
             }

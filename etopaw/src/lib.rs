@@ -163,8 +163,8 @@ pub fn serialize_storage(storage: JsValue, sort: &str, key: &str) -> String {
         let hex_name = crypto::hex_encode(enc_name);
 
         // add secret and secret name
-        map.insert(format!("{}_secret", name), hex_secret);
-        map.insert(format!("{}_secret_name", name), hex_name);
+        map.insert(format!("{name}_secret"), hex_secret);
+        map.insert(format!("{name}_secret_name"), hex_name);
     }
 
     // encrypt sort

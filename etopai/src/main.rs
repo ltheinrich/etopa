@@ -44,9 +44,9 @@ fn main() {
         .options(&["help", "licenses", "nolog"])
         .build(&args);
     if cmd.option("help") {
-        return println!("{}", HELP);
+        return println!("{HELP}");
     } else if cmd.option("licenses") {
-        return println!("{}", LICENSES);
+        return println!("{LICENSES}");
     }
 
     // load file config
@@ -68,7 +68,7 @@ fn main() {
 
     // open username/password storage
     create_dir_all(data).ok();
-    let users = StorageFile::new(format!("{}/users.esdb", data)).unwrap();
+    let users = StorageFile::new(format!("{data}/users.esdb")).unwrap();
 
     // server configuration
     let security = SecurityManager::new(ban_time, login_fails, login_time, account_limit, log);
@@ -78,14 +78,14 @@ fn main() {
     // start http server
     let settings = HttpSettings::new().threads_num(threads);
     let server = HttpServerBuilder::new()
-        .addr(format!("{}:{}", addr, port))
+        .addr(format!("{addr}:{port}"))
         .settings(settings)
         .handler(handle)
         .build()
         .unwrap();
 
     // print info message and join threads
-    println!("HTTP server available on {}:{}", addr, port);
+    println!("HTTP server available on {addr}:{port}");
     server.block().unwrap();
 }
 

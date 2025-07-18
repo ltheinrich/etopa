@@ -4,7 +4,7 @@ use aes_gcm::{
     Aes256Gcm,
     aead::{Aead, KeyInit, generic_array::GenericArray},
 };
-use argon2::{Config, Variant, Version, hash_encoded, verify_encoded};
+use argon2::{Config, ThreadMode, Variant, Version, hash_encoded, verify_encoded};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
 use rand::{Rng, distr::Alphanumeric, rng};
@@ -188,6 +188,7 @@ pub fn argon2_hash(pwd: impl AsRef<[u8]>, salt: impl AsRef<[u8]>) -> Result<Stri
         secret: &[],
         time_cost: 3,
         version: Version::Version13,
+        thread_mode: ThreadMode::Sequential,
     };
     hash_encoded(pwd.as_ref(), salt.as_ref(), &config).or_else(Fail::from)
 }
