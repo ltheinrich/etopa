@@ -201,7 +201,7 @@ impl UserFiles {
     }
 
     /// Read access on existing storage file
-    pub fn read(&self, name: &str) -> Result<RwLockReadGuard<StorageFile>> {
+    pub fn read(&self, name: &str) -> Result<RwLockReadGuard<'_, StorageFile>> {
         // check if alphanumeric
         if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");
@@ -215,7 +215,7 @@ impl UserFiles {
     }
 
     /// Write access on storage file (create if not existent)
-    pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<StorageFile>> {
+    pub fn write(&self, name: &str) -> Result<RwLockWriteGuard<'_, StorageFile>> {
         // check if alphanumeric
         if name.is_empty() || !is_alphanumeric(name) {
             return Fail::from("name not alphanumeric");

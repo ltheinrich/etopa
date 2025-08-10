@@ -60,42 +60,42 @@ impl SharedData {
     }
 
     /// Users database read-only
-    pub fn users(&self) -> RwLockReadGuard<StorageFile> {
+    pub fn users(&self) -> RwLockReadGuard<'_, StorageFile> {
         self.users.read().unwrap()
     }
 
     /// Users database writeable
-    pub fn users_mut(&self) -> RwLockWriteGuard<StorageFile> {
+    pub fn users_mut(&self) -> RwLockWriteGuard<'_, StorageFile> {
         self.users.write().unwrap()
     }
 
     /// User logins read-only
-    pub fn logins(&self) -> RwLockReadGuard<UserLogins> {
+    pub fn logins(&self) -> RwLockReadGuard<'_, UserLogins> {
         self.logins.read().unwrap()
     }
 
     /// User logins writeable
-    pub fn logins_mut(&self) -> RwLockWriteGuard<UserLogins> {
+    pub fn logins_mut(&self) -> RwLockWriteGuard<'_, UserLogins> {
         self.logins.write().unwrap()
     }
 
     /// User files read-only
-    pub fn files(&self) -> RwLockReadGuard<UserFiles> {
+    pub fn files(&self) -> RwLockReadGuard<'_, UserFiles> {
         self.files.read().unwrap()
     }
 
     /// User files writeable
-    pub fn files_mut(&self) -> RwLockWriteGuard<UserFiles> {
+    pub fn files_mut(&self) -> RwLockWriteGuard<'_, UserFiles> {
         self.files.write().unwrap()
     }
 
     /// Security manager read-only
-    pub fn security(&self) -> RwLockReadGuard<SecurityManager> {
+    pub fn security(&self) -> RwLockReadGuard<'_, SecurityManager> {
         self.security.read().unwrap()
     }
 
     /// Security manager writeable
-    pub fn security_mut(&self) -> RwLockWriteGuard<SecurityManager> {
+    pub fn security_mut(&self) -> RwLockWriteGuard<'_, SecurityManager> {
         self.security.write().unwrap()
     }
 
