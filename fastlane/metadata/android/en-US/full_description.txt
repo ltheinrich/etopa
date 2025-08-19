@@ -1,0 +1,1 @@
+<p><i>Etopa</i> is a free and open source (FOSS) app for two-factor-authentication (2FA). The app can use the Etopa.de instance or an own server.</p>
