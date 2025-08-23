@@ -847,12 +847,12 @@ arrayref	0.3.9	David Roundy <roundyd@physics.oregonstate.edu>	https://github.com
 arrayvec	0.7.6	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
 base32	0.5.1	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>|Dave Grantham <dwg@linuxprogrammer.org>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
 base64	0.22.1	Marshall Pierce <marshall@mpierce.org>	https://github.com/marshallpierce/rust-base64	Apache-2.0 OR MIT		encodes and decodes base64 as bytes or utf8
-bitflags	2.9.2	The Rust Project Developers	https://github.com/bitflags/bitflags	Apache-2.0 OR MIT		A macro to generate structures which behave like bitflags.
+bitflags	2.9.3	The Rust Project Developers	https://github.com/bitflags/bitflags	Apache-2.0 OR MIT		A macro to generate structures which behave like bitflags.
 blake2b_simd	1.0.3	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
 block-buffer	0.10.4	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer type for block processing of data
 bumpalo	3.19.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.10.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
-cc	1.2.33	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
+cc	1.2.34	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
 cesu8	1.1.0	Eric Kidd <git@randomhacks.net>	https://github.com/emk/cesu8-rs	Apache-2.0 OR MIT		Convert to and from CESU-8 encoding (similar to UTF-8)
 cfg-if	1.0.3	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cfg-if	Apache-2.0 OR MIT		A macro to ergonomically define an item depending on a large number of #[cfg] parameters. Structured like an if-else chain, the first matching branch is the item that gets emitted.
 cipher	0.4.4	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for describing block ciphers and stream ciphers
