@@ -112,8 +112,8 @@ fn test_gen_token() {
 #[derive(Serialize, Deserialize)]
 struct StringMap(HashMap<String, String>);
 
-#[derive(Serialize, Deserialize)]
-struct StringVec(Vec<String>);
+//#[derive(Serialize, Deserialize)]
+//struct StringVec(Vec<String>);
 
 /// Unsorted parse storage file and decrypt secrets
 #[wasm_bindgen]
