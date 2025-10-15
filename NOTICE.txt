@@ -871,7 +871,7 @@ etopaw	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etop
 find-msvc-tools	0.1.4		https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		Find windows-specific tools, read MSVC versions from the registry and from COM interfaces
 generic-array	0.14.9	Bartłomiej Kamiński <fizyk20@gmail.com>|Aaron Trent <novacrazy@gmail.com>	https://github.com/fizyk20/generic-array.git	MIT		Generic types implementing functionality of arrays
 getrandom	0.2.16	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
-getrandom	0.3.3	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
+getrandom	0.3.4	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
 ghash	0.5.1	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		Universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC), as in the AES-GCM authenticated encryption cipher.
 hex	0.4.3	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
 inout	0.1.4	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Custom reference types for code generic over in-place and buffer-to-buffer modes of operation.
@@ -920,7 +920,6 @@ untrusted	0.9.0	Brian Smith <brian@briansmith.org>	https://github.com/briansmith
 version_check	0.9.5	Sergio Benitez <sb@sergio.bz>	https://github.com/SergioBenitez/version_check	Apache-2.0 OR MIT		Tiny crate to check the version of the installed/running rustc.
 walkdir	2.5.0	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/walkdir	MIT OR Unlicense		Recursively walk a directory.
 wasi	0.11.1+wasi-snapshot-preview1	The Cranelift Project Developers	https://github.com/bytecodealliance/wasi	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Experimental WASI API bindings for Rust
-wasi	0.14.7+wasi-0.2.4		https://github.com/bytecodealliance/wasi-rs	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		WASI API bindings for Rust
 wasip2	1.0.1+wasi-0.2.4		https://github.com/bytecodealliance/wasi-rs	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		WASIp2 API bindings for Rust
 wasm-bindgen	0.2.104	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Easy support for interacting between JS and Rust.
 wasm-bindgen-backend	0.2.104	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/backend	Apache-2.0 OR MIT		Backend code generation of the wasm-bindgen tool
