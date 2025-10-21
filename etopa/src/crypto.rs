@@ -2,13 +2,15 @@
 
 use aes_gcm::{
     Aes256Gcm,
-    aead::{Aead, KeyInit, generic_array::GenericArray},
+    aead::{Aead, KeyInit},
 };
 use argon2::{Config, ThreadMode, Variant, Version, hash_encoded, verify_encoded};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
 use rand::{Rng, distr::Alphanumeric, rng};
 use sha3::{Digest, Sha3_256};
+
+use crate::common::Nonce;
 
 /// Generate password hash for API usage -> sha3-256(etopa + sha3-256(password))
 pub fn hash_password(password: impl AsRef<[u8]>) -> String {
@@ -127,17 +129,18 @@ pub fn hash(plaintext: impl AsRef<[u8]>) -> String {
 }
 
 /// Intialize Aes256Gcm with custom key
-fn init_aes(raw_key: impl AsRef<[u8]>) -> Aes256Gcm {
+fn init_aes(raw_key: impl AsRef<[u8]>) -> Result<Aes256Gcm> {
     // initialize aes with key
-    let key = GenericArray::clone_from_slice(raw_key.as_ref());
-    Aes256Gcm::new(&key)
+    //let key = GenericArray::clone_from_slice(raw_key.as_ref());
+    let key = raw_key.as_ref().try_into()?;
+    Ok(Aes256Gcm::new(&key))
 }
 
 /// Decrypt secure storage
 pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<String> {
     // init
     let raw_data = raw_data.as_ref();
-    let aead = init_aes(raw_key);
+    let aead = init_aes(raw_key)?;
 
     // check if contains at least nonce (first 12 bytes)
     if raw_data.len() < 13 {
@@ -145,9 +148,9 @@ pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<
         Ok("{}".to_string())
     } else {
         // get nonce and decrypt data
-        let nonce = GenericArray::clone_from_slice(&raw_data[..12]);
+        let nonce = &raw_data[..12].try_into()?;
         let decrypted = aead
-            .decrypt(&nonce, &raw_data[12..])
+            .decrypt(nonce, &raw_data[12..])
             .or_else(|_| Fail::from("could not decrypt secure storage data"))?;
 
         // decrypted to string
@@ -159,12 +162,12 @@ pub fn decrypt(raw_data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<
 /// Encrypt secure storage
 pub fn encrypt(data: impl AsRef<[u8]>, raw_key: impl AsRef<[u8]>) -> Result<Vec<u8>> {
     // init
-    let aead = init_aes(raw_key);
+    let aead = init_aes(raw_key)?;
     let mut rng = rng();
 
     // generate random nonce
     let mut raw_data: Vec<u8> = (0..12).map(|_| rng.random()).collect();
-    let nonce = GenericArray::clone_from_slice(&raw_data);
+    let nonce: Nonce = raw_data.as_slice().try_into()?;
 
     // encrypt data
     let mut encrypted = aead
