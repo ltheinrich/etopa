@@ -960,4 +960,4 @@ windows_x86_64_msvc	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apa
 wit-bindgen	0.46.0	Alex Crichton <alex@alexcrichton.com>	https://github.com/bytecodealliance/wit-bindgen	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Rust bindings generator and runtime support for WIT and the component model. Used when compiling Rust programs to the component model.
 zerocopy	0.8.31	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		"Zerocopy makes zero-cost memory manipulation effortless. We write ""unsafe"" so you don't have to."
 zerocopy-derive	0.8.31	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		Custom derive for traits from the zerocopy crate
-zmij	1.0.9	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/zmij	MIT		A double-to-string conversion algorithm based on Schubfach and yy
+zmij	1.0.10	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/zmij	MIT		A double-to-string conversion algorithm based on Schubfach and yy
