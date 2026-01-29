@@ -964,6 +964,6 @@ windows_x86_64_gnullvm	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	
 windows_x86_64_msvc	0.42.2	Microsoft	https://github.com/microsoft/windows-rs	Apache-2.0 OR MIT		Import lib for Windows
 windows_x86_64_msvc	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apache-2.0 OR MIT		Import lib for Windows
 wit-bindgen	0.51.0	Alex Crichton <alex@alexcrichton.com>	https://github.com/bytecodealliance/wit-bindgen	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Rust bindings generator and runtime support for WIT and the component model. Used when compiling Rust programs to the component model.
-zerocopy	0.8.34	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		"Zerocopy makes zero-cost memory manipulation effortless. We write ""unsafe"" so you don't have to."
-zerocopy-derive	0.8.34	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		Custom derive for traits from the zerocopy crate
+zerocopy	0.8.35	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		"Zerocopy makes zero-cost memory manipulation effortless. We write ""unsafe"" so you don't have to."
+zerocopy-derive	0.8.35	Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>	https://github.com/google/zerocopy	Apache-2.0 OR BSD-2-Clause OR MIT		Custom derive for traits from the zerocopy crate
 zmij	1.0.17	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/zmij	MIT		A double-to-string conversion algorithm based on Schubfach and yy
