@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # versions from build.gradle
-export ANDROID_PLATFORM=$(sed -n '6p' etopan-app/app/build.gradle | grep -oE "[^ ]+$")
-export BUILDTOOLS_VERSION=$(sed -n '7p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
-export NDK_VERSION=$(sed -n '8p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
+export ANDROID_PLATFORM=$(sed -n '8p' etopan-app/app/build.gradle | grep -oE "[^ ]+$")
+export BUILDTOOLS_VERSION=$(sed -n '9p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
+export NDK_VERSION=$(sed -n '10p' etopan-app/app/build.gradle | grep -oE "[^ ]+$" | sed 's/"//g')
 
 # versions
 export BUNDLETOOL_VERSION=1.18.3
