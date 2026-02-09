@@ -7,7 +7,7 @@ use aes_gcm::{
 use argon2::{Config, ThreadMode, Variant, Version, hash_encoded, verify_encoded};
 pub use hex::{decode as hex_decode, encode as hex_encode};
 use kern::{Fail, Result};
-use rand::{Rng, distr::Alphanumeric, rng};
+use rand::{RngExt, distr::Alphanumeric, rng};
 use sha3::{Digest, Sha3_256};
 
 /// Generate password hash for API usage -> sha3-256(etopa + sha3-256(password))
