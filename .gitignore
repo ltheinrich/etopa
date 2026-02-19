@@ -3,5 +3,5 @@
 /etopaw-app/pkg
 /data/*.esdb
 /data/*.edb
-/etopan-app/.idea/deploymentTargetDropDown.xml
+/etopan-app/.idea
 /docker/etopa

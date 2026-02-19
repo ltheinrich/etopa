@@ -21,13 +21,8 @@ android {
 
     buildTypes {
         release {
-            postprocessing {
-                removeUnusedCode true
-                removeUnusedResources true
-                optimizeCode false
-                obfuscate false
-            }
-
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
