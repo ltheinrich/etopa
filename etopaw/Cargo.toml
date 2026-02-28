@@ -14,7 +14,7 @@ console_error_panic_hook = "0.1.7"
 serde = "1.0.228"
 serde_derive = "1.0.228"
 serde-wasm-bindgen = "0.6.5"
-wasm-bindgen = { version = "0.2.113", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.114", features = ["serde-serialize"] }
 getrandom_02 = { package = "getrandom", version = "0.2.17", features = ["js"] }
 getrandom_03 = { package = "getrandom", version = "0.4.1", features = [
     "wasm_js",
@@ -27,4 +27,4 @@ crate-type = ["cdylib", "rlib"]
 wasm-opt = false #["-Oz", "--enable-mutable-globals"]
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.63"
+wasm-bindgen-test = "0.3.64"
