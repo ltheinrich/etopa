@@ -886,12 +886,12 @@ getrandom	0.2.17	The Rand Project Developers	https://github.com/rust-random/getr
 getrandom	0.4.2	The Rand Project Developers	https://github.com/rust-random/getrandom	Apache-2.0 OR MIT		A small cross-platform library for retrieving random data from system source
 ghash	0.5.1	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		Universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC), as in the AES-GCM authenticated encryption cipher.
 hashbrown	0.15.5	Amanieu d'Antras <amanieu@gmail.com>	https://github.com/rust-lang/hashbrown	Apache-2.0 OR MIT		A Rust port of Google's SwissTable hash map
-hashbrown	0.16.1	Amanieu d'Antras <amanieu@gmail.com>	https://github.com/rust-lang/hashbrown	Apache-2.0 OR MIT		A Rust port of Google's SwissTable hash map
+hashbrown	0.17.0	Amanieu d'Antras <amanieu@gmail.com>	https://github.com/rust-lang/hashbrown	Apache-2.0 OR MIT		A Rust port of Google's SwissTable hash map
 heck	0.5.0		https://github.com/withoutboats/heck	Apache-2.0 OR MIT		heck is a case conversion library.
 hex	0.4.3	KokaKiwi <kokakiwi@kokakiwi.net>	https://github.com/KokaKiwi/rust-hex	Apache-2.0 OR MIT		Encoding and decoding data into/from hexadecimal representation.
 hybrid-array	0.4.10	RustCrypto Developers	https://github.com/RustCrypto/hybrid-array	Apache-2.0 OR MIT		Hybrid typenum-based and const generic array types designed to provide the flexibility of typenum-based expressions while also allowing interoperability and a transition path to const generics
 id-arena	2.3.0	Nick Fitzgerald <fitzgen@gmail.com>|Aleksey Kladov <aleksey.kladov@gmail.com>	https://github.com/fitzgen/id-arena	Apache-2.0 OR MIT		A simple, id-based arena.
-indexmap	2.13.1		https://github.com/indexmap-rs/indexmap	Apache-2.0 OR MIT		A hash table with consistent order and fast iteration.
+indexmap	2.14.0		https://github.com/indexmap-rs/indexmap	Apache-2.0 OR MIT		A hash table with consistent order and fast iteration.
 inout	0.1.4	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Custom reference types for code generic over in-place and buffer-to-buffer modes of operation.
 itoa	1.0.18	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/itoa	Apache-2.0 OR MIT		Fast integer primitive to string conversion
 jni	0.22.4	jni team	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bindings to the JNI
