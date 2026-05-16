@@ -852,7 +852,6 @@ base32	0.5.1	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>|Dave Gran
 base64	0.22.1	Marshall Pierce <marshall@mpierce.org>	https://github.com/marshallpierce/rust-base64	Apache-2.0 OR MIT		encodes and decodes base64 as bytes or utf8
 bitflags	2.11.1	The Rust Project Developers	https://github.com/bitflags/bitflags	Apache-2.0 OR MIT		A macro to generate structures which behave like bitflags.
 blake2b_simd	1.0.4	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
-block-buffer	0.12.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Buffer types for block processing of data
 bumpalo	3.20.2	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.11.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
 cast	0.3.0	Jorge Aparicio <jorge@japaric.io>	https://github.com/japaric/cast.rs	Apache-2.0 OR MIT		Ergonomic, checked cast functions for primitive types
@@ -933,11 +932,12 @@ serde-wasm-bindgen	0.6.5	Ingvar Stepanyan <me@rreverser.com>	https://github.com/
 serde_core	1.0.228	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Serde traits only, with no support for derive -- use the `serde` crate instead
 serde_derive	1.0.228	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
 serde_json	1.0.149	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
-sha3	0.11.0	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Implementation of the SHA-3 family of cryptographic hash algorithms
+sha3	0.12.0	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Implementation of the SHA-3 family of cryptographic hash algorithms
 shlex	1.3.0	comex <comexk@gmail.com>|Fenhl <fenhl@fenhl.net>|Adrian Taylor <adetaylor@chromium.org>|Alex Touchet <alextouchet@outlook.com>|Daniel Parks <dp+git@oxidized.org>|Garrett Berg <googberg@gmail.com>	https://github.com/comex/rust-shlex	Apache-2.0 OR MIT		Split a string into shell words, like Python's shlex.
 simd_cesu8	1.1.1	Sean C. Roach <me@seancroach.dev>	https://github.com/seancroach/simd_cesu8	Apache-2.0 OR MIT		An extremely fast, SIMD accelerated, encoding and decoding library for CESU-8 and Modified UTF-8.
 simdutf8	0.1.5	Hans Kratz <hans@appfour.com>	https://github.com/rusticstuff/simdutf8	Apache-2.0 OR MIT		SIMD-accelerated UTF-8 validation.
 slab	0.4.12	Carl Lerche <me@carllerche.com>	https://github.com/tokio-rs/slab	MIT		Pre-allocated storage for a uniform data type
+sponge-cursor	0.1.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Cursor for sponge-based absorption and squeezing
 subtle	2.6.1	Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>	https://github.com/dalek-cryptography/subtle	BSD-3-Clause		Pure-Rust traits and utilities for constant-time cryptographic implementations.
 syn	2.0.117	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
 thiserror	2.0.18	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		derive(Error)
