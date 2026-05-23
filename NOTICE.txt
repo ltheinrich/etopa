@@ -847,12 +847,12 @@ anyhow	1.0.102	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/anyho
 arrayref	0.3.9	David Roundy <roundyd@physics.oregonstate.edu>	https://github.com/droundy/arrayref	BSD-2-Clause		Macros to take array references of slices
 arrayvec	0.7.6	bluss	https://github.com/bluss/arrayvec	Apache-2.0 OR MIT		A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
 async-trait	0.1.89	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/async-trait	Apache-2.0 OR MIT		Type erasure for async trait methods
-autocfg	1.5.0	Josh Stone <cuviper@gmail.com>	https://github.com/cuviper/autocfg	Apache-2.0 OR MIT		Automatic cfg for Rust compiler features
+autocfg	1.5.1	Josh Stone <cuviper@gmail.com>	https://github.com/cuviper/autocfg	Apache-2.0 OR MIT		Automatic cfg for Rust compiler features
 base32	0.5.1	Andreas Ots <qrpth@qrpth.eu>|Tim Dumol <tim@timdumol.com>|Dave Grantham <dwg@linuxprogrammer.org>	https://github.com/andreasots/base32	Apache-2.0 OR MIT		Base32 encoder/decoder for Rust
 base64	0.22.1	Marshall Pierce <marshall@mpierce.org>	https://github.com/marshallpierce/rust-base64	Apache-2.0 OR MIT		encodes and decodes base64 as bytes or utf8
 bitflags	2.11.1	The Rust Project Developers	https://github.com/bitflags/bitflags	Apache-2.0 OR MIT		A macro to generate structures which behave like bitflags.
 blake2b_simd	1.0.4	Jack O'Connor	https://github.com/oconnor663/blake2_simd	MIT		a pure Rust BLAKE2b implementation with dynamic SIMD
-bumpalo	3.20.2	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
+bumpalo	3.20.3	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/fitzgen/bumpalo	Apache-2.0 OR MIT		A fast bump allocation arena for Rust.
 bytes	1.11.1	Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>	https://github.com/tokio-rs/bytes	MIT		Types and traits for working with bytes
 cast	0.3.0	Jorge Aparicio <jorge@japaric.io>	https://github.com/japaric/cast.rs	Apache-2.0 OR MIT		Ergonomic, checked cast functions for primitive types
 cc	1.2.62	Alex Crichton <alex@alexcrichton.com>	https://github.com/rust-lang/cc-rs	Apache-2.0 OR MIT		A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
@@ -897,7 +897,7 @@ jni	0.22.4	jni team	https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Rust bin
 jni-macros	0.22.4		https://github.com/jni-rs/jni-rs	Apache-2.0 OR MIT		Procedural macros for the jni crate
 jni-sys	0.4.1	Steven Fackler <sfackler@gmail.com>|Robert Bragg <robert@sixbynine.org>	https://github.com/jni-rs/jni-sys	Apache-2.0 OR MIT		Rust definitions corresponding to jni.h
 jni-sys-macros	0.4.1	Robert Bragg <robert@sixbynine.org>	https://github.com/jni-rs/jni-sys	Apache-2.0 OR MIT		Macros for jni-sys crate
-js-sys	0.3.98	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
+js-sys	0.3.99	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/js-sys	Apache-2.0 OR MIT		Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
 jzon	0.12.5	Sandro-Alessio Gierens <sandro@gierens.de>|Maciej Hirsz <hello@maciej.codes>	https://github.com/rustadopt/jzon-rs	Apache-2.0 OR MIT		Continuation of json-rust, a JSON implementation in Rust
 keccak	0.2.0	RustCrypto Developers	https://github.com/RustCrypto/sponges	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge functions
 kern	1.8.3	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
@@ -952,14 +952,14 @@ walkdir	2.5.0	Andrew Gallant <jamslam@gmail.com>	https://github.com/BurntSushi/w
 wasi	0.11.1+wasi-snapshot-preview1	The Cranelift Project Developers	https://github.com/bytecodealliance/wasi	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Experimental WASI API bindings for Rust
 wasip2	1.0.3+wasi-0.2.9		https://github.com/bytecodealliance/wasi-rs	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		WASIp2 API bindings for Rust
 wasip3	0.4.0+wasi-0.3.0-rc-2026-01-06		https://github.com/bytecodealliance/wasi-rs	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		WASIp3 API bindings for Rust
-wasm-bindgen	0.2.121	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Easy support for interacting between JS and Rust.
-wasm-bindgen-futures	0.4.71	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/futures	Apache-2.0 OR MIT		Bridging the gap between Rust Futures and JavaScript Promises
-wasm-bindgen-macro	0.2.121	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro	Apache-2.0 OR MIT		Definition of the `#[wasm_bindgen]` attribute, an internal dependency
-wasm-bindgen-macro-support	0.2.121	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro-support	Apache-2.0 OR MIT		Implementation APIs for the `#[wasm_bindgen]` attribute
-wasm-bindgen-shared	0.2.121	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
-wasm-bindgen-test	0.3.71	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Internal testing crate for wasm-bindgen
-wasm-bindgen-test-macro	0.3.71	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Internal testing macro for wasm-bindgen
-wasm-bindgen-test-shared	0.2.121	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/test-shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen-test and wasm-bindgen-test-runner, an internal dependency.
+wasm-bindgen	0.2.122	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Easy support for interacting between JS and Rust.
+wasm-bindgen-futures	0.4.72	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/futures	Apache-2.0 OR MIT		Bridging the gap between Rust Futures and JavaScript Promises
+wasm-bindgen-macro	0.2.122	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro	Apache-2.0 OR MIT		Definition of the `#[wasm_bindgen]` attribute, an internal dependency
+wasm-bindgen-macro-support	0.2.122	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro-support	Apache-2.0 OR MIT		Implementation APIs for the `#[wasm_bindgen]` attribute
+wasm-bindgen-shared	0.2.122	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
+wasm-bindgen-test	0.3.72	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Internal testing crate for wasm-bindgen
+wasm-bindgen-test-macro	0.3.72	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-bindgen	Apache-2.0 OR MIT		Internal testing macro for wasm-bindgen
+wasm-bindgen-test-shared	0.2.122	The wasm-bindgen Developers	https://github.com/rustwasm/wasm-bindgen/tree/master/crates/test-shared	Apache-2.0 OR MIT		Shared support between wasm-bindgen-test and wasm-bindgen-test-runner, an internal dependency.
 wasm-encoder	0.244.0	Nick Fitzgerald <fitzgen@gmail.com>	https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wasm-encoder	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		A low-level WebAssembly encoder.
 wasm-metadata	0.244.0		https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wasm-metadata	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		Read and manipulate WebAssembly metadata
 wasmparser	0.244.0	Yury Delendik <ydelendik@mozilla.com>	https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wasmparser	Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT		A simple event-driven library for parsing WebAssembly binary files.
