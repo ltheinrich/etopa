@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 
 android {
     // WARNING! CHANGING THE ORDER OF LINES BREAKS build-config
-    compileSdk = 36
-    buildToolsVersion = "36.1.0"
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
     ndkVersion "29.0.14206865"
     // use LTS (not RC) version for ndkVersion!
 
@@ -53,11 +53,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.core:core-ktx:1.19.0'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
 
