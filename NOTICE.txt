@@ -905,7 +905,7 @@ opaque-debug	0.3.1	RustCrypto Developers	https://github.com/RustCrypto/utils	Apa
 pin-project-lite	0.2.17		https://github.com/taiki-e/pin-project-lite	Apache-2.0 OR MIT		A lightweight version of pin-project written with declarative macros.
 polyval	0.6.2	RustCrypto Developers	https://github.com/RustCrypto/universal-hashes	Apache-2.0 OR MIT		POLYVAL is a GHASH-like universal hash over GF(2^128) useful for constructing a Message Authentication Code (MAC)
 proc-macro2	1.0.106	David Tolnay <dtolnay@gmail.com>|Alex Crichton <alex@alexcrichton.com>	https://github.com/dtolnay/proc-macro2	Apache-2.0 OR MIT		A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.
-quote	1.0.45	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/quote	Apache-2.0 OR MIT		Quasi-quoting macro quote!(...)
+quote	1.0.46	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/quote	Apache-2.0 OR MIT		Quasi-quoting macro quote!(...)
 r-efi	6.0.0		https://github.com/r-efi/r-efi	Apache-2.0 OR LGPL-2.1-or-later OR MIT		UEFI Reference Specification Protocol Constants and Definitions
 rand	0.10.1	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Random number generators and other randomness functionality.
 rand_core	0.6.4	The Rand Project Developers|The Rust Project Developers	https://github.com/rust-random/rand	Apache-2.0 OR MIT		Core random number generator traits and tools for implementation.
