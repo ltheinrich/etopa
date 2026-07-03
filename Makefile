@@ -120,7 +120,7 @@ docker-only:
 	sudo chown -R -f $(shell whoami):$(shell whoami) docker/etopa || :
 	docker build -t ${DOCKER_TAG} .
 
-upgrade: export CARGO_REGISTRIES_CRATES_IO_PROTOCOL = git
+#upgrade: export CARGO_REGISTRIES_CRATES_IO_PROTOCOL = git
 upgrade:
 	$(eval BUNDLETOOL_VERSION := $(shell curl --silent "https://api.github.com/repos/google/bundletool/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'))
 	sed -i '/export BUNDLETOOL_VERSION=*/c\export BUNDLETOOL_VERSION=$(BUNDLETOOL_VERSION)' build-config
