@@ -922,7 +922,7 @@ serde_derive	1.0.228	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <d
 serde_json	1.0.150	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.12.0	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Implementation of the SHA-3 family of cryptographic hash algorithms
 shlex	2.0.1	comex <comexk@gmail.com>|Fenhl <fenhl@fenhl.net>|Adrian Taylor <adetaylor@chromium.org>|Alex Touchet <alextouchet@outlook.com>|Daniel Parks <dp+git@oxidized.org>|Garrett Berg <googberg@gmail.com>	https://github.com/comex/rust-shlex	Apache-2.0 OR MIT		Split a string into shell words, like Python's shlex.
-simd_cesu8	1.1.1	Sean C. Roach <me@seancroach.dev>	https://github.com/seancroach/simd_cesu8	Apache-2.0 OR MIT		An extremely fast, SIMD accelerated, encoding and decoding library for CESU-8 and Modified UTF-8.
+simd_cesu8	1.2.0	Sean C. Roach <me@seancroach.dev>	https://github.com/seancroach/simd_cesu8	Apache-2.0 OR MIT		An extremely fast, SIMD accelerated, encoding and decoding library for CESU-8 and Modified UTF-8.
 simdutf8	0.1.5	Hans Kratz <hans@appfour.com>	https://github.com/rusticstuff/simdutf8	Apache-2.0 OR MIT		SIMD-accelerated UTF-8 validation.
 slab	0.4.12	Carl Lerche <me@carllerche.com>	https://github.com/tokio-rs/slab	MIT		Pre-allocated storage for a uniform data type
 sponge-cursor	0.1.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Cursor for sponge-based absorption and squeezing
@@ -957,4 +957,4 @@ windows_i686_msvc	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apach
 windows_x86_64_gnu	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apache-2.0 OR MIT		Import lib for Windows
 windows_x86_64_gnullvm	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apache-2.0 OR MIT		Import lib for Windows
 windows_x86_64_msvc	0.52.6	Microsoft	https://github.com/microsoft/windows-rs	Apache-2.0 OR MIT		Import lib for Windows
-zmij	1.0.22	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/zmij	MIT		A double-to-string conversion algorithm based on Schubfach and xjb
+zmij	1.0.23	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/zmij	MIT		A double-to-string conversion algorithm based on Schubfach and xjb
