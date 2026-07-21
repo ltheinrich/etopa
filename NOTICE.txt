@@ -893,7 +893,7 @@ js-sys	0.3.103	The wasm-bindgen Developers	https://github.com/wasm-bindgen/wasm-
 jzon	0.12.5	Sandro-Alessio Gierens <sandro@gierens.de>|Maciej Hirsz <hello@maciej.codes>	https://github.com/rustadopt/jzon-rs	Apache-2.0 OR MIT		Continuation of json-rust, a JSON implementation in Rust
 keccak	0.2.0	RustCrypto Developers	https://github.com/RustCrypto/sponges	Apache-2.0 OR MIT		Pure Rust implementation of the Keccak sponge functions
 kern	1.8.3	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/kern	ISC		General library for Rust
-libc	0.2.186	The Rust Project Developers	https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
+libc	0.2.187		https://github.com/rust-lang/libc	Apache-2.0 OR MIT		Raw FFI bindings to platform libraries like libc.
 libm	0.2.16	Alex Crichton <alex@alexcrichton.com>|Amanieu d'Antras <amanieu@gmail.com>|Jorge Aparicio <japaricious@gmail.com>|Trevor Gross <tg@trevorgross.com>	https://github.com/rust-lang/compiler-builtins	MIT		libm in pure Rust
 log	0.4.33	The Rust Project Developers	https://github.com/rust-lang/log	Apache-2.0 OR MIT		A lightweight logging facade for Rust
 memchr	2.8.3	Andrew Gallant <jamslam@gmail.com>|bluss	https://github.com/BurntSushi/memchr	MIT OR Unlicense		Provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32) routines for 1, 2 or 3 byte search and single substring search.
@@ -919,7 +919,7 @@ serde	1.0.229	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@
 serde-wasm-bindgen	0.6.5	Ingvar Stepanyan <me@rreverser.com>	https://github.com/RReverser/serde-wasm-bindgen	MIT		Native Serde adapter for wasm-bindgen
 serde_core	1.0.229	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Serde traits only, with no support for derive -- use the `serde` crate instead
 serde_derive	1.0.229	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/serde	Apache-2.0 OR MIT		Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
-serde_json	1.0.150	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
+serde_json	1.0.151	Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>	https://github.com/serde-rs/json	Apache-2.0 OR MIT		A JSON serialization file format
 sha3	0.12.0	RustCrypto Developers	https://github.com/RustCrypto/hashes	Apache-2.0 OR MIT		Implementation of the SHA-3 family of cryptographic hash algorithms
 shlex	2.0.1	comex <comexk@gmail.com>|Fenhl <fenhl@fenhl.net>|Adrian Taylor <adetaylor@chromium.org>|Alex Touchet <alextouchet@outlook.com>|Daniel Parks <dp+git@oxidized.org>|Garrett Berg <googberg@gmail.com>	https://github.com/comex/rust-shlex	Apache-2.0 OR MIT		Split a string into shell words, like Python's shlex.
 simd_cesu8	1.2.0	Sean C. Roach <me@seancroach.dev>	https://github.com/seancroach/simd_cesu8	Apache-2.0 OR MIT		An extremely fast, SIMD accelerated, encoding and decoding library for CESU-8 and Modified UTF-8.
@@ -928,7 +928,7 @@ slab	0.4.12	Carl Lerche <me@carllerche.com>	https://github.com/tokio-rs/slab	MIT
 sponge-cursor	0.1.0	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Cursor for sponge-based absorption and squeezing
 subtle	2.6.1	Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>	https://github.com/dalek-cryptography/subtle	BSD-3-Clause		Pure-Rust traits and utilities for constant-time cryptographic implementations.
 syn	2.0.119	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
-syn	3.0.1	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
+syn	3.0.2	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/syn	Apache-2.0 OR MIT		Parser for Rust source code
 thiserror	2.0.19	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		derive(Error)
 thiserror-impl	2.0.19	David Tolnay <dtolnay@gmail.com>	https://github.com/dtolnay/thiserror	Apache-2.0 OR MIT		Implementation detail of the `thiserror` crate
 typenum	1.20.1		https://github.com/paholg/typenum	Apache-2.0 OR MIT		Typenum is a Rust library for type-level numbers evaluated at     compile time. It currently supports bits, unsigned integers, and signed     integers. It also provides a type-level array of type-level numbers, but its     implementation is incomplete.
