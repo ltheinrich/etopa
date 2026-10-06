@@ -867,7 +867,7 @@ cpufeatures	0.3.1	RustCrypto Developers	https://github.com/RustCrypto/utils	Apac
 crossbeam-utils	0.8.23		https://github.com/crossbeam-rs/crossbeam	Apache-2.0 OR MIT		Utilities for concurrent programming
 crypto-common	0.2.2	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Common traits used by cryptographic algorithms
 ctr	0.10.1	RustCrypto Developers	https://github.com/RustCrypto/block-modes	Apache-2.0 OR MIT		CTR block modes of operation
-ctutils	0.4.2	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Constant-time utility library with selection and equality testing support targeting cryptographic applications. Supports `const fn` where appropriate. Built on the `cmov` crate which provides architecture-specific predication intrinsics. Heavily inspired by the `subtle` crate.
+ctutils	0.4.3	RustCrypto Developers	https://github.com/RustCrypto/utils	Apache-2.0 OR MIT		Constant-time utility library with selection and equality testing support targeting cryptographic applications. Supports `const fn` where appropriate. Built on the `cmov` crate which provides architecture-specific predication intrinsics. Heavily inspired by the `subtle` crate.
 digest	0.11.3	RustCrypto Developers	https://github.com/RustCrypto/traits	Apache-2.0 OR MIT		Traits for cryptographic hash functions and message authentication codes
 etopa	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Time-based one-time password authenticator
 etopai	0.0.0	Lennart Heinrich <lennart@ltheinrich.de>	https://ltheinrich.de/etopa	ISC		Etopa HTTPS API
